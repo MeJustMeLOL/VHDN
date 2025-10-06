@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Xác định giá trị cốt lõi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--title-font:'Playfair Display', serif; --body-font:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; --soft-bg-1:#FFF6F3; --soft-bg-2:#FEF8FF; --brand:#E07A5F; --muted:#667085; --card:rgba(255,255,255,0.9);}*{box-sizing:border-box}html,body{height:100%;width:100%;margin:0;padding:0;background:linear-gradient(180deg,var(--soft-bg-1),var(--soft-bg-2));font-family:var(--body-font);color:#071422}
+.slide{position:relative;min-height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.container{position:relative;z-index:2;width:100%;max-width:1200px;padding:clamp(20px,4vw,56px);display:grid;grid-template-columns:1fr 460px;gap:28px;align-items:center}
+.left{padding-right:18px}
+.title{font-family:var(--title-font);font-weight:800;font-size:clamp(28px,4.5vw,44px);margin:0 0 10px}
+.lead{color:var(--muted);margin:0 0 16px}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 8px 20px rgba(9,30,66,0.05);min-height:120px;display:flex;gap:12px}
+.icon{width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,rgba(224,122,95,0.12),rgba(224,122,95,0.02));display:grid;place-items:center}
+.h{font-family:var(--title-font);font-size:15px;margin:0}
+.p{font-size:13px;color:var(--muted);margin:6px 0 0}
+.right{display:flex;flex-direction:column;gap:12px}
+.panel{background:linear-gradient(180deg,rgba(224,122,95,0.04),rgba(224,122,95,0.01));padding:14px;border-radius:12px}
+.panel h5{margin:0;font-weight:700}
+.panel p{margin:8px 0 0;color:var(--muted);font-size:13px}
+.cta{display:inline-block;margin-top:8px;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--brand),#f6a085);color:white;font-weight:700;text-decoration:none}
+@media(max-width:980px){.container{grid-template-columns:1fr}.right{order:-1}}
+</style>
+</head>
+<body>
+<section class="slide">
+  <div class="container">
+    <div class="left">
+      <h1 class="title">Xác định giá trị cốt lõi</h1>
+      <p class="lead">Những nguyên tắc nền tảng giúp tổ chức thành công và khác biệt — định hình hành vi, quyết định và ưu tiên.</p>
+
+      <div class="card-grid">
+        <article class="card" data-key="define">
+          <div class="icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.5 6.5L21 9l-5 3.8L17 20l-5-3-5 3 1-7.2L3 9l6.5-.5L12 2z" stroke="#E07A5F" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round" fill="none"/></svg>
+          </div>
+          <div>
+            <h3 class="h">Định nghĩa</h3>
+            <p class="p">Giá trị cốt lõi là các niềm tin và chuẩn mực chi phối hành vi trong tổ chức.</p>
+          </div>
+        </article>
+
+        <article class="card" data-key="identify">
+          <div class="icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v20M2 12h20" stroke="#E07A5F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h3 class="h">Cách xác định</h3>
+            <p class="p">Phỏng vấn lãnh đạo & nhân viên, khảo sát, phân tích hành vi, và đối chiếu với tầm nhìn doanh nghiệp.</p>
+          </div>
+        </article>
+
+        <article class="card" data-key="examples">
+          <div class="icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#E07A5F" stroke-width="1.2" fill="none"/><path d="M8 12h8" stroke="#E07A5F" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h3 class="h">Ví dụ</h3>
+            <p class="p">Trung thực, Khách hàng là trọng tâm, Chất lượng bền vững, Đổi mới liên tục — mỗi giá trị đi kèm hành vi mong đợi.</p>
+          </div>
+        </article>
+
+        <article class="card" data-key="pitfalls">
+          <div class="icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6v6l4 2" stroke="#E07A5F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h3 class="h">Lưu ý / Sai lầm</h3>
+            <p class="p">Không lồng ghép giá trị vào quy trình, chỉ dán khẩu hiệu, hoặc chọn giá trị mơ hồ vô nghĩa cho hoạt động hàng ngày.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <aside class="right" aria-hidden="true">
+      <div class="panel">
+        <h5>Lộ trình gợi ý</h5>
+        <p>1) Khảo sát hiện trạng → 2) Workshop xác định → 3) Thử nghiệm hành vi → 4) Triển khai chính thức với KPI.</p>
+      </div>
+
+      <div class="panel">
+        <h5>Call to action</h5>
+        <p>Chuẩn bị một bộ câu hỏi phỏng vấn ngắn và mẫu khảo sát nội bộ để thu thập dữ liệu ban đầu.</p>
+        <a class="cta" href="#" aria-hidden="true">Bắt đầu thu thập dữ liệu</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+(function(){
+  const nodes = Array.from(document.querySelectorAll('.title, .lead, .card, .panel'));
+  let running=[];
+  function setInit(){ nodes.forEach(n=>{ n.style.opacity='0'; n.style.transform='translateY(10px)'; n.style.transition='none'; }); }
+  function reset(){ running.forEach(a=>{ try{ a.cancel(); }catch(e){} }); running=[]; setInit(); }
+  function animate(opts){ reset(); const dur=(opts&&opts.duration)||680; const easing='cubic-bezier(.2,.95,.2,1)';
+    nodes.forEach((el,i)=>{ const a=el.animate([{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'translateY(0)'}], {duration: Math.max(360,dur-80), easing, fill:'forwards', delay:i*120}); running.push(a); });
+  }
+  window.addEventListener('message',(ev)=>{ const d=ev.data||{}; if(!d||typeof d.type!=='string') return; switch(d.type){ case 'reset': reset(); break; case 'animate-slide': animate(d.options||{}); break; case 'getNotes': try{ ev.source.postMessage({type:'notes', notes:'Infographic: Xác định giá trị cốt lõi — định nghĩa, cách xác định, ví dụ, lưu ý'}, '*'); }catch(e){} break; case 'hide': reset(); break; default: break;} });
+  window.addEventListener('load', ()=>{ setInit(); try{ window.parent.postMessage({type:'slide-ready', key:'slide-4'}, '*'); }catch(e){} }, {once:true});
+  document.addEventListener('visibilitychange', ()=>{ if(document.hidden) reset(); });
+  window._slide4={ reset, animate };
+})();
+</script>
+</body>
+</html>

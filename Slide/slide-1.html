@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Các phương pháp xây dựng văn hoá doanh nghiệp</title>
+
+<!-- Font pairing: Playfair Display (title) + Inter (body) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #FFF6F3; /* warm pastel */
+    --soft-bg-2: #FEF8FF;
+    --brand: #E07A5F; /* gentle coral accent */
+  }
+
+  *{box-sizing:border-box}
+  html,body{
+    height:100%; width:100%; margin:0; padding:0;
+    background: linear-gradient(180deg,var(--soft-bg-1),var(--soft-bg-2));
+    font-family: var(--body-font);
+    color: #071422;
+  }
+
+  .slide{
+    position:relative;
+    min-height:100vh;
+    width:100vw;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    text-align:center;
+  }
+
+  .bg {
+    position:absolute; inset:0; z-index:0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(224,122,95,0.06) 0%, transparent 10%),
+      radial-gradient(circle at 85% 80%, rgba(150,180,170,0.03) 0%, transparent 20%),
+      url('https://images.unsplash.com/photo-1522098543979-ffc7f79d34aa?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: contrast(.98) saturate(.95) brightness(.96);
+    animation: bgZoom 22s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgZoom {
+    from { transform: scale(1); filter: brightness(.95); }
+    to   { transform: scale(1.06); filter: brightness(1); }
+  }
+
+  .overlay {
+    position:absolute; inset:0; z-index:1;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  }
+
+  .center {
+    position:relative; z-index:2;
+    width:100%;
+    padding: clamp(20px, 5vw, 60px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap: 32px;
+  }
+
+  /* Title edge-to-edge + letter-spacing */
+  .title {
+    font-family: var(--title-font);
+    font-weight:800;
+    font-size: clamp(42px, 10vw, 110px);
+    line-height:1.05;
+    margin:0;
+    color:#071422;
+    opacity:0;
+    transform: translateY(15px);
+    animation: titleIn 900ms cubic-bezier(.2,.95,.2,1) forwards;
+    width:100vw;      /* full width */
+    text-align:center;
+    padding: 0;
+    letter-spacing: 3px; /* 👈 thêm khoảng cách chữ */
+  }
+  @keyframes titleIn {
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .title::after {
+    content:"";
+    display:block;
+    margin:14px auto 0;
+    width:60%; max-width:800px;
+    height:6px;
+    border-radius:4px;
+    background: linear-gradient(90deg, rgba(224,122,95,0.95), rgba(240,180,130,0.9));
+    transform: scaleX(0);
+    transform-origin:left center;
+    animation: sweep 900ms 400ms cubic-bezier(.2,.9,.2,1) forwards;
+  }
+  @keyframes sweep { to { transform: scaleX(1); } }
+
+  .presenters {
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    width:100%;
+    max-width:1000px;
+    gap:20px;
+    font-weight:700;
+    font-size:16px;
+    opacity:0;
+    animation: presentersIn 900ms 1000ms cubic-bezier(.2,.9,.2,1) forwards;
+  }
+  @keyframes presentersIn { to { opacity:1; } }
+
+  .presenter { color:#08303a; }
+
+  .start-cue {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display:flex; gap:8px;
+    align-items:center;
+    opacity:0.9;
+  }
+  .start-dot {
+    width:12px; height:12px; border-radius:50%;
+    background: var(--brand);
+    animation:pulse 1400ms infinite;
+  }
+  .start-text { font-size:13px; font-weight:600; color:rgba(7,20,34,0.7); }
+  @keyframes pulse {
+    0% { transform: scale(.9); opacity:.9; }
+    50% { transform: scale(1.35); opacity:.6; }
+    100% { transform: scale(.9); opacity:.9; }
+  }
+
+  @media(max-width:720px){
+    .presenters{ grid-template-columns: 1fr; text-align:center; gap:12px; }
+  }
+</style>
+</head>
+<body>
+  <section class="slide">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+
+    <div class="center">
+      <h1 class="title">Các phương pháp xây dựng văn hoá doanh nghiệp</h1>
+
+      <div class="presenters">
+        <div class="presenter">Nguyễn Thị Phương Thảo</div>
+        <div class="presenter">Trần Yến Nhi</div>
+        <div class="presenter">Dặng Hoàng Yến</div>
+      </div>
+    </div>
+
+    <div class="start-cue">
+      <div class="start-dot"></div>
+      <div class="start-text">Khởi đầu</div>
+    </div>
+  </section>
+
+<script>
+/* Added: parent-controlled animation interface
+   - Listens for postMessage: reset, animate-slide, getNotes, fullscreen, hide
+   - Prevents CSS auto-play by disabling animations on load and using JS to animate when requested
+   - Replies to parent with notes on getNotes
+*/
+(function(){
+  const title = document.querySelector('.title');
+  const presenters = document.querySelectorAll('.presenter');
+  const startCue = document.querySelector('.start-cue');
+  const statusKey = 'slide-1';
+  let running = [];
+  let lastOptions = {};
+
+  function setInitialState(){
+    // disable CSS animations that would run automatically
+    [title, ...presenters, startCue].forEach(el => {
+      if(!el) return;
+      // pause CSS animations if any
+      try { el.style.animation = 'none'; } catch(e){}
+      // set base invisible state
+      el.style.opacity = '0';
+      el.style.transform = (el === title) ? 'translateY(15px)' : 'translateY(8px)';
+      el.style.transition = 'none';
+    });
+  }
+
+  function resetAnimations(){
+    running.forEach(a=>{ try{ a.cancel(); }catch(e){} });
+    running = [];
+    setInitialState();
+    // small visual sync
+    try { if (startCue) startCue.style.opacity = '0.9'; } catch(e){}
+  }
+
+  function animateSlide(options){
+    lastOptions = options || {};
+    resetAnimations();
+    const stagger = (options && options.stagger) || 140;
+    const duration = (options && options.duration) || 700;
+    const easing = 'cubic-bezier(.2,.95,.2,1)';
+    const seq = [];
+
+    // title first (larger movement)
+    if (title){
+      const a = title.animate([
+        { opacity: 0, transform: 'translateY(15px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: duration, easing, fill: 'forwards', delay: 0 });
+      seq.push(a);
+      running.push(a);
+    }
+
+    // presenters (staggered)
+    presenters.forEach((el, i) => {
+      const a = el.animate([
+        { opacity: 0, transform: 'translateY(8px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: Math.max(420, duration-100), easing, fill: 'forwards', delay: (i+1) * stagger });
+      running.push(a);
+      seq.push(a);
+    });
+
+    // start-cue appears after presenters
+    if (startCue){
+      const delay = (presenters.length + 1) * stagger + 120;
+      const a = startCue.animate([
+        { opacity: 0, transform: 'translateY(8px) scale(0.98)' },
+        { opacity: 0.95, transform: 'translateY(0) scale(1)' }
+      ], { duration: 420, easing, fill: 'forwards', delay });
+      running.push(a);
+      seq.push(a);
+    }
+
+    // when last finishes, do nothing but keep state
+    const last = running[running.length-1];
+    if (last) last.onfinish = () => { /* idle */ };
+  }
+
+  // message handling
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data || typeof data.type !== 'string') return;
+    switch (data.type){
+      case 'reset':
+        resetAnimations();
+        break;
+      case 'animate-slide':
+        animateSlide(data.options || {});
+        break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'Chương 1 — Các phương pháp xây dựng văn hoá doanh nghiệp. Ghi chú: tiêu đề, tên người trình bày, cue bắt đầu.' }, '*');
+        } catch(e){}
+        break;
+      case 'fullscreen':
+        if (data.active) document.documentElement.classList.add('iframe-fullscreen');
+        else document.documentElement.classList.remove('iframe-fullscreen');
+        break;
+      case 'hide':
+        resetAnimations();
+        break;
+      default:
+        // ignore
+        break;
+    }
+  });
+
+  // on load: ensure initial state and notify parent ready
+  window.addEventListener('load', () => {
+    setInitialState();
+    try { window.parent.postMessage({ type: 'slide-ready', key: statusKey }, '*'); } catch(e){}
+  }, { once:true });
+
+  // if tab hidden, reset
+  document.addEventListener('visibilitychange', () => { if (document.hidden) resetAnimations(); });
+
+  // expose for debugging when opened standalone
+  window._slide1Controlled = { reset: resetAnimations, animate: animateSlide };
+
+})();
+</script>
+
+</body>
+</html>
