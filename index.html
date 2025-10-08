@@ -45,7 +45,7 @@
     body.immersive .controls,body.immersive .info-bar,body.immersive .tree-list,body.immersive .status {opacity:0 !important;pointer-events:none !important;}
     body.immersive .main { padding:0; }
     body.immersive #frame-wrap{position:fixed;left:0; right:0; top:0; bottom:0;width:100%; height:100%;border-radius:0;z-index:99999;background:#000;}
-    .full-toggle {position:absolute; right:12px; top:12px; z-index:10005;background: rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.04);color:var(--fg); padding:8px 10px; border-radius:8px; cursor:pointer;backdrop-filter: blur(6px); display:flex; gap:8px; align-items:center;transition:transform .12s ease, opacity .12s;}
+    .full-toggle {position:absolute; right:12px; top:12px; z-index:10005;background: rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.04);color:var(--fg); padding:8px 10px; border-radius:8px; cursor:button;backdrop-filter: blur(6px); display:flex; gap:8px; align-items:center;transition:transform .12s ease, opacity .12s;}
     .full-toggle:hover{ transform:translateY(-3px); }
     body.immersive .full-toggle { display:flex; left:12px; right:auto; top:12px; }
     .info-bar{position:absolute;left:12px;right:12px;bottom:12px;height:var(--info-h);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:10px;display:flex;align-items:center;gap:12px;padding:12px;box-sizing:border-box;opacity:0;transform:translateY(10px);transition:opacity .22s ease, transform .22s ease;pointer-events:none;color:var(--muted)}
@@ -179,30 +179,41 @@
 <script>
 (function(){
   const slideMap = [
-    { key:'slide-1', url:'Slide/slide-1.html', title:'1 — Giới thiệu', notes:'Ghi chú: giới thiệu' },
-    { key:'slide-2', url:'Slide/slide-2.html', title:'2 — Nội dung', notes:'Ghi chú: nội dung' },
-    { key:'slide-3', url:'Slide/slide-3.html', title:'3 — Thêm ví dụ', notes:'Ghi chú: ví dụ' },
-    { key:'slide-4', url:'Slide/slide-4.html', title:'4 — Kết luận', notes:'Ghi chú: kết luận' },
-    { key:'slide-5', url:'Slide/slide-5.html', title:'5 — Kết luận', notes:'Ghi chú: kết luận' },
-    { key:'slide-6', url:'Slide/slide-6.html', title:'6 — Kết luận', notes:'Ghi chú: kết luận' },
-    { key:'slide-7', url:'Slide/slide-7.html', title:'7 — Kết luận'},
-    { key:'slide-8', url:'Slide/slide-8.html', title:'8 — Kết luận'},
-    { key:'slide-9', url:'Slide/slide-9.html', title:'8 — Kết luận'},
-    { key:'slide-10', url:'Slide/slide-10.html', title:'8 — Kết luận'},
-    { key:'slide-11', url:'Slide/slide-11.html', title:'8 — Kết luận'},
-    { key:'slide-12', url:'Slide/slide-12.html', title:'8 — Kết luận'},
-    { key:'slide-13', url:'Slide/slide-13.html', title:'8 — Kết luận'},
-    { key:'slide-14', url:'Slide/slide-14.html', title:'8 — Kết luận'},
-    { key:'slide-15', url:'Slide/slide-15.html', title:'8 — Kết luận'},
-    { key:'slide-16', url:'Slide/slide-16.html', title:'8 — Kết luận'},
-    { key:'slide-17', url:'Slide/slide-17.html', title:'8 — Kết luận'},
-    { key:'slide-18', url:'Slide/slide-18.html', title:'8 — Kết luận'},
-    { key:'slide-19', url:'Slide/slide-19.html', title:'8 — Kết luận'},
-    { key:'slide-20', url:'Slide/slide-20.html', title:'8 — Kết luận'},
-    { key:'slide-21', url:'Slide/slide-21.html', title:'8 — Kết luận'},
-    { key:'slide-22', url:'Slide/slide-22.html', title:'8 — Kết luận'},
-    { key:'slide-23', url:'Slide/slide-23.html', title:'8 — Kết luận'},
-    { key:'slide-24', url:'Slide/slide-24.html', title:'8 — Kết luận'}
+    { key:'slide-1', url:'slide-1.html', title:'1 — Giới thiệu', notes:'Ghi chú: giới thiệu' },
+    { key:'slide-2', url:'slide-2.html', title:'2 — Nội dung', notes:'Ghi chú: nội dung' },
+    { key:'slide-3', url:'slide-3.html', title:'3 — Thêm ví dụ', notes:'Ghi chú: ví dụ' },
+    { key:'slide-3-1', url:'slide-3-1.html', title:'3-1 — Kết luận'},
+    { key:'slide-3-2', url:'slide-3-2.html', title:'3-2 — Kết luận'},
+    { key:'slide-3-3', url:'slide-3-3.html', title:'3-3 — Kết luận'},
+    { key:'slide-3-4', url:'slide-3-4.html', title:'3-4 — Kết luận'},
+    { key:'slide-4', url:'slide-4.html', title:'4 — Kết luận', notes:'slide 4' },
+    { key:'slide-4-1', url:'slide-4-1.html', title:'4-1 — Kết luận',stepCount: 2},
+    { key:'slide-4-2', url:'slide-4-2.html', title:'4-2 — Kết luận', notes:'Ghi chú: kết luận' },
+    { key:'slide-5', url:'slide-5.html', title:'5 — Kết luận', notes:'slide 5' },
+    { key:'slide-5-1', url:'slide-5-1.html', title:'5 — Kết luận', notes:'slide 5' },
+    { key:'slide-5-2', url:'slide-5-2.html', title:'5 — Kết luận', notes:'slide 5' },
+    { key:'slide-5-3', url:'slide-5-3.html', title:'5 — Kết luận', notes:'slide 5' },
+    { key:'slide-5-4', url:'slide-5-4.html', title:'5 — Kết luận', notes:'slide 5' },
+    { key:'slide-5-5', url:'slide-5-5.html', title:'5 — Kết luận', notes:'slide 5' },
+    { key:'slide-6', url:'slide-6.html', title:'6 — Kết luận', notes:'slide 5' },
+    { key:'slide-6', url:'slide-6-1.html', title:'6 — Kết luận', notes:'slide 5' },
+    { key:'slide-6', url:'slide-6-2.html', title:'6 — Kết luận', notes:'slide 5' },
+    { key:'slide-6', url:'slide-6-3.html', title:'6 — Kết luận', notes:'slide 5' },
+    { key:'slide-6', url:'slide-6-4.html', title:'6 — Kết luận', notes:'slide 5' },
+    { key:'slide-7', url:'slide-7.html', title:'7 — Kết luận'},
+    { key:'slide-8', url:'slide-8.html', title:'8 — Kết luận'},
+    { key:'slide-9', url:'slide-9.html', title:'8 — Kết luận'},
+    { key:'slide-10', url:'slide-10.html', title:'8 — Kết luận'},
+    { key:'slide-11', url:'slide-11.html', title:'8 — Kết luận'},
+    { key:'slide-12', url:'slide-12.html', title:'8 — Kết luận'},
+    { key:'slide-13', url:'slide-13.html', title:'8 — Kết luận'},
+    { key:'slide-14', url:'slide-14.html', title:'8 — Kết luận'},
+
+    { key:'slide-20', url:'slide-20.html', title:'8 — Kết luận'},
+    { key:'slide-21', url:'slide-21.html', title:'8 — Kết luận'},
+    { key:'slide-22', url:'slide-22.html', title:'8 — Kết luận'},
+    { key:'slide-23', url:'slide-23.html', title:'8 — Kết luận'},
+    { key:'slide-24', url:'slide-24.html', title:'8 — Kết luận' }
   ];
 
   // DOM
@@ -226,6 +237,7 @@
   let isTransitioning = false;
   let lastClickedIndex = null;
   let currentIframe = null;
+  let slideSteps = {}; // stores internal step per slide index
   const iframePool = new Map();
 
   function updateStatus(){ statusEl.textContent = `Slide ${currentIndex+1} / ${slideMap.length}`; }
@@ -298,6 +310,8 @@
         iframe.contentWindow.postMessage({ type: 'reset' }, '*');
       } catch (e) { /* ignore */ }
       try { resolveLoad(); } catch(e){}
+      // ensure internal step is reset in parent tracking
+      slideSteps[index] = 0;
     });
 
     poolAnchor.appendChild(iframe);
@@ -321,16 +335,43 @@
     }
   }
 
+  function computeBase(){ return (lastClickedIndex !== null) ? lastClickedIndex : currentIndex; }
+
+  // ----------------- START: Internal-step aware navigation -----------------
+  /*
+    Behavior:
+    - When an iframe is shown, parent posts {type:'setStep', step: <n>, animate: false}
+      to let iframe set its internal view without animating immediately.
+    - Then parent posts {type:'animate-slide'} to trigger animation on visible iframe.
+    - If slideMap[index].stepCount > 1, parent will toggle internal step on Next/Prev
+      (instead of changing iframe) until steps exhausted.
+  */
+
   async function showIndexCached(index){
     if (index < 0 || index >= slideMap.length) return;
-    if (index === currentIndex) return;
+    // initialize stored step if needed
+    slideSteps[index] = slideSteps[index] || 0;
+
+    if (index === currentIndex) {
+      // already visible — ensure it's in sync (send setStep & animate)
+      try {
+        const desired = slideSteps[index] || 0;
+        if (currentIframe && currentIframe.contentWindow) {
+          currentIframe.contentWindow.postMessage({ type: 'setStep', step: desired, animate: false }, '*');
+          setTimeout(()=> {
+            try { currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay:30, per:110, duration:520 } }, '*'); } catch(e){}
+          }, 40);
+        }
+      } catch(e){}
+      return;
+    }
+
     while (isTransitioning) await new Promise(r => setTimeout(r, 30));
     isTransitioning = true;
     try {
-      // chuẩn bị target
       const targetEl = await ensureIframeLoaded(index);
 
-      // nếu có current iframe, gửi reset cho nó để dừng animation / trả về trạng thái ban đầu
+      // if have current iframe, reset it and hide
       if (currentIframe && currentIframe !== targetEl){
         try { currentIframe.contentWindow.postMessage({ type: 'reset' }, '*'); } catch(e){}
         currentIframe.classList.remove('top');
@@ -338,15 +379,15 @@
         currentIframe.setAttribute('aria-hidden','true');
       }
 
-      // bật target lên
+      // bring target up
       targetEl.classList.add('top');
       targetEl.classList.remove('bottom');
       targetEl.setAttribute('aria-hidden','false');
 
-      // allow transition frame paint
+      // allow frame paint
       await new Promise(r => requestAnimationFrame(r));
 
-      // đợi transition kết thúc (như trước)
+      // wait transition end (or timeout)
       await new Promise(resolve => {
         let done = false;
         function onEnd(e){
@@ -359,7 +400,7 @@
         setTimeout(()=> { if (!done) { done=true; targetEl.removeEventListener('transitionend', onEnd); resolve(); } }, 900);
       });
 
-      // now update state
+      // update state
       currentIframe = targetEl;
       currentIndex = index;
       lastClickedIndex = null;
@@ -367,24 +408,83 @@
       updateStatus();
       updateInfoContent();
 
-      // request notes from child if it supports
-      try { currentIframe.contentWindow.postMessage({type:'getNotes'}, '*'); } catch(e){}
+      // Determine desired internal step for this slide
+      const entry = slideMap[index] || {};
+      const desiredStep = (typeof entry.initialStep === 'number') ? entry.initialStep : (slideSteps[index] || 0);
 
-      // IMPORTANT CHANGE: chỉ khi slide đã được hiển thị thì parent mới gửi lệnh animate để trigger animation
-      // (nếu child hỗ trợ message 'animate-slide' hoặc 'activate')
+      // send setStep (do not animate yet), then animate-slide
       try {
-        currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { selector: '.animate-item', stagger: 120 } }, '*');
-      } catch (err) { /* ignore */ }
+        currentIframe.contentWindow.postMessage({ type: 'setStep', step: desiredStep, animate: false }, '*');
+      } catch(e){ /* ignore */ }
 
+      // small tick then trigger animation on visible iframe
+      setTimeout(()=> {
+        try {
+          currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay: 30, per: 110, duration: 520 } }, '*');
+        } catch(e){}
+      }, 40);
+
+      // ask for notes if supported
+      try { currentIframe.contentWindow.postMessage({type:'getNotes'}, '*'); } catch(e){}
     } finally {
       isTransitioning = false;
     }
   }
 
+  // wrapper (keeps API)
   async function showIndex(index){ return showIndexCached(index); }
-  function computeBase(){ return (lastClickedIndex !== null) ? lastClickedIndex : currentIndex; }
-  function showNext(){ const base = computeBase(); const next = Math.min(slideMap.length-1, base+1); lastClickedIndex = null; showIndex(next); }
-  function showPrev(){ const base = computeBase(); const prev = Math.max(0, base-1); lastClickedIndex = null; showIndex(prev); }
+
+  // Next/Prev: if current slide has internal steps (stepCount > 1) then
+  // toggle internal step inside the same iframe; otherwise move to next/prev iframe.
+  function showNext(){
+    const s = slideMap[currentIndex] || {};
+    const stepCount = (typeof s.stepCount === 'number') ? s.stepCount : 1;
+    // if slide supports internal steps and not on last step, increment internal step
+    if (stepCount > 1) {
+      slideSteps[currentIndex] = slideSteps[currentIndex] || 0;
+      if (slideSteps[currentIndex] < stepCount - 1) {
+        slideSteps[currentIndex] += 1;
+        // instruct iframe to change step and animate
+        try {
+          currentIframe.contentWindow.postMessage({ type: 'setStep', step: slideSteps[currentIndex], animate: false }, '*');
+          setTimeout(()=> {
+            try { currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay: 30, per:110, duration:520 } }, '*'); } catch(e){}
+          }, 40);
+        } catch(e){}
+        return;
+      }
+    }
+    // otherwise go to next iframe entry
+    const base = computeBase();
+    const next = Math.min(slideMap.length-1, base+1);
+    lastClickedIndex = null;
+    showIndex(next);
+  }
+
+  function showPrev(){
+    const s = slideMap[currentIndex] || {};
+    const stepCount = (typeof s.stepCount === 'number') ? s.stepCount : 1;
+    // if slide supports internal steps and not on first step, decrement internal step
+    if (stepCount > 1) {
+      slideSteps[currentIndex] = slideSteps[currentIndex] || 0;
+      if (slideSteps[currentIndex] > 0) {
+        slideSteps[currentIndex] -= 1;
+        try {
+          currentIframe.contentWindow.postMessage({ type: 'setStep', step: slideSteps[currentIndex], animate: false }, '*');
+          setTimeout(()=> {
+            try { currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay: 30, per:110, duration:520 } }, '*'); } catch(e){}
+          }, 40);
+        } catch(e){}
+        return;
+      }
+    }
+    // otherwise navigate to previous iframe
+    const base = computeBase();
+    const prev = Math.max(0, base-1);
+    lastClickedIndex = null;
+    showIndex(prev);
+  }
+  // ----------------- END: Internal-step aware navigation -----------------
 
   prevBtn.addEventListener('click', ()=> { lastClickedIndex = null; showPrev(); frameWrapEl.focus(); });
   nextBtn.addEventListener('click', ()=> { lastClickedIndex = null; showNext(); frameWrapEl.focus(); });
@@ -431,8 +531,7 @@
       try { e0.el.contentWindow.postMessage({type:'getNotes'}, '*'); } catch(e){}
     });
 
-    // nếu muốn preload iframe kế tiếp để giảm độ trễ, vẫn có thể tạo nó —
-    // nhưng vì chúng ta đã thêm behavior 'reset' trên load, animation sẽ không tự chạy.
+    // preload next to reduce latency (optional)
     if (slideMap.length > 1) makeIframeFor(1, slideMap[1].url);
   }
 
