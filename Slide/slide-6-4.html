@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - 5 Yếu tố Cốt lõi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+        --divider-color: #f0e6e2;
+        --positive: #60c5a3;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .main-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+    }
+
+    /* --- Cột Tiêu đề (Bên trái) --- */
+    .title-column {
+        flex-basis: 40%;
+        padding: 5vw;
+        box-sizing: border-box;
+    }
+
+    .title-column h1 {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2.2rem, 4vw, 3.8rem);
+        line-height: 1.3;
+    }
+
+    /* --- Cột Liệt kê (Bên phải) --- */
+    .list-column {
+        flex-basis: 60%;
+        padding-right: 5vw;
+        display: flex;
+        flex-direction: column;
+        gap: 25px; /* Khoảng cách giữa các mục */
+    }
+
+    .list-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        border-bottom: 2px solid var(--divider-color);
+        padding-bottom: 25px;
+        opacity: 0; /* Bắt đầu ẩn */
+    }
+
+    .list-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-icon {
+        font-size: 2rem;
+        color: var(--brand);
+        padding-top: 5px;
+    }
+
+    .item-content strong {
+        display: block;
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+
+    .item-content .transition {
+        color: var(--text-light);
+        margin-bottom: 8px;
+        font-style: italic;
+    }
+
+    .item-content .example {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* --- Animations --- */
+    .animated .title-column h1 { animation: fade-in-left 0.8s 0.2s ease forwards; }
+    .animated .list-item { animation: fade-in-up 0.7s ease forwards; }
+
+    /* Độ trễ tuần tự cho từng mục */
+    .animated .list-item:nth-child(1) { animation-delay: 0.4s; }
+    .animated .list-item:nth-child(2) { animation-delay: 0.6s; }
+    .animated .list-item:nth-child(3) { animation-delay: 0.8s; }
+    .animated .list-item:nth-child(4) { animation-delay: 1.0s; }
+    .animated .list-item:nth-child(5) { animation-delay: 1.2s; }
+
+    @keyframes fade-in-left {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 992px) {
+        .main-container { flex-direction: column; text-align: center; }
+        .title-column { flex-basis: auto; padding: 10vh 30px 30px 30px; }
+        .list-column { flex-basis: auto; padding: 0 30px 10vh 30px; }
+        .list-item { flex-direction: column; align-items: center; }
+    }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="title-column">
+        <h1>5 Yếu tố Cốt lõi Chuyển đổi Văn hóa</h1>
+    </div>
+
+    <div class="list-column">
+        <div class="list-item">
+            <div class="item-icon"><i class="fas fa-lightbulb"></i></div>
+            <div class="item-content">
+                <strong>Thái độ làm việc</strong>
+                <div class="transition">Trì trệ → Đổi mới</div>
+                <div class="example">Ví dụ: Một doanh nghiệp nhà nước chuyển đổi sang cơ chế tự chủ để tăng hiệu quả.</div>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div class="item-icon"><i class="fas fa-handshake"></i></div>
+            <div class="item-content">
+                <strong>Tinh thần hợp tác</strong>
+                <div class="transition">Chia rẽ phòng ban → Teamwork</div>
+                <div class="example">Ví dụ: Samsung khuyến khích các phòng ban cùng phát triển sản phẩm mới.</div>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div class="item-icon"><i class="fas fa-heart"></i></div>
+            <div class="item-content">
+                <strong>Giá trị khách hàng</strong>
+                <div class="transition">Chưa chú trọng → Lấy khách hàng làm trung tâm</div>
+                <div class="example">Ví dụ: Amazon xây dựng văn hoá 'Customer Obsession'.</div>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div class="item-icon"><i class="fas fa-balance-scale"></i></div>
+            <div class="item-content">
+                <strong>Cơ chế thưởng – phạt</strong>
+                <div class="transition">Thiếu minh bạch → Công bằng, rõ ràng</div>
+                <div class="example">Ví dụ: Một số công ty công nghệ áp dụng cơ chế thưởng dựa trên hiệu quả công việc (OKRs).</div>
+            </div>
+        </div>
+
+        <div class="list-item">
+            <div class="item-icon"><i class="fas fa-rocket"></i></div>
+            <div class="item-content">
+                <strong>Phong cách lãnh đạo</strong>
+                <div class="transition">Quan liêu → Truyền cảm hứng</div>
+                <div class="example">Ví dụ: Elon Musk truyền cảm hứng cho nhân viên Tesla bằng tầm nhìn chinh phục không gian.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const container = document.querySelector('.main-container');
+
+    function setInitialState() {
+        container.classList.remove('animated');
+        void container.offsetWidth;
+    }
+
+    function animateIn() {
+        container.classList.add('animated');
+    }
+
+    window.addEventListener('load', animateIn, { once: true });
+
+    window.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'animate-slide') {
+            setInitialState();
+            setTimeout(animateIn, 50);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>
