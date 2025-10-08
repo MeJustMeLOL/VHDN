@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - Mức độ phù hợp</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --brand-light: rgba(224, 122, 95, 0.7);
+        --brand-dark: #c76c54;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .main-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+    }
+
+    /* --- Cột Văn bản (Bên trái) --- */
+    .text-column {
+        flex-basis: 50%;
+        padding: 5vw;
+        box-sizing: border-box;
+    }
+
+    .text-column h1 {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        margin-bottom: 20px;
+        opacity: 0; /* Trạng thái ban đầu */
+    }
+
+    .text-column p {
+        line-height: 1.8;
+        color: var(--text-light);
+        font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+        max-width: 500px;
+        opacity: 0; /* Trạng thái ban đầu */
+    }
+
+    /* --- Khung Sơ đồ (Bên phải) --- */
+    .diagram-frame {
+        flex-basis: 50%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .venn-diagram {
+        position: relative;
+        width: 400px;
+        height: 300px;
+    }
+
+    .circle {
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background-color: var(--brand-light);
+        mix-blend-mode: multiply; /* Tạo hiệu ứng màu giao nhau đẹp mắt */
+        opacity: 0; /* Trạng thái ban đầu */
+    }
+
+    #culture-circle {
+        top: 0;
+        left: 0;
+    }
+
+    #strategy-circle {
+        bottom: 0;
+        right: 0;
+    }
+
+    .label {
+        position: absolute;
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: white;
+        opacity: 0; /* Trạng thái ban đầu */
+    }
+
+    #culture-label { top: 40px; left: 40px; }
+    #strategy-label { bottom: 40px; right: 40px; }
+    #fit-label {
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--text-dark);
+        font-size: 1rem;
+        background-color: rgba(255,255,255,0.7);
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    /* --- Animations --- */
+    .animated h1 { animation: fade-slide-in 0.8s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    .animated p { animation: fade-slide-in 0.8s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    .animated #culture-circle { animation: slide-in-left 1s 0.6s ease forwards; }
+    .animated #strategy-circle { animation: slide-in-right 1s 0.6s ease forwards; }
+    .animated .label { animation: fade-in 0.8s 1.4s ease forwards; }
+
+    @keyframes fade-slide-in {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slide-in-left {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slide-in-right {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+        .main-container { flex-direction: column; }
+        .text-column { order: 2; flex-basis: auto; text-align: center; }
+        .diagram-frame { order: 1; flex-basis: 50vh; width: 100%; }
+        .venn-diagram { transform: scale(0.8); }
+    }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="text-column">
+        <h1>Đo lường mức độ phù hợp</h1>
+        <p>Xem xét văn hoá hiện tại có hỗ trợ hay cản trở chiến lược. Ví dụ: Một công ty muốn toàn cầu hóa nhưng văn hoá vẫn nặng tính địa phương → cản trở mở rộng quốc tế.</p>
+    </div>
+
+    <div class="diagram-frame">
+        <div class="venn-diagram">
+            <div id="culture-circle" class="circle"></div>
+            <div id="strategy-circle" class="circle"></div>
+
+            <div id="culture-label" class="label">Văn hóa</div>
+            <div id="strategy-label" class="label">Chiến lược</div>
+            <div id="fit-label" class="label">Sự phù hợp</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+(function(){
+    const container = document.querySelector('.main-container');
+
+    function setInitialState() {
+        container.classList.remove('animated');
+        void container.offsetWidth;
+    }
+
+    function animateIn() {
+        container.classList.add('animated');
+    }
+
+    window.addEventListener('load', animateIn, { once: true });
+
+    window.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'animate-slide') {
+            setInitialState();
+            setTimeout(animateIn, 50);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Xác định giá trị cốt lõi (Chi tiết)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--title-font:'Playfair Display', serif; --body-font:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; --soft-bg-1:#FFF6F3; --soft-bg-2:#FEF8FF; --brand:#E07A5F; --muted:#667085; --card:rgba(255,255,255,0.96);}*{box-sizing:border-box}html,body{height:100%;width:100%;margin:0;padding:0;background:linear-gradient(180deg,var(--soft-bg-1),var(--soft-bg-2));font-family:var(--body-font);color:#071422}
+.slide{position:relative;min-height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:28px}
+.wrap{width:100%;max-width:1200px;background:var(--card);border-radius:16px;padding:28px;box-shadow:0 12px 30px rgba(9,30,66,0.06);display:grid;grid-template-columns:1fr 420px;gap:22px;align-items:start}
+.left{padding-right:8px}
+.kicker{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.title{font-family:var(--title-font);font-weight:800;font-size:28px;margin:8px 0 12px}
+.lead{color:var(--muted);margin:0 0 18px}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:start}
+.num{width:48px;height:48px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(180deg,var(--brand),#f6a085);color:white;font-weight:800}
+.step h4{margin:0;font-size:15px}
+.step p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+.right{display:flex;flex-direction:column;gap:12px}
+.panel{background:linear-gradient(180deg,rgba(224,122,95,0.04),rgba(224,122,95,0.01));padding:14px;border-radius:12px}
+.panel h5{margin:0;font-weight:700}
+.panel p{margin:8px 0 0;color:var(--muted);font-size:13px}
+.examples{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.example{background:white;border-radius:10px;padding:10px;box-shadow:0 6px 14px rgba(9,30,66,0.04);font-size:13px}
+.small{font-size:12px;color:var(--muted)}
+@media(max-width:980px){.wrap{grid-template-columns:1fr}.right{order:-1}}
+</style>
+</head>
+<body>
+<section class="slide">
+  <div class="wrap">
+    <div class="left">
+      <div class="kicker">Chi tiết — Xác định giá trị cốt lõi</div>
+      <h1 class="title">Quy trình 5 bước xác định giá trị</h1>
+      <p class="lead">Một quy trình thực tế, có thể áp dụng nhanh để thu thập, đối chiếu và chọn lọc các giá trị cốt lõi phù hợp.</p>
+
+      <div class="steps">
+        <div class="step" data-key="step1">
+          <div class="num">1</div>
+          <div>
+            <h4>Thu thập dữ liệu hiện trạng</h4>
+            <p>Khảo sát nhanh, phỏng vấn lãnh đạo & nhân viên, phân tích văn hoá hành vi — mục tiêu là hiểu hiện trạng thực tế.</p>
+          </div>
+        </div>
+
+        <div class="step" data-key="step2">
+          <div class="num">2</div>
+          <div>
+            <h4>Workshop nhóm</h4>
+            <p>Tổ chức workshop liên phòng ban — khai thác giá trị đề xuất, thảo luận ví dụ hành vi tương ứng và ưu tiên.</p>
+          </div>
+        </div>
+
+        <div class="step" data-key="step3">
+          <div class="num">3</div>
+          <div>
+            <h4>Thử nghiệm hành vi</h4>
+            <p>Thiết kế thử nghiệm nhỏ (pilots) để quan sát tính thực thi: quy trình, quyết định, trao thưởng.</p>
+          </div>
+        </div>
+
+        <div class="step" data-key="step4">
+          <div class="num">4</div>
+          <div>
+            <h4>Chốt & mô tả</h4>
+            <p>Chọn 3–5 giá trị cốt lõi, mô tả rõ hành vi mong đợi (các ví dụ cụ thể cho từng giá trị).</p>
+          </div>
+        </div>
+
+        <div class="step" data-key="step5">
+          <div class="num">5</div>
+          <div>
+            <h4>Gắn vào hệ thống</h4>
+            <p>Đưa giá trị vào mô tả công việc, KPI, tuyển dụng và chương trình thưởng để đảm bảo tính lâu dài.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <aside class="right" aria-hidden="true">
+      <div class="panel">
+        <h5>Ví dụ mô tả giá trị</h5>
+        <p class="small">Giá trị: <strong>Khách hàng là trọng tâm</strong></p>
+        <p class="small">Hành vi mong đợi: Lắng nghe chủ động, phản hồi trong 24h, đưa ra giải pháp thay vì lý do.</p>
+      </div>
+
+      <div class="panel">
+        <h5>Chỉ số đo lường (KPI)</h5>
+        <p class="small">% phản hồi khách hàng, điểm hài lòng nội bộ, số sáng kiến cải tiến được triển khai.</p>
+      </div>
+
+      <div class="examples">
+        <div class="example"><strong>Ví dụ thực tế A</strong><div class="small">Công ty X đặt KPI "thời gian phản hồi" vào bản mô tả vị trí CSKH.</div></div>
+        <div class="example"><strong>Ví dụ thực tế B</strong><div class="small">Công ty Y thưởng nhân viên theo sáng kiến cải tiến phù hợp giá trị.</div></div>
+      </div>
+
+    </aside>
+  </div>
+</section>
+
+<script>
+(function(){
+  const nodes = Array.from(document.querySelectorAll('.kicker, .title, .lead, .step, .panel, .example'));
+  let running = [];
+  function setInit(){ nodes.forEach(n=>{ n.style.opacity='0'; n.style.transform='translateY(10px)'; n.style.transition='none'; }); }
+  function reset(){ running.forEach(a=>{ try{ a.cancel(); }catch(e){} }); running = []; setInit(); }
+  function animate(opts){ reset(); const dur=(opts&&opts.duration)||680; const easing='cubic-bezier(.2,.95,.2,1)';
+    nodes.forEach((el,i)=>{ const a = el.animate([{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'translateY(0)'}], {duration: Math.max(320,dur-80), easing, fill:'forwards', delay: i*110}); running.push(a); });
+  }
+  window.addEventListener('message',(ev)=>{ const d=ev.data||{}; if(!d||typeof d.type!=='string') return; switch(d.type){ case 'reset': reset(); break; case 'animate-slide': animate(d.options||{}); break; case 'getNotes': try{ ev.source.postMessage({type:'notes', notes:'Chi tiết giá trị cốt lõi — quy trình 5 bước: thu thập, workshop, thử nghiệm, chốt, gắn vào hệ thống'}, '*'); }catch(e){} break; case 'hide': reset(); break; default: break;} });
+  window.addEventListener('load', ()=>{ setInit(); try{ window.parent.postMessage({type:'slide-ready', key:'slide-5'}, '*'); }catch(e){} }, {once:true});
+  document.addEventListener('visibilitychange', ()=>{ if(document.hidden) reset(); });
+  window._slide5 = { reset, animate };
+})();
+</script>
+</body>
+</html>

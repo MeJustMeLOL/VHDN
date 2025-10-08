@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Triển Khai Chiến Lược</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --bg-color: #fdfdfd;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --brand-color: #4f46e5; /* Indigo */
+    --border-color: #e5e7eb;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    font-family: var(--body-font);
+    color: var(--text-dark);
+  }
+
+  .slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+    padding: clamp(30px, 6vw, 80px);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    max-width: 750px;
+  }
+
+  .title {
+    font-family: var(--title-font);
+    font-weight: 800;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 500;
+    color: var(--text-light);
+    margin: 0 auto;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .strategy-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: #eef2ff; /* Light indigo */
+    color: var(--brand-color);
+    display: grid;
+    place-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .strategy-card h3 {
+    font-family: var(--title-font);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .strategy-card p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-light);
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .content-grid {
+      grid-template-columns: 1fr;
+      max-width: 500px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+  <section class="slide">
+    <div class="header">
+      <h1 class="title">Từ Phân Tích đến Hành Động</h1>
+      <p class="subtitle">Sau khi phân tích, bước tiếp theo là chuyển hóa các kết luận thành một kế hoạch chiến lược rõ ràng và có tính khả thi.</p>
+    </div>
+
+    <div class="content-grid">
+      <div class="strategy-card">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        </div>
+        <h3>1. Xác định Ưu tiên</h3>
+        <p>Tập trung nguồn lực (nhân sự, tài chính, thời gian) vào những mục tiêu có tác động lớn nhất. Trả lời câu hỏi: "Đâu là những việc quan trọng nhất cần làm ngay để đạt được lợi thế cạnh tranh?".</p>
+      </div>
+
+      <div class="strategy-card">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+        </div>
+        <h3>2. Lựa chọn Mô hình Kinh doanh</h3>
+        <p>Xây dựng cách thức doanh nghiệp sẽ tạo ra, phân phối và thu về giá trị. Mô hình kinh doanh định rõ: khách hàng là ai, sản phẩm là gì, bán qua kênh nào và làm sao để có lợi nhuận.</p>
+      </div>
+
+      <div class="strategy-card">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h3>3. Lập Lộ trình Triển khai</h3>
+        <p>Phác thảo các bước hành động cụ thể theo thời gian. Chia nhỏ mục tiêu lớn thành các nhiệm vụ ngắn hạn (theo quý, theo tháng) và các mục tiêu dài hạn (theo năm) để dễ dàng theo dõi và điều chỉnh.</p>
+      </div>
+    </div>
+  </section>
+
+<script>
+(function(){
+  const elements = document.querySelectorAll('.header, .strategy-card');
+
+  function setInitialState() {
+    elements.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+    });
+  }
+
+  function animateIn() {
+    elements.forEach((el, index) => {
+      el.animate([
+        { opacity: 0, transform: 'translateY(20px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], {
+        duration: 800,
+        easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+        fill: 'forwards',
+        delay: 100 + 150 * index
+      });
+    });
+  }
+
+  window.addEventListener('load', () => {
+    setInitialState();
+    animateIn();
+  }, { once: true });
+})();
+</script>
+
+</body>
+</html>

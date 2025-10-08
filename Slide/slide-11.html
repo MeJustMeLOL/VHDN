@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide 11 — Thiết kế chương trình truyền thông nội bộ</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #FFF6F3;
+    --soft-bg-2: #FEF8FF;
+    --brand: #E07A5F;
+    --muted: #6b7280;
+    --text: #071422;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+  }
+
+  body {
+    font-family: var(--body-font);
+    color: var(--text);
+    background: linear-gradient(180deg, var(--soft-bg-1), var(--soft-bg-2));
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slide-content {
+    width: 100%;
+    max-width: 1000px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 36px;
+  }
+
+  h1 {
+    font-family: var(--title-font);
+    font-size: clamp(34px, 5vw, 42px);
+    color: var(--text);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .band {
+    width: 96px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--brand);
+    margin-top: -16px;
+  }
+
+  .timeline {
+    display: flex;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin-top: 24px;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    opacity: 0; /* Initially hidden for animation */
+    transform: translateY(15px);
+  }
+
+  .dot {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #FFFFFF, #FDF7F4);
+    border: 2px solid rgba(224, 122, 95, 0.2);
+    color: var(--brand);
+    font-family: var(--title-font);
+    font-weight: 700;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(180, 90, 60, 0.1);
+  }
+
+  .step .label {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 100px;
+  }
+
+  /* Keyframes for single pop-in animation */
+  @keyframes popIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animate-in items controlled by JS */
+  .animate-item {
+    animation: popIn 700ms cubic-bezier(.2, .95, .2, 1) forwards;
+  }
+
+  @media(max-width: 600px) {
+    .timeline {
+      gap: 20px;
+    }
+    .dot {
+      width: 60px;
+      height: 60px;
+      font-size: 20px;
+    }
+    .step .label {
+      font-size: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-content">
+  <h1 class="animate-item">Thiết kế chương trình<br>truyền thông nội bộ</h1>
+  <div class="band animate-item"></div>
+
+  <div class="timeline" id="timeline">
+    <div class="step animate-item"><div class="dot">1</div><div class="label">Khảo sát & Phân tích</div></div>
+    <div class="step animate-item"><div class="dot">2</div><div class="label">Xây dựng Thông điệp</div></div>
+    <div class="step animate-item"><div class="dot">3</div><div class="label">Lựa chọn Kênh</div></div>
+    <div class="step animate-item"><div class="dot">4</div><div class="label">Triển khai Thử nghiệm</div></div>
+    <div class="step animate-item"><div class="dot">5</div><div class="label">Đo lường & Tối ưu</div></div>
+  </div>
+</div>
+
+<script>
+  let runningAnimations = [];
+
+  function resetAnimations() {
+    runningAnimations.forEach(anim => anim.cancel());
+    runningAnimations = [];
+    const items = document.querySelectorAll('.animate-item');
+    items.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(15px)';
+    });
+  }
+
+  function animateSlide() {
+    resetAnimations();
+    const items = document.querySelectorAll('.animate-item');
+    const stagger = 120; // Time in ms between each item animating in
+    items.forEach((el, i) => {
+      const anim = el.animate(
+        [
+          { opacity: 0, transform: 'translateY(15px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ],
+        {
+          duration: 700,
+          delay: i * stagger,
+          easing: 'cubic-bezier(.2, .95, .2, 1)',
+          fill: 'forwards'
+        }
+      );
+      runningAnimations.push(anim);
+    });
+  }
+
+  // Set the initial state before any animations
+  resetAnimations();
+
+  // Listen for commands from the parent frame (the slide controller)
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+
+    switch (data.type) {
+      case 'reset':
+      case 'hide':
+        resetAnimations();
+        break;
+      case 'animate-slide':
+        animateSlide();
+        break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'Slide 11: Quy trình 5 bước thiết kế chương trình truyền thông nội bộ.' }, '*');
+        } catch (e) {}
+        break;
+    }
+  });
+
+  // Notify parent frame that the slide is ready
+  window.addEventListener('load', () => {
+    try {
+      window.parent.postMessage({ type: 'slide-ready' }, '*');
+    } catch (e) {}
+  }, { once: true });
+</script>
+
+</body>
+</html>
