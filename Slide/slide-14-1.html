@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đo lường & Phản hồi - Study Cases</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #FFF6F3;
+        --soft-bg-2: #FEF8FF;
+        --brand: #E07A5F;
+        --muted: #667085;
+        --text-main: #25283D;
+        --positive: #60c5a3;
+        --warning: #f59e0b;
+        --info: #3b82f6;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(175deg, var(--soft-bg-1), var(--soft-bg-2));
+        font-family: var(--body-font);
+        color: var(--text-main);
+        overflow: hidden;
+    }
+
+    .slide-container {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .view {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ==================== VIEW 0: Split Screen Vertical ==================== */
+    #view-0 {
+        background: linear-gradient(to right,
+            rgba(224, 122, 95, 0.05) 0%,
+            rgba(254, 248, 255, 0.3) 50%,
+            rgba(96, 197, 163, 0.05) 100%
+        );
+    }
+
+    #view-0 .header-section {
+        padding: 4rem 5vw 2rem;
+        text-align: center;
+    }
+
+    #view-0 .main-title {
+        font-family: var(--title-font);
+        font-weight: 900;
+        font-size: clamp(3rem, 6vw, 4.5rem);
+        margin: 0 0 1rem 0;
+        background: linear-gradient(135deg, var(--brand), var(--positive));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    #view-0 .context-banner {
+        display: inline-block;
+        font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+        padding: 1rem 3rem;
+        background: rgba(224, 122, 95, 0.15);
+        border-left: 5px solid var(--brand);
+        border-right: 5px solid var(--brand);
+        margin-bottom: 1rem;
+    }
+
+    #view-0 .context-banner strong {
+        color: var(--brand);
+        font-weight: 800;
+    }
+
+    #view-0 .metrics-section {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        padding: 0 5vw 4rem;
+    }
+
+    .metric-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 2rem;
+        position: relative;
+    }
+
+    .metric-column::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 15%;
+        bottom: 15%;
+        width: 2px;
+        background: linear-gradient(to bottom, transparent, rgba(224, 122, 95, 0.3), transparent);
+    }
+
+    .metric-column:last-child::after {
+        display: none;
+    }
+
+    .metric-icon-large {
+        font-size: 4rem;
+        color: var(--brand);
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+    }
+
+    .metric-name-large {
+        font-family: var(--title-font);
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .metric-desc-large {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: var(--muted);
+        text-align: center;
+        max-width: 280px;
+    }
+
+    /* ==================== VIEW 1: Asymmetric Grid Layout ==================== */
+    #view-1 {
+        background: linear-gradient(135deg,
+            rgba(254, 248, 255, 0.5) 0%,
+            rgba(255, 246, 243, 0.5) 100%
+        );
+    }
+
+    #view-1 .hero-header {
+        padding: 3rem 5vw 2rem;
+        border-bottom: 3px solid rgba(224, 122, 95, 0.2);
+    }
+
+    #view-1 .hero-title {
+        font-family: var(--title-font);
+        font-weight: 900;
+        font-size: clamp(2.5rem, 5vw, 3.8rem);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    #view-1 .hero-icon {
+        font-size: 3.5rem;
+        color: var(--brand);
+    }
+
+    #view-1 .content-grid {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 0;
+    }
+
+    .finding-panel {
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+    }
+
+    .finding-panel.warning {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+    }
+
+    .finding-panel.positive {
+        background: linear-gradient(135deg, rgba(96, 197, 163, 0.08), rgba(96, 197, 163, 0.02));
+    }
+
+    .finding-panel.large {
+        grid-row: span 2;
+        background: linear-gradient(to bottom, rgba(224, 122, 95, 0.05), rgba(96, 197, 163, 0.05));
+        padding: 4rem;
+    }
+
+    .badge-large {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
+        width: fit-content;
+    }
+
+    .badge-large.warning {
+        background: rgba(245, 158, 11, 0.2);
+        color: var(--warning);
+    }
+
+    .badge-large.positive {
+        background: rgba(96, 197, 163, 0.2);
+        color: var(--positive);
+    }
+
+    .finding-number {
+        font-family: var(--title-font);
+        font-size: clamp(3.5rem, 7vw, 5rem);
+        font-weight: 900;
+        margin-bottom: 0.5rem;
+        line-height: 1;
+        background: linear-gradient(135deg, var(--brand), var(--warning));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .finding-text-large {
+        font-size: 1.3rem;
+        line-height: 1.6;
+        color: var(--muted);
+    }
+
+    .action-section-title {
+        font-family: var(--title-font);
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .action-list-vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .action-row {
+        display: flex;
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    .action-num {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--brand);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        box-shadow: 0 6px 20px rgba(224, 122, 95, 0.3);
+    }
+
+    .action-text {
+        flex: 1;
+        padding-top: 0.5rem;
+    }
+
+    .action-text strong {
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+    }
+
+    .action-text span {
+        font-size: 1rem;
+        color: var(--muted);
+        line-height: 1.5;
+    }
+
+    /* ==================== VIEW 2: Full Width Timeline + Stats Bar ==================== */
+    #view-2 {
+        background: linear-gradient(to bottom,
+            rgba(224, 122, 95, 0.03) 0%,
+            rgba(96, 197, 163, 0.08) 100%
+        );
+    }
+
+    #view-2 .title-bar {
+        padding: 3rem 5vw;
+        background: linear-gradient(to right, rgba(224, 122, 95, 0.1), rgba(96, 197, 163, 0.1));
+        border-bottom: 4px solid var(--brand);
+    }
+
+    #view-2 .title-bar h1 {
+        font-family: var(--title-font);
+        font-weight: 900;
+        font-size: clamp(2.5rem, 5vw, 3.8rem);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    #view-2 .title-bar .icon {
+        font-size: 3.5rem;
+        color: var(--brand);
+    }
+
+    #view-2 .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #view-2 .timeline-section {
+        flex: 1;
+        padding: 3rem 5vw;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3rem;
+        align-items: center;
+    }
+
+    .timeline-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+    }
+
+    .timeline-block::after {
+        content: '';
+        position: absolute;
+        right: -1.5rem;
+        top: 30px;
+        width: 3rem;
+        height: 3px;
+        background: linear-gradient(to right, var(--brand), var(--positive));
+    }
+
+    .timeline-block:last-child::after {
+        display: none;
+    }
+
+    .timeline-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--brand), #f4a261);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 24px rgba(224, 122, 95, 0.3);
+    }
+
+    .timeline-month {
+        font-family: var(--title-font);
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+    }
+
+    .timeline-desc {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--muted);
+    }
+
+    #view-2 .stats-bar {
+        background: linear-gradient(135deg, rgba(96, 197, 163, 0.15), rgba(224, 122, 95, 0.1));
+        padding: 2.5rem 5vw;
+        border-top: 3px solid var(--positive);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+
+    .stat-block {
+        text-align: center;
+        padding: 1rem;
+        position: relative;
+    }
+
+    .stat-block::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 20%;
+        bottom: 20%;
+        width: 2px;
+        background: linear-gradient(to bottom, transparent, rgba(96, 197, 163, 0.5), transparent);
+    }
+
+    .stat-block:last-child::after {
+        display: none;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--positive);
+        margin-bottom: 0.75rem;
+    }
+
+    .stat-value {
+        font-family: var(--title-font);
+        font-size: 2.8rem;
+        font-weight: 900;
+        line-height: 1;
+        background: linear-gradient(135deg, var(--positive), var(--brand));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .stat-change {
+        font-size: 0.95rem;
+        color: var(--muted);
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    /* ==================== Responsive ==================== */
+    @media (max-width: 1024px) {
+        #view-0 .metrics-section {
+            grid-template-columns: 1fr;
+        }
+
+        #view-1 .content-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+        }
+
+        .finding-panel.large {
+            grid-row: span 1;
+        }
+
+        #view-2 .timeline-section,
+        #view-2 .stats-bar {
+            grid-template-columns: 1fr;
+        }
+
+        .timeline-block::after {
+            display: none;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <!-- VIEW 0: Split Screen Vertical Layout -->
+    <section id="view-0" class="view" style="display:flex;">
+        <div class="header-section">
+            <h1 class="main-title anim-item">Thiết lập & Đo lường</h1>
+            <div class="context-banner anim-item">
+                Tech Startup 150 NV: Nghỉ việc tăng <strong>12% → 23%</strong> trong 6 tháng
+            </div>
+        </div>
+
+        <div class="metrics-section">
+            <div class="metric-column anim-item">
+                <i class="fas fa-star metric-icon-large"></i>
+                <h3 class="metric-name-large">eNPS</h3>
+                <p class="metric-desc-large">Employee Net Promoter Score - Mức độ giới thiệu bạn bè</p>
+            </div>
+
+            <div class="metric-column anim-item">
+                <i class="fas fa-heart metric-icon-large"></i>
+                <h3 class="metric-name-large">Engagement</h3>
+                <p class="metric-desc-large">Khảo sát hài lòng, động lực và cảm nhận lãnh đạo</p>
+            </div>
+
+            <div class="metric-column anim-item">
+                <i class="fas fa-users metric-icon-large"></i>
+                <h3 class="metric-name-large">Tham gia</h3>
+                <p class="metric-desc-large">% tham dự Town Hall, AMA, Workshop</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 1: Asymmetric Grid Layout -->
+    <section id="view-1" class="view" style="display:none;">
+        <div class="hero-header anim-item">
+            <h1 class="hero-title">
+                <i class="fas fa-chart-line hero-icon"></i>
+                Phân tích & Phản hồi
+            </h1>
+        </div>
+
+        <div class="content-grid">
+            <div class="finding-panel warning anim-item">
+                <span class="badge-large warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Vấn đề nghiêm trọng
+                </span>
+                <div class="finding-number">-15</div>
+                <p class="finding-text-large">
+                    <strong>eNPS thấp:</strong> 67% không muốn giới thiệu bạn bè vì thiếu thông tin và ý kiến không được nghe
+                </p>
+            </div>
+
+            <div class="finding-panel warning anim-item">
+                <span class="badge-large warning">
+                    <i class="fas fa-chart-bar"></i>
+                    Cần cải thiện
+                </span>
+                <div class="finding-number">42</div>
+                <p class="finding-text-large">
+                    <strong>Engagement Score:</strong> Thấp nhất ở "Hiểu mục tiêu" (28) và "Lãnh đạo lắng nghe" (35)
+                </p>
+            </div>
+
+            <div class="finding-panel positive anim-item">
+                <span class="badge-large positive">
+                    <i class="fas fa-trophy"></i>
+                    Điểm sáng
+                </span>
+                <div class="finding-number">78%</div>
+                <p class="finding-text-large">
+                    <strong>Workshop:</strong> Động lực học hỏi vẫn cao - cơ hội cải thiện
+                </p>
+            </div>
+
+            <div class="finding-panel large anim-item">
+                <h3 class="action-section-title">
+                    <i class="fas fa-bullhorn"></i>
+                    Phản hồi Ngay
+                </h3>
+                <div class="action-list-vertical">
+                    <div class="action-row">
+                        <div class="action-num">1</div>
+                        <div class="action-text">
+                            <strong>All-hands Meeting</strong>
+                            <span>CEO chia sẻ công khai, thừa nhận và cam kết</span>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <div class="action-num">2</div>
+                        <div class="action-text">
+                            <strong>Town Hall hàng tháng</strong>
+                            <span>Q&A mở, livestream cho remote</span>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <div class="action-num">3</div>
+                        <div class="action-text">
+                            <strong>1-on-1 Engineering</strong>
+                            <span>VP: 20 buổi trò chuyện cá nhân</span>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <div class="action-num">4</div>
+                        <div class="action-text">
+                            <strong>Dashboard Minh bạch</strong>
+                            <span>Công khai OKRs trên Notion</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW 2: Full Width Timeline + Stats Bar -->
+    <section id="view-2" class="view" style="display:none;">
+        <div class="title-bar anim-item">
+            <h1>
+                <i class="fas fa-rocket icon"></i>
+                Hành động & Kết quả
+            </h1>
+        </div>
+
+        <div class="main-content">
+            <div class="timeline-section">
+                <div class="timeline-block anim-item">
+                    <div class="timeline-circle">T1</div>
+                    <div class="timeline-month">Transparency</div>
+                    <p class="timeline-desc">Dashboard OKRs công khai, Weekly CEO email</p>
+                </div>
+
+                <div class="timeline-block anim-item">
+                    <div class="timeline-circle">T2</div>
+                    <div class="timeline-month">Engineering</div>
+                    <p class="timeline-desc">Tham gia product planning, Discord Q&A</p>
+                </div>
+
+                <div class="timeline-block anim-item">
+                    <div class="timeline-circle">T3</div>
+                    <div class="timeline-month">Leadership</div>
+                    <p class="timeline-desc">Đào tạo 12 team leads về feedback</p>
+                </div>
+
+                <div class="timeline-block anim-item">
+                    <div class="timeline-circle">T6</div>
+                    <div class="timeline-month">Optimize</div>
+                    <p class="timeline-desc">Khảo sát lần 2, điều chỉnh chương trình</p>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-block anim-item">
+                    <div class="stat-label">eNPS</div>
+                    <div class="stat-value">+32</div>
+                    <div class="stat-change">Từ -15 (tăng 47)</div>
+                </div>
+
+                <div class="stat-block anim-item">
+                    <div class="stat-label">Engagement</div>
+                    <div class="stat-value">71</div>
+                    <div class="stat-change">Từ 42 (tăng 29)</div>
+                </div>
+
+                <div class="stat-block anim-item">
+                    <div class="stat-label">Retention</div>
+                    <div class="stat-value">9%</div>
+                    <div class="stat-change">Từ 23% (giảm 14%)</div>
+                </div>
+
+                <div class="stat-block anim-item">
+                    <div class="stat-label">Town Hall</div>
+                    <div class="stat-value">89%</div>
+                    <div class="stat-change">Từ 42% (tăng gấp đôi)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+(function(){
+    let step = 0;
+    let isAnimating = false;
+    const views = [
+        document.getElementById('view-0'),
+        document.getElementById('view-1'),
+        document.getElementById('view-2')
+    ];
+    const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+    function animateChildren(viewEl, type = 'in') {
+        const items = Array.from(viewEl.querySelectorAll('.anim-item'));
+        const stagger = type === 'in' ? 120 : 60;
+        const duration = type === 'in' ? 700 : 350;
+
+        const animations = items.map((item, i) => {
+            const keyframes = type === 'in'
+                ? [
+                    { opacity: 0, transform: 'translateY(30px)' },
+                    { opacity: 1, transform: 'translateY(0px)' }
+                  ]
+                : [
+                    { opacity: 1, transform: 'translateY(0px)' },
+                    { opacity: 0, transform: 'translateY(-25px)' }
+                  ];
+
+            return item.animate(keyframes, {
+                duration: duration,
+                delay: i * stagger,
+                easing: easing,
+                fill: 'forwards'
+            }).finished;
+        });
+        return Promise.all(animations);
+    }
+
+    async function transitionTo(targetStep) {
+        if (isAnimating) return;
+        if (targetStep < 0 || targetStep >= views.length) return;
+
+        isAnimating = true;
+
+        const currentView = views[step];
+        const nextView = views[targetStep];
+
+        if (currentView === nextView) {
+            await animateChildren(currentView, 'in');
+            isAnimating = false;
+            return;
+        }
+
+        await animateChildren(currentView, 'out');
+        currentView.style.display = 'none';
+        nextView.style.display = 'flex';
+        await animateChildren(nextView, 'in');
+
+        step = targetStep;
+        isAnimating = false;
+    }
+
+    window.addEventListener('message', (ev) => {
+        const msg = ev.data || {};
+        switch(msg.type) {
+            case 'reset':
+                isAnimating = false;
+                step = 0;
+                views.forEach((view, idx) => {
+                    view.style.display = idx === 0 ? 'flex' : 'none';
+                    view.querySelectorAll('.anim-item').forEach(el => {
+                        el.style.opacity = '0';
+                    });
+                });
+                break;
+            case 'animate-slide':
+                transitionTo(step);
+                break;
+            case 'setStep':
+                const newStep = parseInt(msg.step) || 0;
+                transitionTo(Math.min(newStep, views.length - 1));
+                break;
+        }
+    });
+
+    window.addEventListener('load', () => transitionTo(0), { once: true });
+
+})();
+</script>
+
+</body>
+</html>

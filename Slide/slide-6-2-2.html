@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - Case Study: Giá trị Tuyên bố tại Google</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        /* Đồng bộ màu sắc với các slide trước */
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+        --divider-color: #f0e6e2;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .main-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Mấu chốt #1: Cột hình ảnh chủ đạo */
+    .image-column {
+        flex-basis: 45%;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .image-column img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, transparent 50%, var(--soft-bg-1) 100%);
+    }
+
+    /* Mấu chốt #2: Cột nội dung theo phong cách tạp chí */
+    .content-column {
+        flex-basis: 55%;
+        padding: 5vw;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .content-column h1 {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        margin-bottom: 30px;
+    }
+
+    .values-list {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .value-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        border-left: 3px solid var(--divider-color);
+        padding-left: 20px;
+        opacity: 0; /* Bắt đầu ẩn */
+    }
+
+    .value-icon {
+        font-size: 1.5rem;
+        color: var(--brand);
+        padding-top: 5px;
+    }
+
+    .value-text strong {
+        display: block;
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .value-text span {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* --- Animations --- */
+    .animated .image-column { animation: slide-in-left 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .animated .content-column h1 { animation: fade-in-up 0.8s 0.5s ease forwards; }
+    .animated .value-item { animation: fade-in-up 0.7s ease forwards; }
+
+    /* Độ trễ tuần tự */
+    .animated .value-item:nth-child(1) { animation-delay: 0.7s; }
+    .animated .value-item:nth-child(2) { animation-delay: 0.9s; }
+    .animated .value-item:nth-child(3) { animation-delay: 1.1s; }
+    .animated .value-item:nth-child(4) { animation-delay: 1.3s; }
+
+    @keyframes slide-in-left {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+    }
+    @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 992px) {
+        .main-container { flex-direction: column; }
+        .image-column { flex-basis: 40vh; width: 100%; }
+        .content-column { flex-basis: auto; }
+    }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="image-column">
+        <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Văn hóa Google">
+        <div class="image-overlay"></div>
+    </div>
+
+    <div class="content-column">
+        <h1>Giá trị Tuyên bố tại Google</h1>
+        <div class="values-list">
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-user"></i></div>
+                <div class="value-text">
+                    <strong>1. Tập trung vào người dùng và mọi thứ khác sẽ theo sau.</strong>
+                    <span>Luôn đặt trải nghiệm và lợi ích của người dùng lên hàng đầu trong mọi quyết định.</span>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-bolt"></i></div>
+                <div class="value-text">
+                    <strong>2. Nhanh vẫn hơn chậm.</strong>
+                    <span>Google tin rằng việc cung cấp kết quả tức thì là một phần của sự tôn trọng thời gian của người dùng.</span>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-globe"></i></div>
+                <div class="value-text">
+                    <strong>3. Nhu cầu thông tin vượt mọi biên giới.</strong>
+                    <span>Mục tiêu là cung cấp quyền truy cập thông tin cho toàn thế giới, bằng mọi ngôn ngữ.</span>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-rocket"></i></div>
+                <div class="value-text">
+                    <strong>4. Tuyệt vời thôi là chưa đủ.</strong>
+                    <span>Luôn đặt ra những mục tiêu có vẻ bất khả thi và nỗ lực để vượt qua chúng, hướng tới sự xuất sắc.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const container = document.querySelector('.main-container');
+
+    function setInitialState() {
+        container.classList.remove('animated');
+        void container.offsetWidth;
+    }
+
+    function animateIn() {
+        container.classList.add('animated');
+    }
+
+    window.addEventListener('load', animateIn, { once: true });
+
+    window.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'animate-slide') {
+            setInitialState();
+            setTimeout(animateIn, 50);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - Thu hẹp Khoảng cách</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        /* Đồng bộ màu sắc và font chữ */
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+        --line-color: rgba(224, 122, 95, 0.15);
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .main-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4vw;
+        box-sizing: border-box;
+    }
+
+    .decorative-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+    }
+    .cross-line {
+        position: absolute;
+        background-color: var(--line-color);
+        transform-origin: center;
+    }
+    #line1 { width: 1px; height: 150%; top: -25%; left: 30%; }
+    #line2 { width: 1px; height: 150%; top: -25%; left: 70%; }
+    #line3 { width: 150%; height: 1px; top: 50%; left: -25%; }
+
+    .slide-title {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        text-align: center;
+        margin-bottom: 50px;
+        z-index: 1;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        width: 100%;
+        max-width: 1100px;
+        z-index: 1;
+    }
+
+    /* Mấu chốt: Thay đổi phong cách thẻ tag */
+    .action-card {
+        background-color: rgba(255, 255, 255, 0.6); /* Nền trong mờ */
+        backdrop-filter: blur(10px); /* Hiệu ứng thủy tinh */
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        opacity: 0; /* Bắt đầu ẩn */
+        text-align: center;
+        min-height: 180px; /* Đảm bảo chiều cao đồng đều */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
+        color: var(--brand);
+        margin-bottom: 20px;
+    }
+    .card-title {
+        font-family: var(--title-font);
+        font-size: 1.8rem;
+        color: var(--text-dark);
+    }
+
+    /* --- Animations --- */
+    .animated .slide-title { animation: fade-in-down 0.8s 0.2s ease forwards; }
+    .animated .action-card { animation: fade-in-up 0.7s ease forwards; }
+
+    .animated .action-card:nth-child(1) { animation-delay: 0.8s; }
+    .animated .action-card:nth-child(2) { animation-delay: 1.0s; }
+    .animated .action-card:nth-child(3) { animation-delay: 1.2s; }
+
+    .animated .cross-line { animation: draw-line 1.5s 0.3s cubic-bezier(0.6, 0, 0.2, 1) forwards; }
+    .animated #line1 { transform: scaleY(0) rotate(45deg); }
+    .animated #line2 { transform: scaleY(0) rotate(-45deg); }
+    .animated #line3 { transform: scaleX(0); }
+
+    @keyframes fade-in-down {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes draw-line {
+        to { transform: scale(1) rotate(var(--r, 0deg)); }
+    }
+
+    @media (max-width: 992px) {
+        .content-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="decorative-overlay">
+        <div id="line1" class="cross-line" style="--r: 45deg;"></div>
+        <div id="line2" class="cross-line" style="--r: -45deg;"></div>
+        <div id="line3" class="cross-line" style="--r: 0deg;"></div>
+    </div>
+
+    <h1 class="slide-title">Bước 5: Thu hẹp khoảng cách</h1>
+
+    <div class="content-grid">
+        <div class="action-card">
+            <div class="card-icon"><i class="fas fa-sitemap"></i></div>
+            <h2 class="card-title">Quy trình</h2>
+        </div>
+
+        <div class="action-card">
+            <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h2 class="card-title">Kỹ năng</h2>
+        </div>
+
+        <div class="action-card">
+            <div class="card-icon"><i class="fas fa-tools"></i></div>
+            <h2 class="card-title">Công cụ</h2>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const container = document.querySelector('body');
+
+    function setInitialState() {
+        container.classList.remove('animated');
+        void container.offsetWidth;
+    }
+
+    function animateIn() {
+        container.classList.add('animated');
+    }
+
+    window.addEventListener('load', animateIn, { once: true });
+
+    window.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'animate-slide') {
+            setInitialState();
+            setTimeout(animateIn, 50);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

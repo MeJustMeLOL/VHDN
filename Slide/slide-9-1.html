@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide 10 — Nội dung (Definition / Two-column)</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #FFF6F3;
+    --soft-bg-2: #FEF8FF;
+    --brand: #E07A5F;
+    --muted: #6b7280;
+    --text: #071422;
+    --card-bg: rgba(255, 255, 255, 0.92);
+    --card-border: rgba(0, 0, 0, 0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; }
+
+  body {
+    background: linear-gradient(180deg, var(--soft-bg-1), var(--soft-bg-2));
+    font-family: var(--body-font);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  /* Main slide container */
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(32px, 6vw, 64px);
+    text-align: center;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .title {
+    font-family: var(--title-font);
+    font-size: clamp(36px, 5vw, 46px);
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1.2;
+  }
+
+  .band {
+    width: 96px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--brand);
+    margin-top: 6px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: clamp(15px, 2vw, 17px);
+    max-width: 760px;
+    margin-top: 8px;
+    line-height: 1.7;
+  }
+
+  /* Two-column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+    margin-top: 28px;
+    width: 100%;
+  }
+
+  .col {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 26px;
+    text-align: left;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .col h3 {
+    font-family: var(--title-font);
+    margin: 0 0 12px 0;
+    font-size: 20px;
+    color: var(--brand);
+    font-weight: 700;
+  }
+
+  .col p, .col ul {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .col ul {
+    margin-top: 12px;
+    padding-left: 22px;
+  }
+  .col ul li { margin-bottom: 10px; }
+
+  /* Long-form definition box */
+  .definition {
+    margin-top: 26px;
+    width: 100%;
+    max-width: 880px;
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 28px 34px;
+    text-align: left;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .note {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+    max-width: 780px;
+  }
+
+  /* Animation items */
+  .animate-item {
+      opacity: 0;
+      transform: translateY(14px);
+  }
+
+  /* Responsive */
+  @media (max-width: 800px) {
+    .two-col { grid-template-columns: 1fr; gap: 18px; }
+    .slide { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<main class="slide" role="main" aria-label="Slide 10 content">
+  <div class="container">
+    <h1 class="title animate-item">1. Đào tạo nội bộ</h1>
+    <div class="band animate-item" aria-hidden="true"></div>
+    <p class="subtitle animate-item">Tập trung nâng cao kỹ năng CSKH cho nhân viên thông qua các workshop và gắn KPI đánh giá hiệu quả đào tạo.</p>
+
+    <section class="two-col" aria-label="Đào tạo nội bộ">
+      <div class="col animate-item" aria-labelledby="col1-title">
+        <h3 id="col1-title">Tổ chức Workshop Trải nghiệm Khách hàng</h3>
+        <p>Mục tiêu: Nâng cao kiến thức và kỹ năng CSKH cho nhân viên.</p>
+        <ul>
+          <li>Mời chuyên gia đào tạo kỹ năng giao tiếp, giải quyết vấn đề, thấu hiểu khách hàng.</li>
+          <li>Ngân sách: 50 triệu/năm; tổ chức 2 lần/năm (Quý I &amp; Quý III).</li>
+          <li>Trách nhiệm: Phòng Nhân sự tổ chức; Phòng CSKH đảm bảo 100% nhân viên tham gia.</li>
+        </ul>
+      </div>
+
+      <div class="col animate-item" aria-labelledby="col2-title">
+        <h3 id="col2-title">Gắn KPI Đào tạo với Phòng CSKH</h3>
+        <p>Mục tiêu: Nâng cao chất lượng dịch vụ và trải nghiệm khách hàng thông qua phát triển kỹ năng.</p>
+        <ul>
+          <li>Đưa KPI đào tạo thành yêu cầu bắt buộc, đánh giá hàng quý.</li>
+          <li>Liên kết trực tiếp với hiệu quả công việc và chỉ số hài lòng khách hàng (CSAT).</li>
+          <li>Trách nhiệm: Trưởng nhóm CSKH báo cáo kết quả; đảm bảo ≥90% nhân viên hoàn thành.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="definition animate-item">
+      Đây là bước đầu tiên trong hành trình cải thiện trải nghiệm khách hàng, tập trung vào việc xây dựng nền tảng kỹ năng vững chắc cho toàn bộ đội ngũ CSKH, đảm bảo mọi nhân viên đều hiểu rõ mục tiêu, phương pháp và công cụ đo lường hiệu quả công việc.
+    </div>
+
+    <div class="note animate-item">
+      Lưu ý: Luôn theo dõi kết quả đào tạo và điều chỉnh nội dung workshop để phù hợp với thực tế vận hành và yêu cầu khách hàng.
+    </div>
+  </div>
+</main>
+
+<script>
+let runningAnimations = [];
+
+function resetAnimations() {
+  runningAnimations.forEach(anim => anim.cancel());
+  runningAnimations = [];
+  document.querySelectorAll('.animate-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(14px)';
+  });
+}
+
+function animateSlide(options = {}) {
+  resetAnimations();
+  const items = document.querySelectorAll(options.selector || '.animate-item');
+  const stagger = options.stagger || 120;
+  const duration = options.duration || 600;
+  const easing = 'cubic-bezier(.2,.95,.2,1)';
+
+  items.forEach((el, i) => {
+    const anim = el.animate(
+      [
+        { opacity: 0, transform: 'translateY(14px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ],
+      { duration, delay: i * stagger, easing, fill: 'forwards' }
+    );
+    runningAnimations.push(anim);
+  });
+}
+
+resetAnimations();
+
+window.addEventListener('message', (ev) => {
+  const data = ev.data || {};
+  if (!data.type) return;
+  switch(data.type){
+    case 'reset':
+    case 'hide': resetAnimations(); break;
+    case 'animate-slide': animateSlide(data.options); break;
+    case 'getNotes':
+      try {
+        ev.source.postMessage({ type: 'notes', notes: "Slide 10: Đào tạo nội bộ, workshop CSKH, KPI liên quan CSAT." }, '*');
+      } catch(e){}
+      break;
+  }
+});
+
+window.addEventListener('load', () => {
+  try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+}, { once: true });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Thiết lập KPIs đo lường sự hài lòng của khách hàng</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #FFF6F3;
+    --soft-bg-2: #FEF8FF;
+    --brand: #E07A5F;
+    --muted: #6b7280;
+    --text: #071422;
+    --card-bg: rgba(255,255,255,0.92);
+    --card-border: rgba(0,0,0,0.06);
+    --accent: #FFD3C4;
+    --quote-bg: #fff4f2;
+    --success: #60c5a3;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%}
+  body{
+    font-family:var(--body-font);
+    color:var(--text);
+    background: linear-gradient(180deg,var(--soft-bg-1),var(--soft-bg-2));
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.6;
+  }
+
+  .slide {
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: clamp(28px, 5vw, 56px);
+  }
+
+  .wrap {
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    align-items:center;
+  }
+
+  .title {
+    font-family:var(--title-font);
+    font-size: clamp(32px, 5vw, 44px);
+    color:var(--brand);
+    font-weight:800;
+    text-align:center;
+    line-height:1.2;
+  }
+
+  .band {
+    width:96px;
+    height:6px;
+    border-radius:4px;
+    background:var(--brand);
+    margin-top:8px;
+  }
+
+  .subtitle {
+    color:var(--muted);
+    font-size:16px;
+    margin-top:12px;
+    text-align:center;
+    max-width:850px;
+    line-height:1.8;
+  }
+
+  .two-col {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:28px;
+    width:100%;
+    margin-top:24px;
+  }
+
+  .col {
+    background:var(--card-bg);
+    border-radius:14px;
+    padding:24px;
+    border:1px solid var(--card-border);
+    box-shadow: 0 6px 20px rgba(7,20,34,0.05);
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .col h3 {
+    font-family:var(--title-font);
+    color:var(--brand);
+    margin-bottom:10px;
+    font-size:20px;
+    line-height:1.3;
+  }
+
+  .col p, .col ul { color:var(--muted); font-size:15px; margin:0; line-height:1.6 }
+  .col ul { padding-left:20px; margin-top:8px }
+  .col ul li { margin-bottom:10px }
+
+  .quote {
+    margin-top:16px;
+    background:var(--quote-bg);
+    border-left:4px solid var(--brand);
+    padding:14px 18px;
+    border-radius:8px;
+    color:var(--text);
+    font-size:15px;
+    line-height:1.6;
+  }
+  .quote code { display:block; background:transparent; padding:0; font-family:monospace; margin-top:6px; color:var(--text) }
+
+  .example {
+    margin-top:24px;
+    width:100%;
+    background:linear-gradient(180deg, rgba(224,122,95,0.06), rgba(255,250,248,0.02));
+    border:1px solid rgba(224,122,95,0.08);
+    border-radius:14px;
+    padding:18px;
+    color:var(--text);
+  }
+  .example h4 { margin:0 0 8px 0; font-size:16px; color:var(--brand); font-family:var(--title-font) }
+  .pill { display:inline-block; padding:6px 12px; border-radius:999px; background:var(--accent); font-size:13px; color:var(--text); margin-right:8px; margin-bottom:6px }
+
+  .note { margin-top:12px; color:var(--muted); font-size:13px; text-align:center }
+
+  .animate-item { opacity:0; transform:translateY(12px); transition: all 0.6s cubic-bezier(.2,.95,.2,1) }
+
+  @media (max-width:900px){
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<main class="slide" role="main" aria-label="Slide KPI đo lường sự hài lòng">
+  <div class="wrap">
+    <h1 class="title animate-item">5. Thiết lập KPIs đo lường sự hài lòng của khách hàng</h1>
+    <div class="band animate-item" aria-hidden="true"></div>
+    <p class="subtitle animate-item">Định nghĩa, mục tiêu, thang đo và ví dụ thực tế để gắn KPI hài lòng khách hàng vào đánh giá hiệu suất cá nhân, nhóm và tổ chức.</p>
+
+    <section class="two-col" aria-label="Nội dung KPI">
+      <div class="col animate-item" aria-labelledby="col1-title">
+        <h3 id="col1-title">Khái niệm &amp; Mục tiêu</h3>
+        <p><strong>KPI</strong> là các chỉ số định lượng để đánh giá mức độ hoàn thành mục tiêu, giúp doanh nghiệp và nhân viên theo dõi tiến trình và cải thiện hiệu quả.</p>
+        <ul>
+          <li>KPI phải gắn trực tiếp với mục tiêu chiến lược của tổ chức.</li>
+          <li>Mục tiêu cụ thể: Đo lường hiệu quả các hoạt động chăm sóc khách hàng (CSKH).</li>
+          <li>Chu kỳ đánh giá: <strong>Hằng quý</strong>, do Phòng CSKH &amp; Phòng Đảm bảo chất lượng triển khai (khảo sát + phân tích dữ liệu).</li>
+        </ul>
+
+        <div class="quote" aria-hidden="false">
+          <strong>Ghi nhớ ngắn gọn:</strong> KPI = con số phản ánh mức độ hoàn thành mục tiêu thực tế.
+        </div>
+      </div>
+
+      <div class="col animate-item" aria-labelledby="col2-title">
+        <h3 id="col2-title">Các chỉ số tiêu biểu</h3>
+
+        <h4 style="margin-top:6px; font-size:15px; font-family:var(--title-font); color:var(--brand)">CSAT — Customer Satisfaction Score</h4>
+        <p style="color:var(--muted); margin-top:4px">Đo mức độ hài lòng sau mỗi tương tác với dịch vụ (ví dụ khảo sát 1–5 sao).</p>
+        <div class="quote" role="region" aria-label="Công thức CSAT">
+          <strong>CSAT (tỷ lệ % hài lòng)</strong>
+          <code>CSAT (%) = (Số lượt đánh giá 4–5 sao / Tổng số lượt khảo sát) × 100</code>
+          <small style="display:block; color:var(--muted); margin-top:6px">Ví dụ: CSAT ≥ 85% → đạt mục tiêu.</small>
+        </div>
+
+        <h4 style="margin-top:12px; font-size:15px; font-family:var(--title-font); color:var(--brand)">NPS — Net Promoter Score</h4>
+        <p style="color:var(--muted); margin-top:4px">Đo mức độ trung thành và sẵn sàng giới thiệu dịch vụ (thang 0–10).</p>
+        <div class="quote" role="region" aria-label="Công thức NPS">
+          <strong>NPS (Promoters − Detractors)</strong>
+          <code>NPS (%) = %Promoters (9–10) − %Detractors (0–6)</code>
+          <small style="display:block; color:var(--muted); margin-top:6px">Quy ước: %Promoters ≥ 60% → KPI đạt.</small>
+        </div>
+      </div>
+    </section>
+
+    <aside class="example animate-item" aria-label="Ví dụ thực tế">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap; margin-bottom:10px;">
+        <div class="pill">Công ty: Dịch vụ Internet</div>
+        <div style="font-size:14px;color:var(--muted)">KPI mẫu áp dụng cho đội CSKH</div>
+      </div>
+
+      <h4 style="margin-top:10px; margin-bottom:6px">Mô tả chi tiết:</h4>
+      <ul style="color:var(--muted); margin-left:20px; margin-top:6px">
+        <li>Khách hàng đánh giá mức độ hài lòng sau mỗi lần hỗ trợ (1–5 sao).</li>
+        <li>CSAT mục tiêu: <strong>≥ 85%</strong> (trung bình nhóm ≥ 4.25/5).</li>
+        <li>NPS mục tiêu: <strong>%Promoters (9–10) ≥ 60%</strong> và NPS tổng dương.</li>
+        <li>Kết quả đánh giá trung bình theo tháng/quý dùng để tính KPI cá nhân và thưởng nhóm.</li>
+      </ul>
+
+      <div style="margin-top:10px; color:var(--muted); font-size:13px">
+        Lưu ý: Kèm các chỉ số bổ trợ (AHT, TTR) để tránh đánh đổi giữa tốc độ và chất lượng.
+      </div>
+    </aside>
+
+    <div class="note animate-item">
+      Có thể bổ sung thêm biểu đồ CSAT theo tháng hoặc thẻ hướng dẫn "Cách gửi khảo sát" (câu hỏi mẫu) để slide trực quan hơn.
+    </div>
+  </div>
+</main>
+
+<script>
+  // Animation logic
+  let running = [];
+  function reset() {
+    running.forEach(a => a.cancel());
+    running = [];
+    document.querySelectorAll('.animate-item').forEach(el=>{
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(12px)';
+    });
+  }
+  function animateSlide() {
+    reset();
+    const items = Array.from(document.querySelectorAll('.animate-item'));
+    const stagger = 100;
+    const dur = 600;
+    const easing = 'cubic-bezier(.2,.95,.2,1)';
+    items.forEach((el,i)=>{
+      const anim = el.animate([
+        { opacity:0, transform:'translateY(12px)' },
+        { opacity:1, transform:'translateY(0)' }
+      ], { duration: dur, delay: i*stagger, easing: easing, fill:'forwards' });
+      running.push(anim);
+    });
+  }
+
+  window.addEventListener('message', (ev) => {
+    const msg = ev.data || {};
+    if(msg.type === 'animate-slide') animateSlide();
+    if(msg.type === 'reset' || msg.type === 'hide') reset();
+    if(msg.type === 'getNotes') {
+      try {
+        window.parent.postMessage({ type:'notes', notes: 'Slide KPI: CSAT, NPS, chu kỳ đánh giá hằng quý, ví dụ ISP.' }, '*');
+      } catch(e){}
+    }
+  }, false);
+
+  window.addEventListener('load', () => {
+    setTimeout(animateSlide, 80);
+    try { window.parent.postMessage({ type:'slide-ready' }, '*'); } catch(e){}
+  }, { once:true });
+</script>
+
+</body>
+</html>

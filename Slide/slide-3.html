@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Bước 1: Tìm hiểu môi trường</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #fdf6f3;
+    --soft-bg-2: #fef9ff;
+    --brand: #E07A5F;
+    --text-dark: #1d2d3a;
+    --text-light: #5a6472;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+    font-family: var(--body-font);
+    color: var(--text-dark);
+  }
+
+  .slide {
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    padding: clamp(20px, 5vw, 60px);
+  }
+
+  .background-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(20%) brightness(1.1) contrast(0.95);
+    opacity: 0.15;
+  }
+
+  .content-wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .step-title {
+    font-family: var(--title-font);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 3.75rem);
+    line-height: 1.1;
+    color: var(--text-dark);
+    margin: 0;
+  }
+
+  .step-title::before {
+    content: "";
+    display: block;
+    font-family: var(--body-font);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .description {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--text-light);
+    max-width: 650px;
+    margin: 0;
+  }
+
+</style>
+</head>
+<body>
+
+  <section class="slide">
+    <div class="background-image"></div>
+    <div class="content-wrapper">
+      <h1 class="step-title">Tìm hiểu môi trường và các yếu tố ảnh hưởng</h1>
+      <p class="description">
+        Muốn xây dựng được chiến lược phù hợp, doanh nghiệp cần xem xét các yếu tố có thể làm thay đổi chiến lược trong tương lai.
+      </p>
+    </div>
+  </section>
+
+<script>
+(function(){
+  const elements = document.querySelectorAll('.step-title, .description');
+
+  function setInitialState() {
+    elements.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(15px)';
+      el.style.transition = 'none';
+    });
+  }
+
+  function animateIn() {
+    elements.forEach((el, index) => {
+      el.animate([
+        { opacity: 0, transform: 'translateY(15px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], {
+        duration: 800,
+        easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)',
+        fill: 'forwards',
+        delay: 200 + (index * 150)
+      });
+    });
+  }
+
+  window.addEventListener('load', () => {
+    setInitialState();
+    animateIn();
+  }, { once: true });
+
+  // Interface for external control if needed
+  window.addEventListener('message', (ev) => {
+    if (ev.data && ev.data.type === 'animate-slide') {
+      setInitialState();
+      setTimeout(animateIn, 50); // small delay to ensure reset is applied
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

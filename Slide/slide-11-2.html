@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Điểm mạnh & Thách thức Caring Culture (To)</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --bg-start: #FFF6F3;
+    --bg-end: #FEF8FF;
+    --brand: #E07A5F;
+    --accent: #FFD3C4;
+    --text: #071422;
+    --muted: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; }
+
+  body {
+    font-family: var(--body-font);
+    color: var(--text);
+    background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(32px, 6vw, 64px);
+    text-align: center;
+  }
+
+  .title {
+    font-family: var(--title-font);
+    font-size: clamp(42px, 6vw, 56px);
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: clamp(18px, 2.5vw, 22px);
+    margin-top: 16px;
+    max-width: 900px;
+    line-height: 1.8;
+  }
+
+  .table-wrapper {
+    margin-top: 40px;
+    width: 100%;
+    max-width: 1000px;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 18px;
+    line-height: 1.8;
+    text-align: left;
+  }
+
+  th, td {
+    padding: 20px 16px;
+  }
+
+  th {
+    background: var(--brand);
+    color: white;
+    font-family: var(--title-font);
+    font-weight: 700;
+    font-size: 22px;
+  }
+
+  td {
+    background: rgba(224, 122, 95, 0.06);
+    color: var(--text);
+    font-size: 18px;
+  }
+
+  tr + tr td {
+    border-top: 2px solid rgba(0,0,0,0.08);
+  }
+
+  ul { padding-left: 24px; margin-top: 8px; }
+  ul li { margin-bottom: 12px; }
+
+  .animate-item {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .note {
+    margin-top: 32px;
+    font-size: 16px;
+    color: var(--muted);
+    font-style: italic;
+    max-width: 850px;
+    text-align: center;
+  }
+
+  @media (max-width: 800px) {
+    th, td { padding: 16px 12px; font-size: 16px; }
+    .title { font-size: clamp(36px, 8vw, 48px); }
+    .subtitle { font-size: clamp(16px, 3vw, 18px); }
+  }
+</style>
+</head>
+<body>
+
+<main class="slide" role="main" aria-label="Điểm mạnh và Thách thức Caring Culture">
+  <h1 class="title animate-item">Điểm mạnh & Thách thức của Caring Culture</h1>
+  <p class="subtitle animate-item">
+    Bảng so sánh các lợi ích, hạn chế và cách khắc phục để triển khai mô hình văn hóa “Quan tâm” hiệu quả, dễ nhìn.
+  </p>
+
+  <div class="table-wrapper animate-item">
+    <table>
+      <thead>
+        <tr>
+          <th>Điểm mạnh</th>
+          <th>Thách thức / Khắc phục</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <ul>
+              <li>Tăng sự gắn bó và trung thành của nhân viên.</li>
+              <li>Xây dựng môi trường làm việc tích cực, giảm căng thẳng và mâu thuẫn nội bộ.</li>
+              <li>Góp phần nâng cao hình ảnh và thương hiệu doanh nghiệp trong mắt khách hàng và ứng viên.</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><strong>Hạn chế:</strong> Nếu quá đề cao yếu tố tình cảm, doanh nghiệp có thể thiếu tính cạnh tranh, ngại va chạm hoặc khó đưa ra quyết định cứng rắn.</li>
+              <li><strong>Cách khắc phục:</strong> Kết hợp giữa sự quan tâm và kỷ luật, thiết lập tiêu chuẩn công việc rõ ràng, đánh giá công bằng dựa trên năng lực và hiệu quả.</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note animate-item">
+    Lưu ý: Cân bằng giữa “Quan tâm” và “Kỷ luật” để mô hình văn hóa tạo ra giá trị bền vững.
+  </div>
+</main>
+
+<script>
+let runningAnimations = [];
+
+function resetAnimations() {
+  runningAnimations.forEach(anim => anim.cancel());
+  runningAnimations = [];
+  document.querySelectorAll('.animate-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(12px)';
+  });
+}
+
+function animateSlide(options = {}) {
+  resetAnimations();
+  const items = document.querySelectorAll(options.selector || '.animate-item');
+  const stagger = options.stagger || 120;
+  const duration = options.duration || 600;
+  const easing = 'cubic-bezier(.2,.95,.2,1)';
+  items.forEach((el, i) => {
+    const anim = el.animate(
+      [
+        { opacity: 0, transform: 'translateY(12px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ],
+      { duration, delay: i * stagger, easing, fill: 'forwards' }
+    );
+    runningAnimations.push(anim);
+  });
+}
+
+resetAnimations();
+
+window.addEventListener('message', (ev) => {
+  const data = ev.data || {};
+  if (!data.type) return;
+  switch(data.type){
+    case 'reset':
+    case 'hide': resetAnimations(); break;
+    case 'animate-slide': animateSlide(data.options); break;
+    case 'getNotes':
+      try { ev.source.postMessage({ type: 'notes', notes: "Slide: Bảng so sánh Điểm mạnh và Thách thức Caring Culture, font lớn dễ đọc." }, '*'); } catch(e){}
+      break;
+  }
+});
+
+window.addEventListener('load', () => {
+  try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+}, { once: true });
+</script>
+
+</body>
+</html>

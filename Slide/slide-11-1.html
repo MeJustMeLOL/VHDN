@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Mô hình văn hóa “Quan tâm” (Caring Culture)</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --bg-start: #FFF6F3;
+    --bg-end: #FEF8FF;
+    --brand: #E07A5F;
+    --text: #071422;
+    --muted: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; }
+
+  body {
+    font-family: var(--body-font);
+    color: var(--text);
+    background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(32px, 6vw, 64px);
+    text-align: center;
+  }
+
+  .title {
+    font-family: var(--title-font);
+    font-size: clamp(36px, 6vw, 48px);
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: clamp(16px, 2vw, 18px);
+    margin-top: 12px;
+    max-width: 840px;
+    line-height: 1.7;
+  }
+
+  .section {
+    margin-top: 36px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px;
+    font-size: 16px;
+    color: var(--text);
+  }
+
+  .section div {
+    flex: 1 1 48%;
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .section h3 {
+    font-family: var(--title-font);
+    font-weight: 700;
+    color: var(--brand);
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  .section ul {
+    margin-top: 10px;
+    padding-left: 20px;
+  }
+
+  .section ul li {
+    margin-bottom: 10px;
+    color: var(--muted);
+  }
+
+  .definition {
+    margin-top: 36px;
+    font-size: 17px;
+    line-height: 1.8;
+    max-width: 900px;
+    text-align: left;
+    padding: 0 10px;
+    color: var(--text);
+  }
+
+  .note {
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .animate-item {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  @media (max-width: 800px) {
+    .section div {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<main class="slide" role="main" aria-label="Mô hình Caring Culture">
+  <h1 class="title animate-item">Mô hình văn hóa “Quan tâm” (Caring Culture)</h1>
+  <p class="subtitle animate-item">
+    Tập trung vào con người, mối quan hệ, lòng tin và sự quan tâm lẫn nhau để tạo môi trường làm việc ấm áp và hỗ trợ.
+  </p>
+
+  <div class="section" aria-label="Chi tiết mô hình Caring Culture">
+    <div class="animate-item">
+      <h3>Yếu tố chính</h3>
+      <ul>
+        <li>Chú trọng con người và mối quan hệ giữa các thành viên.</li>
+        <li>Đề cao lòng tin, sự tôn trọng và quan tâm lẫn nhau.</li>
+        <li>Mục tiêu: tạo môi trường làm việc ấm áp, nơi mọi người được thấu hiểu và hỗ trợ.</li>
+      </ul>
+    </div>
+
+    <div class="animate-item">
+      <h3>Ứng dụng thực tế</h3>
+      <ul>
+        <li>Áp dụng để cải thiện gắn kết đội ngũ và văn hóa doanh nghiệp.</li>
+        <li>Tăng trải nghiệm nhân viên và khách hàng thông qua sự quan tâm thực sự.</li>
+        <li>Làm cơ sở cho KPI đánh giá hợp tác, tinh thần đồng đội và hài lòng nội bộ.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="definition animate-item">
+    Mô hình Caring Culture khuyến khích nhân viên thể hiện sự quan tâm, hỗ trợ đồng nghiệp và tạo môi trường làm việc tích cực, thúc đẩy hiệu suất chung và xây dựng văn hóa doanh nghiệp vững mạnh.
+  </div>
+
+  <div class="note animate-item">
+    Lưu ý: Kết hợp đào tạo, team-building và theo dõi định kỳ các chỉ số về sự gắn kết và hài lòng nhân viên để triển khai hiệu quả.
+  </div>
+</main>
+
+<script>
+let runningAnimations = [];
+
+function resetAnimations() {
+  runningAnimations.forEach(anim => anim.cancel());
+  runningAnimations = [];
+  document.querySelectorAll('.animate-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(12px)';
+  });
+}
+
+function animateSlide(options = {}) {
+  resetAnimations();
+  const items = document.querySelectorAll(options.selector || '.animate-item');
+  const stagger = options.stagger || 120;
+  const duration = options.duration || 600;
+  const easing = 'cubic-bezier(.2,.95,.2,1)';
+  items.forEach((el, i) => {
+    const anim = el.animate(
+      [
+        { opacity: 0, transform: 'translateY(12px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ],
+      { duration, delay: i * stagger, easing, fill: 'forwards' }
+    );
+    runningAnimations.push(anim);
+  });
+}
+
+resetAnimations();
+
+window.addEventListener('message', (ev) => {
+  const data = ev.data || {};
+  if (!data.type) return;
+  switch(data.type){
+    case 'reset':
+    case 'hide': resetAnimations(); break;
+    case 'animate-slide': animateSlide(data.options); break;
+    case 'getNotes':
+      try { ev.source.postMessage({ type: 'notes', notes: "Slide: Caring Culture – yếu tố con người, mối quan hệ, lòng tin, tôn trọng, ứng dụng thực tế." }, '*'); } catch(e){}
+      break;
+  }
+});
+
+window.addEventListener('load', () => {
+  try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+}, { once: true });
+</script>
+
+</body>
+</html>

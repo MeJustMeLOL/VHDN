@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - Sổ tay Ghi chú Văn hóa Google</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&family=Kalam:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --handwriting-font: 'Kalam', cursive; /* Font chữ viết tay */
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+        --note-yellow: #fff9c4;
+        --note-blue: #e3f2fd;
+        --paper-bg: #f7f9fa;
+        --line-color: #e0e6ec;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .notebook {
+        width: 100%;
+        height: 100%;
+        background-color: var(--paper-bg);
+        position: relative;
+        padding: 5vw;
+        box-sizing: border-box;
+        overflow: hidden;
+        background-image: repeating-linear-gradient(to bottom, transparent, transparent 29px, var(--line-color) 30px);
+        background-size: 100% 30px;
+    }
+
+    .notebook-spine {
+        position: absolute;
+        top: 0;
+        left: 40px;
+        width: 20px;
+        height: 100%;
+        background:
+            radial-gradient(circle at 10px 10px, transparent 6px, #ccc 7px, #ccc 8px, transparent 9px),
+            repeating-linear-gradient(to bottom, #ddd, #ddd 28px, transparent 28px, transparent 30px);
+        background-size: 20px 30px, 100%;
+        border-right: 2px solid #ddd;
+    }
+
+    .notebook-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .sticky-note {
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        padding: 20px;
+        box-sizing: border-box;
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-family: 'Inter', sans-serif;
+        opacity: 0;
+    }
+    .note-icon { font-size: 1.5rem; }
+    .note-text { font-weight: 600; font-size: 1.1rem; color: #333; }
+
+    #note1 { background-color: var(--note-yellow); top: 10%; left: 15%; transform: rotate(-4deg); }
+    #note2 { background-color: var(--note-blue); top: 5%; right: 25%; transform: rotate(3deg); }
+    #note3 { background-color: var(--note-blue); bottom: 20%; left: 30%; transform: rotate(5deg); }
+    #note4 { background-color: var(--note-yellow); bottom: 15%; right: 10%; transform: rotate(-6deg); }
+
+    /* Mấu chốt #1: Cập nhật vị trí bút */
+    .pen {
+        position: absolute;
+        width: 20px;
+        height: 280px; /* Dài hơn */
+        background: linear-gradient(to top, #444, #666);
+        border-radius: 10px;
+        bottom: 10%;
+        left: 8%; /* Dịch vào trong một chút */
+        transform: rotate(0deg);
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+        opacity: 0;
+        z-index: 2;
+    }
+    .pen::before { /* Ngòi bút */
+        content: '';
+        position: absolute;
+        top: -15px; /* Đổi lên trên */
+        left: -2.5px;
+        border-bottom: 20px solid #888; /* Đổi hướng */
+        border-left: 12.5px solid transparent;
+        border-right: 12.5px solid transparent;
+    }
+
+    /* Mấu chốt #2: Cập nhật card visit */
+    .business-card {
+        position: absolute;
+        width: 280px;
+        height: 160px;
+        background-color: white;
+        border-radius: 10px;
+        bottom: 10%;
+        left: 5%;
+        transform: rotate(-2deg); /* Hơi nghiêng cho tự nhiên */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        padding: 20px;
+        box-sizing: border-box;
+        opacity: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .google-logo { font-size: 2rem; font-weight: bold; font-family: Arial, sans-serif; }
+    .google-logo .g { color: #4285F4; }
+    .google-logo .o1 { color: #DB4437; }
+    .google-logo .o2 { color: #F4B400; }
+    .google-logo .l { color: #4285F4; }
+    .google-logo .e { color: #0F9D58; }
+
+    .card-handwriting {
+        font-family: var(--handwriting-font);
+        font-size: 1.2rem;
+        color: #555;
+        text-align: right;
+    }
+
+    /* --- Animations --- */
+    .animated .notebook { animation: fade-in 1s ease forwards; }
+    .animated .pen { animation: pop-in 0.8s 0.7s ease forwards; }
+    .animated .business-card { animation: pop-in 0.8s 0.5s ease forwards; }
+    .animated .sticky-note { animation: pop-in 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
+
+    .animated #note1 { animation-delay: 1.0s; }
+    .animated #note2 { animation-delay: 1.2s; }
+    .animated #note3 { animation-delay: 1.4s; }
+    .animated #note4 { animation-delay: 1.6s; }
+
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pop-in {
+        from { opacity: 0; transform: scale(0.9) rotate(var(--r, 0deg)); }
+        to { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); }
+    }
+</style>
+</head>
+<body>
+
+<div class="notebook">
+    <div class="notebook-spine"></div>
+    <div class="notebook-content">
+        <div class="business-card" style="--r: -2deg;">
+            <div class="google-logo">
+                <span class="g">G</span><span class="o1">o</span><span class="o2">o</span><span class="g">g</span><span class="l">l</span><span class="e">e</span>
+            </div>
+            <div class="card-handwriting">
+                Những giả định cơ bản
+            </div>
+        </div>
+
+        <div id="note1" class="sticky-note" style="--r: -4deg;">
+            <div class="note-icon" style="color: #4a90e2;"><i class="fas fa-brain"></i></div>
+            <p class="note-text">Người thông minh sẽ tự biết làm điều đúng.</p>
+        </div>
+        <div id="note2" class="sticky-note" style="--r: 3deg;">
+            <div class="note-icon" style="color: #f7b32b;"><i class="fas fa-chart-line"></i></div>
+            <p class="note-text">Quyết định dựa trên dữ liệu luôn tốt hơn.</p>
+        </div>
+        <div id="note3" class="sticky-note" style="--r: 5deg;">
+            <div class="note-icon" style="color: #a672cb;"><i class="fas fa-cogs"></i></div>
+            <p class="note-text">Công nghệ có thể giải quyết mọi vấn đề lớn.</p>
+        </div>
+        <div id="note4" class="sticky-note" style="--r: -6deg;">
+            <div class="note-icon" style="color: #60c5a3;"><i class="fas fa-users"></i></div>
+            <p class="note-text">Sự cởi mở & hợp tác sẽ tạo ra sản phẩm tốt hơn.</p>
+        </div>
+
+        <div class="pen" style="--r: 0deg;"></div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const container = document.querySelector('.notebook');
+
+    function setInitialState() {
+        container.classList.remove('animated');
+        void container.offsetWidth;
+    }
+
+    function animateIn() {
+        container.classList.add('animated');
+    }
+
+    window.addEventListener('load', animateIn, { once: true });
+
+    window.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'animate-slide') {
+            setInitialState();
+            setTimeout(animateIn, 50);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô hình Schein - Hoàn thiện</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .main-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* --- Cột Văn bản (Bên trái) --- */
+    .text-column {
+        flex-basis: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 5vw;
+        box-sizing: border-box;
+    }
+
+    .text-column h1 {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        margin-bottom: 20px;
+    }
+
+    .text-column .description {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .text-column .description li {
+        line-height: 1.8;
+        color: var(--text-light);
+        font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+        max-width: 550px;
+        margin-bottom: 1em;
+    }
+
+    .text-column .description strong {
+        color: var(--text-dark);
+    }
+
+    /* --- Khung Sơ đồ (Bên phải) --- */
+    .diagram-frame {
+        flex-basis: 50%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* --- Các phần tử Animation --- */
+    .droplet, .circle, .text-label {
+        opacity: 0;
+    }
+    .droplet.animated { animation: drop 1.5s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
+    .circle.animated { animation: expand-and-stay 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+    .text-label.animated { animation: fade-in 1s ease-out forwards; }
+
+    .droplet {
+        width: 12px; height: 12px;
+        background-color: var(--brand);
+        border-radius: 50%;
+        position: absolute;
+        top: 0; left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .circle, .text-label {
+        position: absolute;
+        top: 50%; left: 50%;
+        animation-fill-mode: forwards;
+    }
+
+    .circle {
+        border-radius: 50%;
+        border: 2px solid rgba(0,0,0,0.1); /* Thêm viền nhẹ cho đẹp */
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    .text-label {
+        color: var(--text-dark);
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-align: center;
+        line-height: 1.5;
+        width: 160px;
+    }
+
+    /* Mấu chốt: Thêm màu nền cho các vòng tròn */
+    #circle1 {
+        width: 500px; height: 500px;
+        background-color: #F8D5C8; /* Màu cam nhạt nhất */
+        animation-delay: 1.3s;
+    }
+    #circle2 {
+        width: 340px; height: 340px;
+        background-color: #F1BCA9; /* Màu cam vừa */
+        animation-delay: 1.4s;
+    }
+    #circle3 {
+        width: 180px; height: 180px;
+        background-color: #E9A38C; /* Màu cam đậm hơn */
+        animation-delay: 1.5s;
+    }
+
+    #text1 { transform: translate(-50%, -220px); animation-delay: 1.9s; }
+    #text2 { transform: translate(-50%, -125px); animation-delay: 2.0s; }
+    #text3 { transform: translate(-50%, -50%); animation-delay: 2.1s; }
+
+
+    /* --- Animations --- */
+    @keyframes drop {
+        0% { transform: translate(-50%, 0); opacity: 1; }
+        80% { transform: translate(-50%, calc(50vh - 6px)); opacity: 1; }
+        100% { transform: translate(-50%, calc(50vh - 6px)); opacity: 0; }
+    }
+
+    @keyframes expand-and-stay {
+        from { transform: translate(-50%, -50%) scale(0); }
+        to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+        .main-container { flex-direction: column; }
+        .text-column { flex-basis: auto; text-align: center; padding: 30px; order: 2; }
+        .diagram-frame { flex-basis: 50vh; width: 100%; order: 1; }
+        #circle1 { width: 320px; height: 320px; }
+        #circle2 { width: 220px; height: 220px; }
+        #circle3 { width: 120px; height: 120px; }
+        .text-label { font-size: 0.8rem; width: 100px; }
+        #text1 { transform: translate(-50%, -135px); }
+        #text2 { transform: translate(-50%, -80px); }
+        #text3 { transform: translate(-50%, -50%); }
+    }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="text-column">
+        <h1>Ba cấp độ văn hóa theo mô hình Schein</h1>
+        <ul class="description">
+            <li><strong>Yếu tố hữu hình:</strong> trang phục, không gian làm việc. Ví dụ: Google tạo không gian mở với phòng nghỉ ngơi, khu giải trí để khuyến khích sáng tạo.</li>
+            <li><strong>Giá trị tuyên bố:</strong> triết lý kinh doanh, slogan. Ví dụ: Viettel với khẩu hiệu 'Hãy nói theo cách của bạn' thể hiện triết lý lấy khách hàng làm trung tâm.</li>
+            <li><strong>Giả định nền tảng:</strong> niềm tin ngầm định về nhân viên, khách hàng. Ví dụ: Toyota dựa trên triết lý Kaizen – cải tiến liên tục.</li>
+        </ul>
+    </div>
+
+    <div class="diagram-frame">
+        <div class="droplet"></div>
+
+        <div id="circle1" class="circle"></div>
+        <div id="circle2" class="circle"></div>
+        <div id="circle3" class="circle"></div>
+
+        <div id="text1" class="text-label">Các yếu tố hữu hình và sản phẩm của xã hội</div>
+        <div id="text2" class="text-label">Các quy tắc và giá trị định hướng xã hội</div>
+        <div id="text3" class="text-label">Các giả định nền tảng, ngầm định hướng dẫn hành vi</div>
+    </div>
+
+</div>
+
+<script>
+(function(){
+    const droplet = document.querySelector('.droplet');
+    const circles = [
+        document.querySelector('#circle1'),
+        document.querySelector('#circle2'),
+        document.querySelector('#circle3')
+    ];
+    const labels = [
+        document.querySelector('#text1'),
+        document.querySelector('#text2'),
+        document.querySelector('#text3')
+    ];
+    const allElements = [droplet, ...circles, ...labels];
+
+    function setInitialState() {
+        allElements.forEach(el => {
+            el.classList.remove('animated');
+            void el.offsetWidth;
+        });
+    }
+
+    function animateIn() {
+        droplet.classList.add('animated');
+        circles.forEach((circle, index) => {
+            setTimeout(() => circle.classList.add('animated'), 1300 + index * 100);
+        });
+        labels.forEach((label, index) => {
+            setTimeout(() => label.classList.add('animated'), 1900 + index * 100);
+        });
+    }
+
+    window.addEventListener('load', animateIn, { once: true });
+
+    window.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'animate-slide') {
+            setInitialState();
+            setTimeout(animateIn, 50);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

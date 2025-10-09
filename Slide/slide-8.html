@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - Vai trò của Lãnh đạo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        /* Đồng bộ màu sắc và font chữ */
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+        --divider-color: #f0e6e2;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .main-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+    }
+
+    /* Mấu chốt #1: Cột hình ảnh biểu tượng */
+    .image-column {
+        flex-basis: 50%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .image-column img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(253, 246, 243, 0), var(--soft-bg-1) 95%);
+    }
+
+    /* Mấu chốt #2: Cột nội dung liệt kê vai trò */
+    .content-column {
+        flex-basis: 50%;
+        padding-left: 5vw;
+        padding-right: 5vw;
+        box-sizing: border-box;
+    }
+
+    .content-column h1 {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2.2rem, 4vw, 3.8rem);
+        line-height: 1.3;
+        margin-bottom: 30px;
+    }
+
+    .role-list {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .role-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        opacity: 0; /* Bắt đầu ẩn */
+    }
+
+    .item-icon {
+        font-size: 1.5rem;
+        color: var(--brand);
+        padding-top: 5px;
+    }
+
+    .item-text strong {
+        display: block;
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+    .item-text span {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* --- Animations --- */
+    .animated .image-column { animation: fade-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .animated .content-column h1 { animation: fade-in-up 0.8s 0.4s ease forwards; }
+    .animated .role-item { animation: fade-in-up 0.7s ease forwards; }
+
+    /* Độ trễ tuần tự */
+    .animated .role-item:nth-child(1) { animation-delay: 0.6s; }
+    .animated .role-item:nth-child(2) { animation-delay: 0.8s; }
+    .animated .role-item:nth-child(3) { animation-delay: 1.0s; }
+    .animated .role-item:nth-child(4) { animation-delay: 1.2s; }
+
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 992px) {
+        .main-container { flex-direction: column; }
+        .image-column { flex-basis: 40vh; width: 100%; }
+        .image-overlay { background: linear-gradient(to top, rgba(253, 246, 243, 0), var(--soft-bg-1) 95%); }
+        .content-column { flex-basis: auto; text-align: center; padding: 30px; }
+        .role-item { flex-direction: column; align-items: center; }
+    }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="image-column">
+        <img src="https://images.unsplash.com/photo-1599813133177-37a73f328b8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80" alt="Lãnh đạo dẫn dắt">
+        <div class="image-overlay"></div>
+    </div>
+
+    <div class="content-column">
+        <h1>Bước 6: Vai trò của Lãnh đạo</h1>
+        <div class="role-list">
+            <div class="role-item">
+                <div class="item-icon"><i class="fas fa-user-tie"></i></div>
+                <div class="item-text">
+                    <strong>Làm gương & Định hình</strong>
+                    <span>Hành động của lãnh đạo phải là tấm gương phản chiếu cho các giá trị mong muốn.</span>
+                </div>
+            </div>
+
+            <div class="role-item">
+                <div class="item-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="item-text">
+                    <strong>Truyền thông & Kể chuyện</strong>
+                    <span>Liên tục chia sẻ về tầm quan trọng của văn hóa qua các câu chuyện và thông điệp.</span>
+                </div>
+            </div>
+
+            <div class="role-item">
+                <div class="item-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <div class="item-text">
+                    <strong>Trao quyền & Tin tưởng</strong>
+                    <span>Tạo ra một môi trường an toàn để nhân viên dám thử, dám sai và đóng góp.</span>
+                </div>
+            </div>
+
+            <div class="role-item">
+                <div class="item-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="item-text">
+                    <strong>Đo lường & Khen thưởng</strong>
+                    <span>Công nhận và tưởng thưởng những hành vi phù hợp với văn hóa mong muốn.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const container = document.querySelector('.main-container');
+
+    function setInitialState() {
+        container.classList.remove('animated');
+        void container.offsetWidth;
+    }
+
+    function animateIn() {
+        container.classList.add('animated');
+    }
+
+    window.addEventListener('load', animateIn, { once: true });
+
+    window.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'animate-slide') {
+            setInitialState();
+            setTimeout(animateIn, 50);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

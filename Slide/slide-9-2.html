@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Cơ chế ghi nhận & Khen thưởng</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --brand: #E07A5F;
+    --soft-bg-1: #FFF6F3;
+    --soft-bg-2: #FEF8FF;
+    --text: #071422;
+    --muted: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--body-font);
+    background: linear-gradient(180deg, var(--soft-bg-1), var(--soft-bg-2));
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: clamp(32px, 6vw, 64px);
+  }
+
+  .content {
+    max-width: 960px;
+    width: 100%;
+    text-align: left;
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  h1 {
+    font-family: var(--title-font);
+    font-weight: 800;
+    font-size: clamp(32px, 4vw, 44px);
+    color: var(--brand);
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul li {
+    margin-bottom: 16px;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  ul li strong {
+    color: var(--brand);
+    font-weight: 700;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 720px) {
+    body { padding: 28px 20px; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<main class="content">
+  <h1>2.Cơ chế ghi nhận &amp; Khen thưởng</h1>
+  <p class="subtitle">Khích lệ hành động mang lại giá trị cho khách hàng</p>
+
+  <ul>
+    <li><strong>Mục tiêu:</strong> Khích lệ nhân viên hành động vì khách hàng, xây dựng tinh thần phục vụ chủ động.</li>
+    <li><strong>Thời gian:</strong> Triển khai liên tục, đánh giá và tổng kết định kỳ 6 tháng/lần.</li>
+    <li><strong>Ví dụ:</strong> Vinh danh, thưởng nóng cho nhân viên có hành động vượt trội, giải quyết vấn đề lớn hoặc nhận phản hồi tốt từ khách hàng.</li>
+    <li><strong>Đảm nhận:</strong> Trưởng bộ phận &amp; Ban Giám đốc chủ trì, ngân sách khen thưởng 30&nbsp;triệu/năm, thông qua kênh truyền thông nội bộ.</li>
+  </ul>
+</main>
+
+</body>
+</html>

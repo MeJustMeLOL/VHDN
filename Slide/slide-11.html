@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Infographic — Các Mô Hình Văn Hóa Doanh Nghiệp</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #FFF6F3;
+    --soft-bg-2: #FEF8FF;
+    --brand: #E07A5F;
+    --muted: #6b7280;
+    --text: #071422;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-border: rgba(0, 0, 0, 0.07);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; width:100%; }
+body {
+    font-family: var(--body-font);
+    color: var(--text);
+    background: linear-gradient(180deg, var(--soft-bg-1), var(--soft-bg-2));
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.slide-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 32px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 48px;
+}
+.header-content {
+    max-width: 350px;
+    flex-shrink: 0;
+}
+.header-content h1 {
+    font-family: var(--title-font);
+    font-size: clamp(32px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+.header-content .band {
+    width: 96px; height: 5px; border-radius: 3px;
+    background: var(--brand); margin-bottom: 20px;
+}
+.header-content p { color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+.infographic-container { flex-grow:1; min-height:450px; perspective:1200px; }
+.stack {
+    position: relative; width:100%; height:100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(.25,.8,.25,1);
+}
+.layer {
+    position: absolute; width: 320px; padding:20px; border-radius:12px;
+    background: var(--card-bg); border:1px solid var(--card-border);
+    box-shadow:0 10px 20px rgba(0,0,0,0.05),0 25px 50px rgba(180,90,60,0.1);
+    opacity:0; transform-style: preserve-3d;
+    transform: rotateX(10deg) rotateY(-15deg) translateZ(0);
+    transition: all 0.6s cubic-bezier(.25,.8,.25,1);
+}
+.layer[data-layer="1"] { top:0; left:0; }
+.layer[data-layer="2"] { top:40px; left:50px; }
+.layer[data-layer="3"] { top:80px; left:100px; }
+.layer[data-layer="4"] { top:120px; left:150px; }
+
+.layer.is-active {
+    transform: rotateX(5deg) rotateY(-8deg) translateZ(40px) scale(1.05);
+    box-shadow:0 15px 30px rgba(0,0,0,0.1),0 30px 60px rgba(180,90,60,0.15);
+}
+.stack.is-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap:20px; transform:none; perspective:none;
+}
+.stack.is-split .layer {
+    position: relative; top:auto; left:auto;
+    opacity:1; transform:rotate(0) scale(1);
+    box-shadow:0 4px 12px rgba(0,0,0,0.07);
+}
+
+.layer-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.layer-num {
+    width:32px; height:32px; flex-shrink:0; border-radius:50%;
+    background: var(--brand); color:white; font-weight:700;
+    font-size:16px; display:grid; place-items:center;
+}
+.layer-title { font-size:16px; font-weight:700; }
+.layer-desc { font-size:14px; color: var(--muted); line-height:1.5; }
+
+/* Responsive */
+@media(max-width:900px){
+    .slide-container { flex-direction:column; text-align:center; gap:24px; }
+    .header-content { max-width:100%; text-align:center; }
+    .header-content .band { margin:0 auto 20px; }
+    .infographic-container { perspective:none; width:100%; }
+    .stack,.stack.is-split { display:grid; grid-template-columns:1fr; gap:16px; position:relative; }
+    .layer { position:relative; width:100%; transform:none !important; opacity:1; }
+}
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+  <header class="header-content">
+    <h1>Bước 9 :Xây dựng các Mô Hình Văn Hóa Doanh Nghiệp </h1>
+    <div class="band"></div>
+    <p>Phân tích các mô hình văn hóa "Quan tâm" và "Học hỏi", cùng tác động thực tiễn trong doanh nghiệp.</p>
+  </header>
+
+  <div class="infographic-container">
+    <div class="stack" id="stack">
+      <div class="layer" data-layer="1">
+        <div class="layer-header"><div class="layer-num">1</div><h3 class="layer-title">Văn hóa "Quan tâm" (Caring Culture)</h3></div>
+        <p class="layer-desc">
+        </p>
+      </div>
+      <div class="layer" data-layer="2">
+        <div class="layer-header"><div class="layer-num">2</div><h3 class="layer-title">Văn hóa "Học hỏi" (Learning Culture)</h3></div>
+        <p class="layer-desc">
+        </p>
+      </div>
+      <div class="layer" data-layer="3">
+        <div class="layer-header"><div class="layer-num">3</div><h3 class="layer-title">Ứng dụng thực tế</h3></div>
+        <p class="layer-desc">
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const stack = document.getElementById('stack');
+const layers = Array.from(stack.querySelectorAll('.layer'));
+let animationTimeout;
+
+function resetAnimation() {
+  clearTimeout(animationTimeout);
+  stack.classList.remove('is-split');
+  layers.forEach(layer => { layer.classList.remove('is-active'); layer.style.opacity='0'; layer.style.pointerEvents='none'; });
+}
+
+async function animateSlide() {
+  resetAnimation();
+  for (let i=0;i<layers.length;i++){
+    await new Promise(resolve=>{
+      layers[i].style.opacity='1';
+      layers[i].style.pointerEvents='auto';
+      layers[i].classList.add('is-active');
+      if(i>0) layers[i-1].classList.remove('is-active');
+      animationTimeout=setTimeout(resolve,600);
+    });
+  }
+  await new Promise(resolve=>{
+    animationTimeout=setTimeout(()=>{
+      layers[layers.length-1].classList.remove('is-active');
+      stack.classList.add('is-split');
+      resolve();
+    },500);
+  });
+}
+
+resetAnimation();
+
+window.addEventListener('message', ev=>{
+  const data = ev.data || {};
+  if(!data.type) return;
+  switch(data.type){
+    case 'reset':
+    case 'hide': resetAnimation(); break;
+    case 'animate-slide': animateSlide(); break;
+    case 'getNotes':
+      try { ev.source.postMessage({type:'notes', notes:'Infographic: highlight then split layers.'},'*'); } catch(e){}
+      break;
+  }
+});
+window.addEventListener('load', ()=>{
+  try{ window.parent.postMessage({type:'slide-ready'},'*'); }catch(e){}
+},{once:true});
+</script>
+
+</body>
+</html>

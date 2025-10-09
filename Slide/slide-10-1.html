@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Phổ cập Thay đổi đến Nhân viên — Fullscreen Responsive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root {
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #fdfcfb;
+    --soft-bg-2: #fbfdff;
+    --brand: #E07A5F;
+    --muted: #6b7280;
+    --text: #071422;
+    --line-color: rgba(0, 0, 0, 0.08);
+    --max-width: 1200px;
+}
+
+/* Reset and base */
+* { box-sizing: border-box; }
+html, body {
+    height: 100%;
+    margin: 0;
+    background: linear-gradient(180deg, var(--soft-bg-1), var(--soft-bg-2));
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body {
+    font-family: var(--body-font);
+    line-height: 1.45;
+    overflow: hidden; /* keep slide area contained; views can scroll if needed */
+}
+
+/* Fullscreen slide container */
+.slide-container {
+    width: 100%;
+    height: 100vh; /* always fill viewport height */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Each view (slide) */
+.view {
+    position: absolute;
+    inset: 0; /* top:0; right:0; bottom:0; left:0 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(18px, 4vw, 48px);
+    width: min(96%, var(--max-width));
+    margin: 0 auto;
+    box-sizing: border-box;
+
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    transition: opacity 420ms cubic-bezier(.2,.9,.2,1), transform 420ms cubic-bezier(.2,.9,.2,1);
+}
+
+.view.active {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 2;
+    transform: translateY(0) scale(1);
+}
+
+.view:not(.active) {
+    transform: translateY(6vh) scale(0.995);
+}
+
+/* Inner content wrapper keeps layout centered and allows internal scrolling on small screens */
+.view .inner {
+    width: 100%;
+    max-height: calc(100vh - 120px);
+    overflow: auto; /* allow content to scroll on smaller viewports */
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 0;
+}
+
+.view-title {
+    font-family: var(--title-font);
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    font-weight: 800;
+    margin: 6px 0 10px 0;
+    color: var(--brand);
+    text-align: center;
+    line-height: 1.05;
+}
+
+.band {
+    width: 88px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--brand);
+    margin: 0 auto 18px;
+}
+
+.view-subtitle {
+    color: var(--muted);
+    font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    margin: 0 auto 28px auto;
+    max-width: 900px;
+    line-height: 1.65;
+    text-align: center;
+}
+
+.content-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(18px, 3.6vw, 40px) clamp(22px, 4.4vw, 56px);
+    width: 100%;
+    align-items: start;
+}
+
+.content-item {
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line-color);
+}
+.content-item:last-child { border-bottom: none; }
+
+.item-icon-wrapper {
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    color: var(--brand);
+    flex-shrink: 0;
+    margin-top: 6px;
+    width: 42px;
+    display: grid;
+    place-items: center;
+}
+
+.item-title {
+    font-weight: 700;
+    font-size: clamp(1.02rem, 1.9vw, 1.25rem);
+    margin: 0 0 6px 0;
+    color: var(--brand);
+}
+
+.item-description {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(0.95rem, 1.8vw, 1rem);
+    line-height: 1.6;
+}
+
+.affirmation-layout { max-width: 920px; margin: 0 auto; text-align: center; }
+.affirmation-icon { font-size: clamp(2rem, 4.2vw, 3rem); color: var(--brand); margin-bottom: 18px; }
+.affirmation-text { font-family: var(--title-font); font-size: clamp(1.25rem, 3.2vw, 2rem); font-weight:800; margin-bottom: 12px; color: var(--brand); line-height:1.15; }
+.affirmation-subtext { font-size: clamp(0.95rem, 1.7vw, 1.05rem); color: var(--muted); line-height:1.7; }
+
+/* Responsive: single column on small screens */
+@media (max-width: 880px) {
+    .content-list { grid-template-columns: 1fr; gap: 18px 18px; }
+    .content-item { padding-bottom: 14px; }
+    .band { margin-bottom: 12px; }
+}
+
+@media (max-height: 520px) {
+    .view .inner { max-height: calc(100vh - 64px); }
+}
+
+/* Keyboard focus styles */
+:focus { outline: 3px solid rgba(0,0,0,0.06); outline-offset: 3px; }
+
+/* Small utility for visible navigation on top-right when needed */
+.controls {
+    position: absolute;
+    right: 18px;
+    top: 16px;
+    z-index: 5;
+    display: flex;
+    gap: 8px;
+}
+.control-btn {
+    background: rgba(255,255,255,0.8);
+    border-radius: 8px;
+    padding: 8px 10px;
+    border: 1px solid rgba(7,20,34,0.06);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Allow embedding to request full-screen easily */
+:root { --webkit-tap-highlight-color: rgba(0,0,0,0); }
+</style>
+</head>
+<body>
+
+<div class="slide-container" role="application" aria-roledescription="carousel">
+
+    <div class="controls" aria-hidden="true">
+        <button class="control-btn" onclick="previousSlide()">◀</button>
+        <button class="control-btn" onclick="nextSlide()">▶</button>
+    </div>
+
+    <!-- VIEW EXAMPLES -->
+    <section id="view-0" class="view" role="group" aria-label="Truyền thông & Lộ trình Hành động">
+        <div class="inner">
+            <h1 class="view-title">Truyền thông & Lộ trình Hành động</h1>
+            <div class="band"></div>
+            <p class="view-subtitle">Giải thích <strong>LÝ DO</strong> thay đổi và vạch ra <strong>CÁCH THỨC</strong> thực hiện để xây dựng niềm tin và sự đồng thuận.</p>
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-route" aria-hidden="true"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Lộ trình cụ thể</h3>
+                        <p class="item-description">Cung cấp kế hoạch chi tiết, tổ chức đào tạo và trang bị đầy đủ thiết bị cần thiết cho nhân viên.</p>
+                    </div>
+                </div>
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-tools" aria-hidden="true"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Hỗ trợ kỹ thuật</h3>
+                        <p class="item-description">Thành lập đội ngũ hỗ trợ 24/7, cung cấp tài liệu và giải quyết nhanh chóng các vấn đề phát sinh.</p>
+                    </div>
+                </div>
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Thiết lập Quy trình</h3>
+                        <p class="item-description">Ban hành quy định làm việc từ xa rõ ràng và chuẩn hóa các quy trình cho môi trường làm việc mới.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-1" class="view" role="group" aria-label="Lợi ích Mang lại">
+        <div class="inner">
+            <h1 class="view-title">Lợi ích Mang lại</h1>
+            <div class="band"></div>
+            <p class="view-subtitle">Nhấn mạnh những giá trị tích cực mà sự thay đổi đem lại cho cả nhân viên và tổ chức.</p>
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-users-cog"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Văn hóa Minh bạch</h3>
+                        <p class="item-description">Xây dựng môi trường làm việc cởi mở, tin tưởng và lấy khách hàng làm trung tâm.</p>
+                    </div>
+                </div>
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-chart-line"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Phát triển Kỹ năng</h3>
+                        <p class="item-description">Nhân viên được đào tạo và trang bị những kỹ năng mới phù hợp với xu thế công việc hiện đại.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-2" class="view" role="group" aria-label="Vai trò của Nhân viên">
+        <div class="inner">
+            <h1 class="view-title">Vai trò của Nhân viên</h1>
+            <div class="band"></div>
+            <p class="view-subtitle">Mỗi cá nhân không chỉ là người tiếp nhận, mà là trụ cột và là người kiến tạo nên sự thay đổi.</p>
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-user-check"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Người Thực hành Tiên phong</h3>
+                        <p class="item-description">Chủ động áp dụng và duy trì văn hóa mới trong công việc hàng ngày, trở thành tấm gương cho đồng nghiệp.</p>
+                    </div>
+                </div>
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-puzzle-piece"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Người Đóng góp & Cải tiến</h3>
+                        <p class="item-description">Tích cực góp ý, đưa ra phản hồi để cùng nhau hoàn thiện quy trình và xây dựng văn hóa chung bền vững.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-3" class="view" role="group" aria-label="Động viên & Tạo động lực">
+        <div class="inner">
+            <h1 class="view-title">Động viên & Tạo động lực</h1>
+            <div class="band"></div>
+            <p class="view-subtitle">Thúc đẩy tinh thần tích cực và cam kết từ mỗi cá nhân thông qua sự ghi nhận và hỗ trợ kịp thời.</p>
+            <div class="content-list">
+                <div class="content-item">
+                    <div class="item-icon-wrapper"><i class="fas fa-trophy"></i></div>
+                    <div class="item-text-wrapper">
+                        <h3 class="item-title">Khen thưởng & Ghi nhận</h3>
+                        <p class="item-description">Tôn vinh những cá nhân và tập thể xuất sắc trong quá trình chuyển đổi để lan tỏa năng lượng tích cực.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-4" class="view" role="group" aria-label="Kết luận">
+        <div class="inner">
+            <div class="affirmation-layout">
+                <div class="affirmation-icon"><i class="fas fa-exclamation-circle"></i></div>
+                <h2 class="affirmation-text">Khi nhân viên hiểu rõ và có động lực, họ sẽ cùng doanh nghiệp kiến tạo văn hóa bền vững.</h2>
+                <p class="affirmation-subtext">Phổ cập thay đổi đúng cách không phải là lựa chọn, mà là yếu tố bắt buộc để thành công lâu dài.</p>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+(function(){
+    let currentStep = 0;
+    const views = Array.from(document.querySelectorAll('.view'));
+
+    function showStep(step) {
+        step = Math.max(0, Math.min(step, views.length - 1));
+        views.forEach((v, i) => {
+            if(i === step){
+                v.classList.add('active');
+                v.setAttribute('aria-hidden', 'false');
+            } else {
+                v.classList.remove('active');
+                v.setAttribute('aria-hidden', 'true');
+            }
+        });
+        currentStep = step;
+    }
+
+    window.nextSlide = function(){
+        if(currentStep < views.length - 1){
+            showStep(currentStep + 1);
+        }
+    }
+
+    window.previousSlide = function(){
+        if(currentStep > 0){
+            showStep(currentStep - 1);
+        }
+    }
+
+    document.addEventListener('keydown', (e)=>{
+        if(e.key === 'ArrowRight') nextSlide();
+        if(e.key === 'ArrowLeft') previousSlide();
+        if(e.key === 'Home') showStep(0);
+        if(e.key === 'End') showStep(views.length - 1);
+    });
+
+    window.addEventListener('message', (ev)=>{
+        const msg = ev.data || {};
+        switch(msg.type){
+            case 'reset':
+            case 'hide':
+                showStep(0);
+                break;
+            case 'setStep':
+                showStep(parseInt(msg.step)||0);
+                break;
+            case 'next':
+                nextSlide();
+                break;
+            case 'previous':
+                previousSlide();
+                break;
+        }
+    }, false);
+
+    window.addEventListener('load', ()=>{
+        showStep(0);
+        try{ window.parent.postMessage({type:'slide-ready'}, '*'); }catch(e){}
+    }, {once:true});
+
+    // Optional: support swipe gestures on touch devices
+    (function addSwipe(){
+        let startX = 0;
+        let startY = 0;
+        const threshold = 40; // px
+        const restraint = 70; // px
+        const allowedTime = 500; // ms
+        let startTime = 0;
+
+        function touchStart(e){
+            const t = e.changedTouches[0];
+            startX = t.pageX; startY = t.pageY; startTime = Date.now();
+        }
+        function touchEnd(e){
+            const t = e.changedTouches[0];
+            const distX = t.pageX - startX;
+            const distY = t.pageY - startY;
+            const elapsed = Date.now() - startTime;
+            if(elapsed <= allowedTime && Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){
+                if(distX < 0) nextSlide(); else previousSlide();
+            }
+        }
+        document.addEventListener('touchstart', touchStart, {passive:true});
+        document.addEventListener('touchend', touchEnd, {passive:true});
+    })();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - Thu hẹp Khoảng cách (2 giai đoạn)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        /* Đồng bộ màu sắc và font chữ */
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+        --positive: #60c5a3;
+        --card-bg: #ffffff;
+        --line-color: #f0e6e2;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .slide-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 4vw;
+        box-sizing: border-box;
+    }
+
+    .view {
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .view-title {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    /* --- View 1: Tình huống --- */
+    .situation-layout {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+    }
+    .state-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--line-color);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 8px Gg30px rgba(0,0,0,0.06);
+        width: 300px;
+        text-align: center;
+    }
+    .state-card .title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+    .state-card .value {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        min-height: 50px;
+    }
+    #current-state .title { color: var(--brand); }
+    #desired-state .title { color: var(--positive); }
+
+    .arrow-connector {
+        font-size: 3rem;
+        color: var(--line-color);
+    }
+
+    /* --- View 2: Các hoạt động --- */
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    .action-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--line-color);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .card-icon { font-size: 1.8rem; color: var(--brand); }
+    .card-title { font-family: var(--title-font); font-size: 1.5rem; color: var(--text-dark); }
+
+    .card-content ul {
+        list-style: none; padding: 0; margin: 0;
+    }
+    .card-content li {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        line-height: 1.7;
+        margin-bottom: 10px;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 992px) {
+        .actions-grid, .situation-layout { grid-template-columns: 1fr; flex-direction: column; }
+    }
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <section id="view-0" class="view" data-step="0">
+        <h1 class="view-title">Tình huống: Thu hẹp khoảng cách</h1>
+        <div class="situation-layout">
+            <div id="current-state" class="state-card">
+                <div class="title">Giá trị Hiện tại</div>
+                <p class="value">Thời gian Xử lý Cuộc gọi Trung bình (AHT) quá dài.</p>
+            </div>
+            <div class="arrow-connector">
+                <i class="fas fa-long-arrow-alt-right"></i>
+            </div>
+            <div id="desired-state" class="state-card">
+                <div class="title">Giá trị Mong muốn</div>
+                <p class="value">Cải thiện đáng kể Tốc độ và Chất lượng Giải quyết vấn đề.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-1" class="view" data-step="1" style="display:none;">
+        <h1 class="view-title">Các hoạt động cụ thể</h1>
+        <div class="actions-grid">
+            <div class="action-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-sitemap"></i></div>
+                    <h2 class="card-title">Quy trình</h2>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>-Thực hiện Phân luồng Cuộc gọi Thông minh: Triển khai hệ thống IVR (Phản hồi bằng Giọng nói Tương tác) tiên tiến để tự động định tuyến các yêu cầu đơn giản đến cơ sở dữ liệu hoặc chatbot, giúp các nhân viên tổng đài chỉ tập trung xử lý các vấn đề phức tạp.</li>
+                        <li>-Chuẩn hóa Kịch bản (Script): Thiết kế lại các kịch bản đối thoại, rút ngắn các câu hỏi thừa thãi và cung cấp "Phần trả lời nhanh" (Quick Answers) cho các sự cố phổ biến nhất.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="action-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h2 class="card-title">Kỹ năng</h2>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>- Đào tạo Kỹ thuật Chuyên sâu: Tổ chức các buổi đào tạo chuyên sâu về kỹ năng chẩn đoán vấn đề cấp tốc và sử dụng các công cụ hỗ trợ mới để giảm thời gian tìm kiếm thông tin.</li>
+                        <li>-Thực hành Tình huống Giả định: Tổ chức các buổi huấn luyện nhập vai (Role-playing) với các tình huống khách hàng khó tính hoặc vấn đề kỹ thuật phức tạp để nhân viên thực hành giảm AHT mà vẫn đảm bảo sự hài lòng.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="action-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-tools"></i></div>
+                    <h2 class="card-title">Công cụ</h2>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>- Triển khai Hệ thống CSDL Tập trung (Knowledge Base): Xây dựng một thư viện kiến thức nội bộ dễ dàng tìm kiếm, cho phép nhân viên tổng đài tìm thấy giải pháp ngay lập tức mà không cần hỏi đồng nghiệp hay quản lý.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+// Mấu chốt #3: Tái sử dụng và điều chỉnh JS từ slide-4-2.html
+(function(){
+  let step = 0;
+  let isAnimating = false;
+  const view0 = document.getElementById('view-0');
+  const view1 = document.getElementById('view-1');
+  const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+  // Hàm animation cho các phần tử con, trả về một Promise
+  function animateChildren(viewEl, type = 'in') {
+    const items = Array.from(viewEl.querySelectorAll('.view-title, .state-card, .arrow-connector, .action-card'));
+    const stagger = type === 'in' ? 100 : 50;
+    const duration = type === 'in' ? 600 : 300;
+
+    const animations = items.map((item, i) => {
+      const keyframes = type === 'in'
+        ? [ { opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'translateY(0px)' } ]
+        : [ { opacity: 1, transform: 'translateY(0px)' }, { opacity: 0, transform: 'translateY(-15px)' } ];
+
+      return item.animate(keyframes, {
+        duration: duration,
+        delay: i * stagger,
+        easing: easing,
+        fill: 'forwards'
+      }).finished;
+    });
+    return Promise.all(animations);
+  }
+
+  // Hàm chuyển đổi chính
+  async function transitionTo(targetStep) {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const currentView = (step === 0) ? view0 : view1;
+    const nextView = (targetStep === 0) ? view0 : view1;
+
+    // Nếu không chuyển view, chỉ chạy lại animation 'in'
+    if (currentView === nextView) {
+      await animateChildren(currentView, 'in');
+      isAnimating = false;
+      return;
+    }
+
+    await animateChildren(currentView, 'out');
+    currentView.style.display = 'none';
+    nextView.style.display = 'block';
+    await animateChildren(nextView, 'in');
+
+    step = targetStep;
+    isAnimating = false;
+  }
+
+  // Xử lý lệnh từ parent (ví dụ: các nút điều khiển của trình chiếu)
+  window.addEventListener('message', (ev) => {
+    const msg = ev.data || {};
+    switch(msg.type){
+      case 'reset':
+        isAnimating = false;
+        step = 0;
+        view0.style.display = 'block';
+        view1.style.display = 'none';
+        [...document.querySelectorAll('.view-title, .state-card, .arrow-connector, .action-card')].forEach(el => {
+          el.style.opacity = '0';
+        });
+        break;
+      case 'animate-slide':
+        transitionTo(step); // Chạy animation cho step hiện tại
+        break;
+      case 'setStep': // Lệnh để chuyển giữa các slide con
+        transitionTo(msg.step === 1 ? 1 : 0);
+        break;
+    }
+  }, false);
+
+  // Tự động chạy animation khi tải lần đầu
+  window.addEventListener('load', () => transitionTo(0), { once: true });
+
+})();
+</script>
+
+</body>
+</html>

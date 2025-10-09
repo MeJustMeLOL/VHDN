@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide - Vai trò của Lãnh đạo (2 giai đoạn)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        /* Đồng bộ màu sắc và font chữ */
+        --title-font: 'Playfair Display', serif;
+        --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        --soft-bg-1: #fdf6f3;
+        --soft-bg-2: #fef9ff;
+        --brand: #E07A5F;
+        --text-dark: #1d2d3a;
+        --text-light: #5a6472;
+        --positive: #60c5a3;
+        --card-bg: #ffffff;
+        --line-color: #f0e6e2;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body-font);
+        background: linear-gradient(170deg, var(--soft-bg-1), var(--soft-bg-2));
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .slide-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 4vw;
+        box-sizing: border-box;
+    }
+
+    .view {
+        width: 100%;
+        max-width: 1100px; /* Tăng chiều rộng để chứa 3 cột */
+    }
+
+    .view-title {
+        font-family: var(--title-font);
+        color: var(--text-dark);
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    /* --- View 1: Tình huống --- */
+    .situation-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--line-color);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    .situation-card .title {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--brand);
+        margin-bottom: 10px;
+    }
+    .situation-card .description {
+        font-size: 1rem;
+        color: var(--text-light);
+        line-height: 1.7;
+    }
+
+    /* --- View 2: Phân cấp hành động --- */
+    .roles-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    .role-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--line-color);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+    .card-header {
+        text-align: center;
+        border-bottom: 1px solid var(--line-color);
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .card-icon { font-size: 2rem; color: var(--brand); margin-bottom: 15px; }
+    .card-title { font-family: var(--title-font); font-size: 1.5rem; color: var(--text-dark); margin-bottom: 5px; }
+    .card-subtitle { font-size: 0.9rem; color: var(--text-light); font-style: italic; }
+
+    .card-content ul {
+        list-style: none; padding: 0; margin: 0;
+    }
+    .card-content li {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        line-height: 1.7;
+        padding-left: 20px;
+        position: relative;
+    }
+    .card-content li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--positive);
+        font-weight: bold;
+    }
+    .card-content li:not(:last-child) { margin-bottom: 15px; }
+
+    /* --- Responsive --- */
+    @media (max-width: 992px) {
+        .roles-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <section id="view-0" class="view" data-step="0">
+        <h1 class="view-title">Bước 6: Vai trò của Lãnh đạo</h1>
+        <div class="situation-card">
+            <h2 class="title">Tình huống Cụ thể</h2>
+            <p class="description">Đảm bảo sự thay đổi về hiệu suất và dịch vụ tại Trung tâm Hỗ trợ được triển khai thành công, giảm AHT và tăng chất lượng giải quyết vấn đề.</p>
+        </div>
+    </section>
+
+    <section id="view-1" class="view" data-step="1" style="display:none;">
+        <h1 class="view-title">Phân cấp Hành động</h1>
+        <div class="roles-grid">
+            <div class="role-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-crown"></i></div>
+                    <h2 class="card-title">Lãnh đạo Cấp cao</h2>
+                    <p class="card-subtitle">Người Bảo trợ</p>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Đặt mục tiêu rõ ràng (giảm 20% AHT) và cấp nguồn lực (ngân sách cho IVR, Knowledge Base).</li>
+                        <li>Công khai khen ngợi các đội đạt chỉ tiêu để làm gương, ủng hộ văn hóa hiệu suất.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="role-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-user-shield"></i></div>
+                    <h2 class="card-title">Quản lý Cấp trung</h2>
+                    <p class="card-subtitle">Người Huấn luyện</p>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Giám sát & huấn luyện hàng ngày (lắng nghe cuộc gọi, phản hồi tức thì).</li>
+                        <li>Giải quyết rào cản kỹ thuật, quy trình để nhân viên không bị chậm trễ.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="role-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                    <h2 class="card-title">Đại sứ Thay đổi</h2>
+                    <p class="card-subtitle">Người Tiên phong</p>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Tạo tiêu chuẩn mẫu (chia sẻ các cuộc gọi mẫu có AHT thấp & CSAT cao).</li>
+                        <li>Chủ động hỗ trợ, trở thành cầu nối giữa quản lý và nhân viên tuyến đầu.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+// Tái sử dụng và điều chỉnh JS từ slide-4-2.html
+(function(){
+  let step = 0;
+  let isAnimating = false;
+  const view0 = document.getElementById('view-0');
+  const view1 = document.getElementById('view-1');
+  const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+  // Hàm animation cho các phần tử con
+  function animateChildren(viewEl, type = 'in') {
+    const items = Array.from(viewEl.querySelectorAll('.view-title, .situation-card, .role-card'));
+    const stagger = type === 'in' ? 100 : 50;
+    const duration = type === 'in' ? 600 : 300;
+
+    const animations = items.map((item, i) => {
+      const keyframes = type === 'in'
+        ? [ { opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'translateY(0px)' } ]
+        : [ { opacity: 1, transform: 'translateY(0px)' }, { opacity: 0, transform: 'translateY(-15px)' } ];
+
+      return item.animate(keyframes, {
+        duration: duration,
+        delay: i * stagger,
+        easing: easing,
+        fill: 'forwards'
+      }).finished;
+    });
+    return Promise.all(animations);
+  }
+
+  // Hàm chuyển đổi chính
+  async function transitionTo(targetStep) {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const currentView = (step === 0) ? view0 : view1;
+    const nextView = (targetStep === 0) ? view0 : view1;
+
+    if (currentView === nextView) {
+      await animateChildren(currentView, 'in');
+      isAnimating = false;
+      return;
+    }
+
+    await animateChildren(currentView, 'out');
+    currentView.style.display = 'none';
+    nextView.style.display = 'block';
+    await animateChildren(nextView, 'in');
+
+    step = targetStep;
+    isAnimating = false;
+  }
+
+  // Xử lý lệnh từ parent
+  window.addEventListener('message', (ev) => {
+    const msg = ev.data || {};
+    switch(msg.type){
+      case 'reset':
+        isAnimating = false;
+        step = 0;
+        view0.style.display = 'block';
+        view1.style.display = 'none';
+        [...document.querySelectorAll('.view-title, .situation-card, .role-card')].forEach(el => {
+          el.style.opacity = '0';
+        });
+        break;
+      case 'animate-slide':
+        transitionTo(step);
+        break;
+      case 'setStep':
+        transitionTo(msg.step === 1 ? 1 : 0);
+        break;
+    }
+  }, false);
+
+  // Tự động chạy animation khi tải lần đầu
+  window.addEventListener('load', () => transitionTo(0), { once: true });
+
+})();
+</script>
+
+</body>
+</html>

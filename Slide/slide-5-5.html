@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide — Ý nghĩa của việc xây dựng tầm nhìn</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Giữ nguyên bộ màu sắc và font chữ */
+    --title-font: 'Playfair Display', serif;
+    --body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    --soft-bg-1: #FEFBF9;
+    --soft-bg-2: #F8F8FC;
+    --brand: #E07A5F;
+    --muted: #667085;
+    --text-main: #25283D;
+    --border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(175deg, var(--soft-bg-1), var(--soft-bg-2));
+    font-family: var(--body-font);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: clamp(30px, 5vw, 60px);
+  }
+
+  /* === PHONG CÁCH TRANG TRÍ MỚI === */
+  .decorative-overlay {
+     position: absolute;
+     inset: 0;
+     z-index: 0;
+     pointer-events: none;
+     /* Sử dụng gradient tỏa tròn để tạo chiều sâu */
+     background-image:
+        radial-gradient(circle at 15% 20%, rgba(224, 122, 95, 0.08), transparent 35%),
+        radial-gradient(circle at 85% 80%, rgba(180, 190, 220, 0.08), transparent 40%);
+     opacity: 0.9;
+   }
+  /* === KẾT THÚC PHẦN TRANG TRÍ === */
+
+  .content-grid {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 2fr 3fr; /* Tỷ lệ cột 40/60 */
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  .main-header {
+    text-align: left;
+  }
+
+  .title {
+    font-family: var(--title-font);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    line-height: 1.25;
+    margin: 0;
+    /* Hiệu ứng màu chữ gradient */
+    background: -webkit-linear-gradient(45deg, var(--text-main), #8c7b74);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Danh sách các ý nghĩa */
+  .meaning-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .meaning-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .item-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    color: var(--brand);
+  }
+
+  .item-icon svg {
+      width: 100%;
+      height: 100%;
+  }
+
+  .item-text {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      line-height: 1.65;
+      color: var(--muted);
+      padding-top: 0.25rem;
+  }
+
+  @media(max-width:800px){
+    .content-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .main-header {
+        margin-bottom: 2rem;
+    }
+    .meaning-item {
+        text-align: left;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <div class="decorative-overlay"></div>
+
+  <div class="content-grid">
+    <header class="main-header">
+      <h1 class="title">Ý nghĩa của việc xây dựng tầm nhìn</h1>
+    </header>
+
+    <ul class="meaning-list">
+      <li class="meaning-item">
+        <div class="item-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+          </svg>
+        </div>
+        <p class="item-text">Giúp định hình và củng cố văn hoá doanh nghiệp.</p>
+      </li>
+
+      <li class="meaning-item">
+        <div class="item-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962A3 3 0 013 10.5V18a3 3 0 01-2.121 2.853A9.07 9.07 0 0112 18.72zM12 12.75a3 3 0 01-3-3v-2.25a3 3 0 013-3h.008a3 3 0 013 3v2.25a3 3 0 01-3 3z" />
+          </svg>
+        </div>
+        <p class="item-text">Tạo sự gắn kết và đồng thuận trong tổ chức.</p>
+      </li>
+
+      <li class="meaning-item">
+        <div class="item-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1.5-1.5m1.5 1.5l1.5-1.5m3.75-3l-1.5-1.5m1.5 1.5l1.5-1.5m-3.75 0h.008v.008h-.008v-.008zM3.75 9h16.5" />
+          </svg>
+        </div>
+        <p class="item-text">Định hướng chiến lược, quyết định quản lý và hành vi ứng xử.</p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+// Hiệu ứng animation tương tự các slide trước
+(function(){
+  const nodes = document.querySelectorAll('.title, .meaning-item');
+  let running = [];
+  function setInitialState() {
+    nodes.forEach(n => {
+      n.style.opacity = '0';
+      n.style.transform = 'translateY(15px)';
+      n.style.transition = 'none';
+    });
+  }
+  function resetAnimations() {
+    running.forEach(a => { try { a.cancel(); } catch(e){} });
+    running = [];
+    setInitialState();
+  }
+  function animateSlide(options) {
+    resetAnimations();
+    const dur = (options && options.duration) || 700;
+    const stagger = (options && options.stagger) || 150;
+    const easing = 'cubic-bezier(.2,.95,.2,1)';
+    nodes.forEach((el, i) => {
+      const anim = el.animate(
+        [{ opacity: 0, transform: 'translateY(15px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: dur, easing, fill: 'forwards', delay: i * stagger }
+      );
+      running.push(anim);
+    });
+  }
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data || typeof data.type !== 'string') return;
+    if (data.type === 'animate-slide') animateSlide(data.options || {});
+    if (data.type === 'reset' || data.type === 'hide') resetAnimations();
+  });
+  window.addEventListener('load', () => {
+    setInitialState();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  }, { once: true });
+})();
+</script>
+</body>
+</html>
