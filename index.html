@@ -507,6 +507,31 @@
       left.classList.toggle('expanded');
     }
   });
+  frameWrapEl.addEventListener('mousedown', (e) => {
+  // Chỉ hoạt động khi immersive
+  if (!bodyEl.classList.contains('immersive')) return;
+
+  e.stopPropagation();
+
+  // Chuột trái = NEXT
+  if (e.button === 0) {
+    lastClickedIndex = null;
+    showNext();
+    frameWrapEl.focus();
+  }
+
+  // Chuột phải = PREVIOUS
+  if (e.button === 2) {
+    lastClickedIndex = null;
+    showPrev();
+    frameWrapEl.focus();
+  }
+});
+
+// Chặn menu chuột phải
+frameWrapEl.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});
 
   function startAutoplay(){
     stopAutoplay();
