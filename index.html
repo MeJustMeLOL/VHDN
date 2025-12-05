@@ -128,7 +128,7 @@
       if (topIframe && topIframe.contentWindow) {
         topIframe.contentWindow.postMessage({ type: 'fullscreen', active: true }, '*');
       }
-    } catch (err) { /* ignore */ }
+    } catch (err) { console.debug('enterImmersive postMessage error', err); }
     setTimeout(()=> frameWrap.focus(), 100);
   }
 
@@ -175,57 +175,30 @@
 })();
 </script>
 
-<!-- Slide-pool controller (đã chỉnh để gửi 'reset' khi preload xong và chỉ animate khi hiển thị) -->
+<!-- Slide-pool controller (đã chỉnh để preload 4 frames, giảm delay, add debug + retry) -->
 <script>
 (function(){
   const slideMap = [
-    { key:'slide-1', url:'Slide/slide-1.html', title:'1 — Giới thiệu', notes:'Ghi chú: giới thiệu' },
-    { key:'slide-2', url:'Slide/slide-2.html', title:'2 — Nội dung', notes:'Ghi chú: nội dung' },
-    { key:'slide-3', url:'Slide/slide-3.html', title:'3 — Thêm ví dụ', notes:'Ghi chú: ví dụ' },
-    { key:'slide-3-1', url:'Slide/slide-3-1.html', title:'3-1 — Kết luận'},
-    { key:'slide-3-2', url:'Slide/slide-3-2.html', title:'3-2 — Kết luận'},
-    { key:'slide-3-3', url:'Slide/slide-3-3.html', title:'3-3 — Kết luận'},
-    { key:'slide-3-4', url:'Slide/slide-3-4.html', title:'3-4 — Kết luận'},
-    { key:'slide-4', url:'Slide/slide-4.html', title:'4 — Kết luận', notes:'slide 4' },
-    { key:'slide-4-1', url:'Slide/slide-4-1.html', title:'4-1 — Kết luận'},
-    { key:'slide-4-2', url:'Slide/slide-4-2.html', title:'4-2 — Kết luận', notes:'Ghi chú: kết luận' ,stepCount: 2},
-    { key:'slide-5', url:'Slide/slide-5.html', title:'5 — Kết luận', notes:'slide 5' },
-    { key:'slide-5-1', url:'Slide/slide-5-1.html', title:'5-1 — Kết luận', notes:'slide 5' },
-    { key:'slide-5-2', url:'Slide/slide-5-2.html', title:'5-2 — Kết luận', notes:'slide 5' },
-    { key:'slide-5-3', url:'Slide/slide-5-3.html', title:'5-3 — Kết luận', notes:'slide 5' },
-    { key:'slide-5-4', url:'Slide/slide-5-4.html', title:'5-4 — Kết luận', notes:'slide 5' },
-    { key:'slide-5-5', url:'Slide/slide-5-5.html', title:'5-5 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6.html', title:'6 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6-1.html', title:'6-1 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6-2.html', title:'6-2 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6-2-1.html', title:'6-2-1 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6-2-2.html', title:'6-2-2 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6-2-3.html', title:'6-2-3 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6-3.html', title:'6-3 — Kết luận', notes:'slide 5' },
-    { key:'slide-6', url:'Slide/slide-6-4.html', title:'6-4 — Kết luận', notes:'slide 5' },
-    { key:'slide-7', url:'Slide/slide-7.html', title:'7 — Kết luận'},
-    { key:'slide-7', url:'Slide/slide-7-1.html', title:'7-1 — Kết luận',stepCount: 2},
-    { key:'slide-8', url:'Slide/slide-8.html', title:'8 — Kết luận'},
-    { key:'slide-8', url:'Slide/slide-8-1.html', title:'8-1 — Kết luận',stepCount: 5},
-    { key:'slide-9', url:'Slide/slide-9.html', title:'9 — Kết luận'},
-    { key:'slide-9', url:'Slide/slide-9-1.html', title:'9-1 — Kết luận'},
-    { key:'slide-9', url:'Slide/slide-9-2.html', title:'9-2 — Kết luận'},
-    { key:'slide-9', url:'Slide/slide-9-3.html', title:'9-3 — Kết luận'},
-    { key:'slide-9', url:'Slide/slide-9-4.html', title:'9-4 — Kết luận'},
-    { key:'slide-9', url:'Slide/slide-9-5.html', title:'9-5 — Kết luận'},
-    { key:'slide-10', url:'Slide/slide-10.html', title:'10 — Kết luận'},
-    { key:'slide-10', url:'Slide/slide-10-1.html', title:'10-1 — Kết luận',stepCount:5},
-    { key:'slide-11', url:'Slide/slide-11.html', title:'11 — Kết luận'},
-    { key:'slide-11', url:'Slide/slide-11-1.html', title:'11-1 — Kết luận'},
-    { key:'slide-11', url:'Slide/slide-11-2.html', title:'11-2 — Kết luận'},
-        { key:'slide-11', url:'Slide/slide-11-3.html', title:'11-3 — Kết luận',stepCount:2},
-    { key:'slide-13', url:'Slide/slide-13.html', title:'13 — Kết luận'},
-    { key:'slide-13', url:'Slide/slide-13-1.html', title:'13-1 — Kết luận'},
-    { key:'slide-13', url:'Slide/slide-13-2.html', title:'13-2 — Kết luận'},
-    { key:'slide-13', url:'Slide/slide-13-3.html', title:'13-3 — Kết luận',stepCount:2},
-    { key:'slide-14', url:'Slide/slide-14.html', title:'14 — Kết luận'},
-    { key:'slide-14', url:'Slide/slide-14-1.html', title:'14-1 — Kết luận',stepCount:3},
-    { key:'slide-15', url:'Slide/slide-15.html', title:'15 — Kết luận'},
+    { key:'slide-1', url:'aviation-slide-01.html', title:'01: Báo Cáo Sự Cố Hàng Không', notes: 'Trang tiêu đề của bài trình bày Báo cáo các sự cố hàng không liên quan đến thời tiết cực đoan.' },
+    { key:'slide-2', url:'aviation-slide-02.html', title:'02: Giới Thiệu', notes: 'Thời tiết cực đoan thường là nguyên nhân hoặc nhân tố nguy hiểm trong nhiều sự cố hàng không. Báo cáo này tập hợp và phân tích các sự cố chính thức đã được điều tra, chỉ rõ nguyên nhân, hậu quả, và bài học rút ra.' },
+    { key:'slide-3', url:'aviation-slide-03.html', title:'03: Các Hiện Tượng Chính', notes: 'Bốn hiện tượng thời tiết chính ảnh hưởng đến hàng không: Bão dông và Mưa đá, Gió cắt (Microburst), Sương mù dày, và Tuyết & Băng giá.' },
+    { key:'slide-4', url:'aviation-slide-04.html', title:'04: Case Study: Mưa Dông', notes: 'Case Study 1: Mưa Dông & Mưa Đá - Chuyến bay Southern Airways 242 và bài học về việc bay xuyên qua tâm bão.' },
+    { key:'slide-5', url:'aviation-slide-05.html', title:'05: Diễn Biến (Mưa Dông)', notes: 'Timeline 3 giai đoạn của sự cố Southern Airways 242: Bay vào vùng bão, mất cả hai động cơ do mưa đá, và buộc phải hạ cánh khẩn cấp xuống xa lộ.' },
+    { key:'slide-6', url:'aviation-slide-06.html', title:'06: Nguyên Nhân (Mưa Dông)', notes: 'Phân tích nguyên nhân: Sự phụ thuộc quá mức vào radar thời tiết trên máy bay và những hạn chế của nó (nhiễu xạ), cùng với việc thiếu thông tin cảnh báo kịp thời.' },
+    { key:'slide-7', url:'aviation-slide-07.html', title:'07: Giải Pháp (Mưa Dông)', notes: 'Các giải pháp được đưa ra: Cải tiến quy định cung cấp thông tin thời tiết, nâng cao huấn luyện về hạn chế của radar và quy trình cấm bay vào tâm bão.', stepCount: 2 },
+    { key:'slide-8', url:'aviation-slide-08.html', title:'08: Case Study: Gió Cắt', notes: 'Case Study 2: Gió Cắt (Wind Shear) - Phân tích các thảm kịch Delta 191 và Pan Am 759.' },
+    { key:'slide-9', url:'aviation-slide-09.html', title:'09: Cơ Chế Của Gió Cắt', notes: 'Giải thích cơ chế 3 bước của gió cắt: Tăng lực nâng đột ngột (headwind), mất độ cao nhanh chóng (downdraft), và mất tốc độ/lực nâng (tailwind).', stepCount: 4 },
+    { key:'slide-10', url:'aviation-slide-10.html', title:'10: Diễn Biến (Gió Cắt)', notes: 'Timeline 3 giai đoạn của sự cố Delta 191: Tiếp cận sân bay DFW trong cơn dông, gặp microburst cực mạnh, và mất kiểm soát, rơi cách đường băng không xa.' },
+    { key:'slide-11', url:'aviation-slide-11.html', title:'11: Giải Pháp (Gió Cắt)', notes: 'Các giải pháp công nghệ và huấn luyện: Hệ thống cảnh báo tại sân bay (LLWAS, TDWR), cảnh báo trên máy bay (EGPWS), và các bài huấn luyện trong buồng lái mô phỏng.' },
+    { key:'slide-12', url:'aviation-slide-12.html', title:'12: Case Study: Sương Mù', notes: 'Case Study 3: Sương Mù - Thảm họa Tenerife, tai nạn thảm khốc nhất lịch sử hàng không.' },
+    { key:'slide-13', url:'aviation-slide-13.html', title:'13: Diễn Biến (Sương Mù)', notes: 'Timeline 3 giai đoạn của thảm họa Tenerife: Sân bay đông đúc trong sương mù dày đặc, lỗi giao tiếp và hiểu lầm tín hiệu, dẫn đến va chạm của hai máy bay B747.' },
+    { key:'slide-14', url:'aviation-slide-14.html', title:'14: Giải Pháp (Sương Mù)', notes: 'Các giải pháp được áp dụng sau thảm họa: Chuẩn hóa thuật ngữ giao tiếp hàng không toàn cầu, áp dụng bắt buộc huấn luyện Quản lý Tổ lái (CRM), và phát triển công nghệ hỗ trợ như ILS và radar mặt đất.', stepCount: 2 },
+    { key:'slide-15', url:'aviation-slide-15.html', title:'15: Case Study: Băng Giá', notes: 'Case Study 4: Tuyết & Băng giá - Sự cố của chuyến bay Air Florida 90.',stepCount: 4 },
+    { key:'slide-16', url:'aviation-slide-16.html', title:'16: Công Nghệ Vượt Bão', notes: 'Giới thiệu các công nghệ an toàn hàng không mới với hiệu ứng carousel.', stepCount: 4 },
+    { key:'slide-17', url:'aviation-slide-17.html', title:'17: Diễn Biến (Băng Giá)', notes: 'Timeline 3 giai đoạn của sự cố Air Florida 90: Chờ đợi lâu sau khi khử băng, phi công không bật hệ thống chống băng động cơ, và cất cánh với băng trên cánh.',stepCount: 4 },
+    { key:'slide-18', url:'aviation-slide-18.html', title:'18: Bảng Tổng Hợp', notes: 'Bảng tóm tắt các sự cố, hiện tượng thời tiết, thiệt hại và các biện pháp cải tiến chính đã được thảo luận.' },
+    { key:'slide-19', url:'aviation-slide-19.html', title:'19: Tóm Tắt & Toàn Cảnh', notes: 'Tổng kết lại các vấn đề, tác động và giải pháp, nhấn mạnh sự kết hợp giữa Công nghệ, Quy trình và Huấn luyện.' },
+    { key:'slide-20', url:'aviation-slide-20.html', title:'20: Cảm Ơn & Hỏi Đáp', notes: 'Phần kết thúc và Q&A.' }
   ];
 
   // DOM
@@ -251,6 +224,13 @@
   let currentIframe = null;
   let slideSteps = {}; // stores internal step per slide index
   const iframePool = new Map();
+
+  // tuning params (đã giảm delay, preload 4 frames, giảm step delays)
+  const PRELOAD_COUNT = 4;            // preload 4 frames
+  const SEND_STEP_TICK = 20;         // ms between setStep and animate-slide (was 40)
+  const FRAME_FADE_TIMEOUT = 520;    // ms max wait for CSS transition end (was 900)
+  const ANIMATE_OPTIONS_DEFAULT = { baseDelay: 16, per: 80, duration: 420 }; // reduced delays
+  const AUTOPLAY_INTERVAL = 3000;    // ms between auto-advance (reduced for snappier flow)
 
   function updateStatus(){ statusEl.textContent = `Slide ${currentIndex+1} / ${slideMap.length}`; }
 
@@ -317,10 +297,12 @@
     iframe.addEventListener('load', () => {
       iframe.__loaded = true;
       try {
-        // IMPORTANT CHANGE: ngay khi iframe preload xong, gửi 1 lệnh 'reset' để chắc chắn
-        // trạng thái animation ở trong iframe được reset (không tự chạy animation khi preload).
+        // Gửi 'reset' khi preload xong để chắc trạng thái nội bộ iframe không auto-animate
         iframe.contentWindow.postMessage({ type: 'reset' }, '*');
-      } catch (e) { /* ignore */ }
+        console.debug(`[iframe:${index}] load -> sent reset`);
+      } catch (e) {
+        console.debug(`[iframe:${index}] load -> postMessage reset failed`, e);
+      }
       try { resolveLoad(); } catch(e){}
       // ensure internal step is reset in parent tracking
       slideSteps[index] = 0;
@@ -349,16 +331,34 @@
 
   function computeBase(){ return (lastClickedIndex !== null) ? lastClickedIndex : currentIndex; }
 
-  // ----------------- START: Internal-step aware navigation -----------------
-  /*
-    Behavior:
-    - When an iframe is shown, parent posts {type:'setStep', step: <n>, animate: false}
-      to let iframe set its internal view without animating immediately.
-    - Then parent posts {type:'animate-slide'} to trigger animation on visible iframe.
-    - If slideMap[index].stepCount > 1, parent will toggle internal step on Next/Prev
-      (instead of changing iframe) until steps exhausted.
-  */
+  // helper: safePostMessage with simple retry and debug
+  function safePostMessage(targetIframe, msg, maxRetries = 1, retryDelay = 80){
+    if (!targetIframe || !targetIframe.contentWindow) {
+      console.debug('safePostMessage: iframe not ready', msg);
+      return Promise.reject(new Error('iframe-not-ready'));
+    }
+    return new Promise((resolve) => {
+      let attempts = 0;
+      function trySend(){
+        attempts++;
+        try {
+          targetIframe.contentWindow.postMessage(msg, '*');
+          console.debug(`[iframe:${targetIframe.dataset.index}] postMessage`, msg);
+          resolve(true);
+        } catch (err) {
+          console.debug(`[iframe:${targetIframe.dataset.index}] postMessage failed attempt ${attempts}`, err);
+          if (attempts <= maxRetries) {
+            setTimeout(trySend, retryDelay);
+          } else {
+            resolve(false);
+          }
+        }
+      }
+      trySend();
+    });
+  }
 
+  // ----------------- START: Internal-step aware navigation -----------------
   async function showIndexCached(index){
     if (index < 0 || index >= slideMap.length) return;
     // initialize stored step if needed
@@ -369,23 +369,25 @@
       try {
         const desired = slideSteps[index] || 0;
         if (currentIframe && currentIframe.contentWindow) {
-          currentIframe.contentWindow.postMessage({ type: 'setStep', step: desired, animate: false }, '*');
+          await safePostMessage(currentIframe, { type: 'setStep', step: desired, animate: false }, 1, 40);
           setTimeout(()=> {
-            try { currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay:30, per:110, duration:520 } }, '*'); } catch(e){}
-          }, 40);
+            safePostMessage(currentIframe, { type: 'animate-slide', options: ANIMATE_OPTIONS_DEFAULT }, 1, 40).catch(()=>{});
+          }, SEND_STEP_TICK);
         }
-      } catch(e){}
+      } catch(e){ console.debug('showIndexCached(sync) error', e); }
       return;
     }
 
-    while (isTransitioning) await new Promise(r => setTimeout(r, 30));
+    while (isTransitioning) await new Promise(r => setTimeout(r, 16));
     isTransitioning = true;
     try {
       const targetEl = await ensureIframeLoaded(index);
 
       // if have current iframe, reset it and hide
       if (currentIframe && currentIframe !== targetEl){
-        try { currentIframe.contentWindow.postMessage({ type: 'reset' }, '*'); } catch(e){}
+        try {
+          safePostMessage(currentIframe, { type: 'reset' }).catch(()=>{});
+        } catch(e){ console.debug('reset currentIframe error', e); }
         currentIframe.classList.remove('top');
         currentIframe.classList.add('bottom');
         currentIframe.setAttribute('aria-hidden','true');
@@ -396,7 +398,8 @@
       targetEl.classList.remove('bottom');
       targetEl.setAttribute('aria-hidden','false');
 
-      // allow frame paint
+      // allow frame paint (use RAF twice for safety)
+      await new Promise(r => requestAnimationFrame(r));
       await new Promise(r => requestAnimationFrame(r));
 
       // wait transition end (or timeout)
@@ -409,7 +412,7 @@
           resolve();
         }
         targetEl.addEventListener('transitionend', onEnd);
-        setTimeout(()=> { if (!done) { done=true; targetEl.removeEventListener('transitionend', onEnd); resolve(); } }, 900);
+        setTimeout(()=> { if (!done) { done=true; targetEl.removeEventListener('transitionend', onEnd); resolve(); } }, FRAME_FADE_TIMEOUT);
       });
 
       // update state
@@ -424,22 +427,18 @@
       const entry = slideMap[index] || {};
       const desiredStep = (typeof entry.initialStep === 'number') ? entry.initialStep : (slideSteps[index] || 0);
 
-      // send setStep (do not animate yet), then animate-slide
-      try {
-        currentIframe.contentWindow.postMessage({ type: 'setStep', step: desiredStep, animate: false }, '*');
-      } catch(e){ /* ignore */ }
-
-      // small tick then trigger animation on visible iframe
+      // send setStep (do not animate yet), then animate-slide (reduced tick)
+      await safePostMessage(currentIframe, { type: 'setStep', step: desiredStep, animate: false }, 2, 50);
       setTimeout(()=> {
-        try {
-          currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay: 30, per: 110, duration: 520 } }, '*');
-        } catch(e){}
-      }, 40);
+        safePostMessage(currentIframe, { type: 'animate-slide', options: ANIMATE_OPTIONS_DEFAULT }, 2, 50).catch(()=>{});
+      }, SEND_STEP_TICK);
 
       // ask for notes if supported
-      try { currentIframe.contentWindow.postMessage({type:'getNotes'}, '*'); } catch(e){}
+      safePostMessage(currentIframe, {type:'getNotes'}).catch(()=>{});
     } finally {
       isTransitioning = false;
+      // ensure we keep a small pool preloaded around current index
+      preloadAround(currentIndex);
     }
   }
 
@@ -456,13 +455,12 @@
       slideSteps[currentIndex] = slideSteps[currentIndex] || 0;
       if (slideSteps[currentIndex] < stepCount - 1) {
         slideSteps[currentIndex] += 1;
-        // instruct iframe to change step and animate
-        try {
-          currentIframe.contentWindow.postMessage({ type: 'setStep', step: slideSteps[currentIndex], animate: false }, '*');
+        // instruct iframe to change step and animate (reduced tick)
+        safePostMessage(currentIframe, { type: 'setStep', step: slideSteps[currentIndex], animate: false }, 2, 60).then(()=> {
           setTimeout(()=> {
-            try { currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay: 30, per:110, duration:520 } }, '*'); } catch(e){}
-          }, 40);
-        } catch(e){}
+            safePostMessage(currentIframe, { type: 'animate-slide', options: ANIMATE_OPTIONS_DEFAULT }, 2, 60).catch(()=>{});
+          }, SEND_STEP_TICK);
+        }).catch(()=>{ console.debug('showNext: setStep failed'); });
         return;
       }
     }
@@ -481,12 +479,11 @@
       slideSteps[currentIndex] = slideSteps[currentIndex] || 0;
       if (slideSteps[currentIndex] > 0) {
         slideSteps[currentIndex] -= 1;
-        try {
-          currentIframe.contentWindow.postMessage({ type: 'setStep', step: slideSteps[currentIndex], animate: false }, '*');
+        safePostMessage(currentIframe, { type: 'setStep', step: slideSteps[currentIndex], animate: false }, 2, 60).then(()=> {
           setTimeout(()=> {
-            try { currentIframe.contentWindow.postMessage({ type: 'animate-slide', options: { baseDelay: 30, per:110, duration:520 } }, '*'); } catch(e){}
-          }, 40);
-        } catch(e){}
+            safePostMessage(currentIframe, { type: 'animate-slide', options: ANIMATE_OPTIONS_DEFAULT }, 2, 60).catch(()=>{});
+          }, SEND_STEP_TICK);
+        }).catch(()=>{ console.debug('showPrev: setStep failed'); });
         return;
       }
     }
@@ -517,11 +514,22 @@
     autoplayTimer = setInterval(()=> {
       if (currentIndex < slideMap.length - 1) showNext();
       else { stopAutoplay(); }
-    }, 4200);
+    }, AUTOPLAY_INTERVAL);
   }
   function stopAutoplay(){ autoplay = false; autoplayBtn.textContent = 'Autoplay ▶'; if (autoplayTimer){ clearInterval(autoplayTimer); autoplayTimer = null; } }
   function toggleAutoplay(){ if (autoplay) stopAutoplay(); else startAutoplay(); }
   autoplayBtn.addEventListener('click', toggleAutoplay);
+
+  // preload helper: keep PRELOAD_COUNT frames around current index prepared
+  function preloadAround(index){
+    const start = Math.max(0, index - 0);
+    const end = Math.min(slideMap.length - 1, index + (PRELOAD_COUNT - 1));
+    for (let i = start; i <= end; i++){
+      if (!iframePool.has(i)) {
+        makeIframeFor(i, slideMap[i].url);
+      }
+    }
+  }
 
   // build and initial show
   function initialSetup(){
@@ -529,8 +537,7 @@
     updateStatus();
     updateInfoContent();
 
-    // create only iframe 0 immediately (vẫn preload các iframe khác nếu bạn muốn,
-    // nhưng chúng ta đã đảm bảo gửi 'reset' khi preload xong).
+    // create iframe 0 immediately
     const e0 = makeIframeFor(0, slideMap[0].url);
     e0.loadingPromise.then(() => {
       currentIframe = e0.el;
@@ -538,13 +545,15 @@
       e0.el.classList.remove('bottom');
       e0.el.setAttribute('aria-hidden','false');
 
-      // GỌI: khi slide 0 hiển thị lần đầu, gửi animate-slide thay vì 'show'
-      try { e0.el.contentWindow.postMessage({type:'animate-slide', options:{selector:'.animate-item', stagger:120}}, '*'); } catch(e){}
-      try { e0.el.contentWindow.postMessage({type:'getNotes'}, '*'); } catch(e){}
+      // GỌI: khi slide 0 hiển thị lần đầu, gửi animate-slide thay vì 'show' (sử dụng reduced options)
+      safePostMessage(e0.el, {type:'animate-slide', options:ANIMATE_OPTIONS_DEFAULT}).catch(()=>{});
+      safePostMessage(e0.el, {type:'getNotes'}).catch(()=>{});
     });
 
-    // preload next to reduce latency (optional)
-    if (slideMap.length > 1) makeIframeFor(1, slideMap[1].url);
+    // preload next PRELOAD_COUNT-1 to reduce latency (optional)
+    for (let i = 1; i < PRELOAD_COUNT && i < slideMap.length; i++){
+      makeIframeFor(i, slideMap[i].url);
+    }
   }
 
   window._iframePoolAPI = { makeIframeFor, ensureIframeLoaded, showIndex, showNext, showPrev, iframePool, slideMap };
@@ -552,7 +561,22 @@
   initialSetup();
 
   window.addEventListener('beforeunload', ()=> {
-    try { if (currentIframe) currentIframe.contentWindow.postMessage({type:'hide'}, '*'); } catch(e){}
+    try { if (currentIframe) currentIframe.contentWindow.postMessage({type:'hide'}, '*'); } catch(e){ console.debug('beforeunload post hide failed', e); }
+  });
+
+  // optional: listener for debug messages back from iframe
+  window.addEventListener('message', (ev) => {
+    if (!ev.data) return;
+    if (ev.data && ev.data.type === 'debug') {
+      console.debug('iframe-debug:', ev.data);
+    }
+    if (ev.data && ev.data.type === 'notes') {
+      // iframe can respond with notes: update UI
+      try {
+        const notes = ev.data.notes || '';
+        document.getElementById('infoNotes').textContent = notes || '(chưa có notes)';
+      } catch(e){}
+    }
   });
 
 })();
