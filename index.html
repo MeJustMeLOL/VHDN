@@ -179,26 +179,26 @@
 <script>
 (function(){
   const slideMap = [
-    { key:'slide-1', url:'Slide/aviation-slide-01.html', title:'01: Báo Cáo Sự Cố Hàng Không', notes: 'Trang tiêu đề của bài trình bày Báo cáo các sự cố hàng không liên quan đến thời tiết cực đoan.' },
-    { key:'slide-2', url:'Slide/aviation-slide-02.html', title:'02: Giới Thiệu', notes: 'Thời tiết cực đoan thường là nguyên nhân hoặc nhân tố nguy hiểm trong nhiều sự cố hàng không. Báo cáo này tập hợp và phân tích các sự cố chính thức đã được điều tra, chỉ rõ nguyên nhân, hậu quả, và bài học rút ra.' },
-    { key:'slide-3', url:'Slide/aviation-slide-03.html', title:'03: Các Hiện Tượng Chính', notes: 'Bốn hiện tượng thời tiết chính ảnh hưởng đến hàng không: Bão dông và Mưa đá, Gió cắt (Microburst), Sương mù dày, và Tuyết & Băng giá.' },
-    { key:'slide-4', url:'Slide/aviation-slide-04.html', title:'04: Case Study: Mưa Dông', notes: 'Case Study 1: Mưa Dông & Mưa Đá - Chuyến bay Southern Airways 242 và bài học về việc bay xuyên qua tâm bão.' },
-    { key:'slide-5', url:'Slide/aviation-slide-05.html', title:'05: Diễn Biến (Mưa Dông)', notes: 'Timeline 3 giai đoạn của sự cố Southern Airways 242: Bay vào vùng bão, mất cả hai động cơ do mưa đá, và buộc phải hạ cánh khẩn cấp xuống xa lộ.' },
-    { key:'slide-6', url:'Slide/aviation-slide-06.html', title:'06: Nguyên Nhân (Mưa Dông)', notes: 'Phân tích nguyên nhân: Sự phụ thuộc quá mức vào radar thời tiết trên máy bay và những hạn chế của nó (nhiễu xạ), cùng với việc thiếu thông tin cảnh báo kịp thời.' },
-    { key:'slide-7', url:'Slide/aviation-slide-07.html', title:'07: Giải Pháp (Mưa Dông)', notes: 'Các giải pháp được đưa ra: Cải tiến quy định cung cấp thông tin thời tiết, nâng cao huấn luyện về hạn chế của radar và quy trình cấm bay vào tâm bão.', stepCount: 2 },
-    { key:'slide-8', url:'Slide/aviation-slide-08.html', title:'08: Case Study: Gió Cắt', notes: 'Case Study 2: Gió Cắt (Wind Shear) - Phân tích các thảm kịch Delta 191 và Pan Am 759.' },
-    { key:'slide-9', url:'Slide/aviation-slide-09.html', title:'09: Cơ Chế Của Gió Cắt', notes: 'Giải thích cơ chế 3 bước của gió cắt: Tăng lực nâng đột ngột (headwind), mất độ cao nhanh chóng (downdraft), và mất tốc độ/lực nâng (tailwind).', stepCount: 4 },
-    { key:'slide-10', url:'Slide/aviation-slide-10.html', title:'10: Diễn Biến (Gió Cắt)', notes: 'Timeline 3 giai đoạn của sự cố Delta 191: Tiếp cận sân bay DFW trong cơn dông, gặp microburst cực mạnh, và mất kiểm soát, rơi cách đường băng không xa.' },
-    { key:'slide-11', url:'Slide/aviation-slide-11.html', title:'11: Giải Pháp (Gió Cắt)', notes: 'Các giải pháp công nghệ và huấn luyện: Hệ thống cảnh báo tại sân bay (LLWAS, TDWR), cảnh báo trên máy bay (EGPWS), và các bài huấn luyện trong buồng lái mô phỏng.' },
-    { key:'slide-12', url:'Slide/aviation-slide-12.html', title:'12: Case Study: Sương Mù', notes: 'Case Study 3: Sương Mù - Thảm họa Tenerife, tai nạn thảm khốc nhất lịch sử hàng không.' },
-    { key:'slide-13', url:'Slide/aviation-slide-13.html', title:'13: Diễn Biến (Sương Mù)', notes: 'Timeline 3 giai đoạn của thảm họa Tenerife: Sân bay đông đúc trong sương mù dày đặc, lỗi giao tiếp và hiểu lầm tín hiệu, dẫn đến va chạm của hai máy bay B747.' },
-    { key:'slide-14', url:'Slide/aviation-slide-14.html', title:'14: Giải Pháp (Sương Mù)', notes: 'Các giải pháp được áp dụng sau thảm họa: Chuẩn hóa thuật ngữ giao tiếp hàng không toàn cầu, áp dụng bắt buộc huấn luyện Quản lý Tổ lái (CRM), và phát triển công nghệ hỗ trợ như ILS và radar mặt đất.', stepCount: 2 },
-    { key:'slide-15', url:'Slide/aviation-slide-15.html', title:'15: Case Study: Băng Giá', notes: 'Case Study 4: Tuyết & Băng giá - Sự cố của chuyến bay Air Florida 90.',stepCount: 4 },
-    { key:'slide-16', url:'Slide/aviation-slide-16.html', title:'16: Công Nghệ Vượt Bão', notes: 'Giới thiệu các công nghệ an toàn hàng không mới với hiệu ứng carousel.', stepCount: 4 },
-    { key:'slide-17', url:'Slide/aviation-slide-17.html', title:'17: Diễn Biến (Băng Giá)', notes: 'Timeline 3 giai đoạn của sự cố Air Florida 90: Chờ đợi lâu sau khi khử băng, phi công không bật hệ thống chống băng động cơ, và cất cánh với băng trên cánh.',stepCount: 4 },
-    { key:'slide-18', url:'Slide/aviation-slide-18.html', title:'18: Bảng Tổng Hợp', notes: 'Bảng tóm tắt các sự cố, hiện tượng thời tiết, thiệt hại và các biện pháp cải tiến chính đã được thảo luận.' },
-    { key:'slide-19', url:'Slide/aviation-slide-19.html', title:'19: Tóm Tắt & Toàn Cảnh', notes: 'Tổng kết lại các vấn đề, tác động và giải pháp, nhấn mạnh sự kết hợp giữa Công nghệ, Quy trình và Huấn luyện.' },
-    { key:'slide-20', url:'Slide/aviation-slide-20.html', title:'20: Cảm Ơn & Hỏi Đáp', notes: 'Phần kết thúc và Q&A.' }
+    { key:'slide-1', url:'aviation-slide-01.html', title:'01: Báo Cáo Sự Cố Hàng Không', notes: 'Trang tiêu đề của bài trình bày Báo cáo các sự cố hàng không liên quan đến thời tiết cực đoan.' },
+    { key:'slide-2', url:'aviation-slide-02.html', title:'02: Giới Thiệu', notes: 'Thời tiết cực đoan thường là nguyên nhân hoặc nhân tố nguy hiểm trong nhiều sự cố hàng không. Báo cáo này tập hợp và phân tích các sự cố chính thức đã được điều tra, chỉ rõ nguyên nhân, hậu quả, và bài học rút ra.' },
+    { key:'slide-3', url:'aviation-slide-03.html', title:'03: Các Hiện Tượng Chính', notes: 'Bốn hiện tượng thời tiết chính ảnh hưởng đến hàng không: Bão dông và Mưa đá, Gió cắt (Microburst), Sương mù dày, và Tuyết & Băng giá.' },
+    { key:'slide-4', url:'aviation-slide-04.html', title:'04: Case Study: Mưa Dông', notes: 'Case Study 1: Mưa Dông & Mưa Đá - Chuyến bay Southern Airways 242 và bài học về việc bay xuyên qua tâm bão.' },
+    { key:'slide-5', url:'aviation-slide-05.html', title:'05: Diễn Biến (Mưa Dông)', notes: 'Timeline 3 giai đoạn của sự cố Southern Airways 242: Bay vào vùng bão, mất cả hai động cơ do mưa đá, và buộc phải hạ cánh khẩn cấp xuống xa lộ.' },
+    { key:'slide-6', url:'aviation-slide-06.html', title:'06: Nguyên Nhân (Mưa Dông)', notes: 'Phân tích nguyên nhân: Sự phụ thuộc quá mức vào radar thời tiết trên máy bay và những hạn chế của nó (nhiễu xạ), cùng với việc thiếu thông tin cảnh báo kịp thời.' },
+    { key:'slide-7', url:'aviation-slide-07.html', title:'07: Giải Pháp (Mưa Dông)', notes: 'Các giải pháp được đưa ra: Cải tiến quy định cung cấp thông tin thời tiết, nâng cao huấn luyện về hạn chế của radar và quy trình cấm bay vào tâm bão.', stepCount: 2 },
+    { key:'slide-8', url:'aviation-slide-08.html', title:'08: Case Study: Gió Cắt', notes: 'Case Study 2: Gió Cắt (Wind Shear) - Phân tích các thảm kịch Delta 191 và Pan Am 759.' },
+    { key:'slide-9', url:'aviation-slide-09.html', title:'09: Cơ Chế Của Gió Cắt', notes: 'Giải thích cơ chế 3 bước của gió cắt: Tăng lực nâng đột ngột (headwind), mất độ cao nhanh chóng (downdraft), và mất tốc độ/lực nâng (tailwind).', stepCount: 4 },
+    { key:'slide-10', url:'aviation-slide-10.html', title:'10: Diễn Biến (Gió Cắt)', notes: 'Timeline 3 giai đoạn của sự cố Delta 191: Tiếp cận sân bay DFW trong cơn dông, gặp microburst cực mạnh, và mất kiểm soát, rơi cách đường băng không xa.' },
+    { key:'slide-11', url:'aviation-slide-11.html', title:'11: Giải Pháp (Gió Cắt)', notes: 'Các giải pháp công nghệ và huấn luyện: Hệ thống cảnh báo tại sân bay (LLWAS, TDWR), cảnh báo trên máy bay (EGPWS), và các bài huấn luyện trong buồng lái mô phỏng.' },
+    { key:'slide-12', url:'aviation-slide-12.html', title:'12: Case Study: Sương Mù', notes: 'Case Study 3: Sương Mù - Thảm họa Tenerife, tai nạn thảm khốc nhất lịch sử hàng không.' },
+    { key:'slide-13', url:'aviation-slide-13.html', title:'13: Diễn Biến (Sương Mù)', notes: 'Timeline 3 giai đoạn của thảm họa Tenerife: Sân bay đông đúc trong sương mù dày đặc, lỗi giao tiếp và hiểu lầm tín hiệu, dẫn đến va chạm của hai máy bay B747.' },
+    { key:'slide-14', url:'aviation-slide-14.html', title:'14: Giải Pháp (Sương Mù)', notes: 'Các giải pháp được áp dụng sau thảm họa: Chuẩn hóa thuật ngữ giao tiếp hàng không toàn cầu, áp dụng bắt buộc huấn luyện Quản lý Tổ lái (CRM), và phát triển công nghệ hỗ trợ như ILS và radar mặt đất.', stepCount: 2 },
+    { key:'slide-15', url:'aviation-slide-15.html', title:'15: Case Study: Băng Giá', notes: 'Case Study 4: Tuyết & Băng giá - Sự cố của chuyến bay Air Florida 90.',stepCount: 4 },
+    { key:'slide-16', url:'aviation-slide-16.html', title:'16: Công Nghệ Vượt Bão', notes: 'Giới thiệu các công nghệ an toàn hàng không mới với hiệu ứng carousel.', stepCount: 4 },
+    { key:'slide-17', url:'aviation-slide-17.html', title:'17: Diễn Biến (Băng Giá)', notes: 'Timeline 3 giai đoạn của sự cố Air Florida 90: Chờ đợi lâu sau khi khử băng, phi công không bật hệ thống chống băng động cơ, và cất cánh với băng trên cánh.',stepCount: 4 },
+    { key:'slide-18', url:'aviation-slide-18.html', title:'18: Bảng Tổng Hợp', notes: 'Bảng tóm tắt các sự cố, hiện tượng thời tiết, thiệt hại và các biện pháp cải tiến chính đã được thảo luận.' },
+    { key:'slide-19', url:'aviation-slide-19.html', title:'19: Tóm Tắt & Toàn Cảnh', notes: 'Tổng kết lại các vấn đề, tác động và giải pháp, nhấn mạnh sự kết hợp giữa Công nghệ, Quy trình và Huấn luyện.' },
+    { key:'slide-20', url:'aviation-slide-20.html', title:'20: Cảm Ơn & Hỏi Đáp', notes: 'Phần kết thúc và Q&A.' }
   ];
 
   // DOM
@@ -507,45 +507,32 @@
       left.classList.toggle('expanded');
     }
   });
-  
-
-<script>
-(function(){
-  const bodyEl = document.body;
-
-  // Hàm gọi nút Next/Prev có sẵn
-  function goNext(){
-    document.getElementById("nextBtn")?.click();
-  }
-  function goPrev(){
-    document.getElementById("prevBtn")?.click();
-  }
-
-  // Lắng nghe click chuột khi fullscreen
   document.addEventListener("mousedown", function(e){
-    if (!bodyEl.classList.contains("immersive")) return;  // chỉ hoạt động trong fullscreen
+  if (!bodyEl.classList.contains("immersive")) return;
 
-    // Chuột phải → Prev
-    if (e.button === 2) {
-      e.preventDefault();
-      goPrev();
-    }
+  e.stopPropagation();
 
-    // Chuột trái → Next
-    if (e.button === 0) {
-      e.preventDefault();
-      goNext();
-    }
-  });
+  if (e.button === 0){        // left click = NEXT
+    e.preventDefault();
+    lastClickedIndex = null;
+    showNext();
+    frameWrapEl.focus();
+  }
 
-  // Ngăn menu chuột phải hiện lên
-  document.addEventListener("contextmenu", function(e){
-    if (bodyEl.classList.contains("immersive")) {
-      e.preventDefault();
-    }
-  });
-})();
-</script>
+  if (e.button === 2){        // right click = PREVIOUS
+    e.preventDefault();
+    lastClickedIndex = null;
+    showPrev();
+    frameWrapEl.focus();
+  }
+});
+
+// Chặn menu chuột phải
+document.addEventListener("contextmenu", function(e){
+  if (bodyEl.classList.contains("immersive")) {
+    e.preventDefault();
+  }
+});
 
 
   function startAutoplay(){
