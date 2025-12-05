@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10: Diễn Biến (Gió Cắt) - Detailed</title>
+    <script src="https://unpkg.com/konva@9.2.0/konva.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0a192f;
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+        /* Loader to ensure fonts are ready */
+        #loader {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #64ffda;
+            font-family: 'Roboto Mono', monospace;
+            z-index: 10;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loader">LOADING TELEMETRY...</div>
+<div id="container"></div>
+
+<script>
+    // --- Configuration & Data ---
+    const THEME = {
+        bg: '#0a192f',
+        primary: '#64ffda', // Teal/Cyan
+        warning: '#ffca28', // Yellow
+        danger: '#ff4d4f',  // Red
+        text: '#e6f1ff',
+        textMuted: '#8892b0',
+        grid: 'rgba(136, 146, 176, 0.05)',
+        hudColor: 'rgba(100, 255, 218, 0.4)',
+        fontHeading: 'Playfair Display',
+        fontBody: 'Be Vietnam Pro',
+        fontMono: 'Roboto Mono'
+    };
+
+    const SLIDE_DATA = [
+        {
+            id: 'approach',
+            title: '1. TIẾP CẬN (APPROACH)',
+            time: '18:05:05',
+            alt: '1,500 ft',
+            desc: 'L-1011 tiếp cận Runway 17L. Radar thời tiết phát hiện dông. Tổ bay nhận thấy sấm chớp phía trước.',
+            stats: ['IAS: 169 kts', 'Wind: Variable', 'Gear: Down'],
+            color: THEME.warning,
+            iconPath: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"
+        },
+        {
+            id: 'shear',
+            title: '2. GIÓ CẮT (MICROBURST)',
+            time: '18:05:35',
+            alt: '800 ft',
+            desc: 'Đi vào tâm Microburst. Gió ngược tăng mạnh (+26kts) rồi chuyển đột ngột sang gió xuôi (-46kts).',
+            stats: ['Shear: +26kts -> -46kts', 'Downdraft: >3000 fpm', 'Power: TOGA'],
+            color: THEME.danger,
+            iconPath: "M12 2L2 12h7v10h6V12h7L12 2z"
+        },
+        {
+            id: 'impact',
+            title: '3. VA CHẠM (IMPACT)',
+            time: '18:05:52',
+            alt: '0 ft',
+            desc: 'Mất lực nâng hoàn toàn. Va chạm mặt đất cách đường băng 1.8km, trượt qua xa lộ 114.',
+            stats: ['Loc: N of Runway 17L', 'Casualties: 137', 'Survivors: 27'],
+            color: '#a2d2ff',
+            iconPath: "M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"
+        }
+    ];
+
+    // --- State ---
+    let width = window.innerWidth > 0 ? window.innerWidth : 800;
+    let height = window.innerHeight > 0 ? window.innerHeight : 600;
+    
+    // --- Konva Setup ---
+    const stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height,
+    });
+
+    const bgLayer = new Konva.Layer();
+    const hudLayer = new Konva.Layer(); // New layer for static HUD elements
+    const mainLayer = new Konva.Layer();
+    const uiLayer = new Konva.Layer();
+
+    stage.add(bgLayer);
+    stage.add(hudLayer);
+    stage.add(mainLayer);
+    stage.add(uiLayer);
+
+    // --- Helpers ---
+    function getResponsiveSize() {
+        return Math.min(width, height);
+    }
+
+    // --- Background & HUD Effects ---
+    function createBackground() {
+        // 1. Grid Lines
+        const gridSize = 80;
+        const gridGroup = new Konva.Group({ opacity: 0.8 });
+        
+        for (let i = 0; i < width; i += gridSize) {
+            gridGroup.add(new Konva.Line({
+                points: [i, 0, i, height],
+                stroke: THEME.grid,
+                strokeWidth: 1
+            }));
+        }
+        for (let j = 0; j < height; j += gridSize) {
+            gridGroup.add(new Konva.Line({
+                points: [0, j, width, j],
+                stroke: THEME.grid,
+                strokeWidth: 1
+            }));
+        }
+        bgLayer.add(gridGroup);
+
+        // 2. HUD: Heading Strip (Top)
+        const hudGroup = new Konva.Group({ opacity: 0.5 });
+        hudGroup.add(new Konva.Line({
+            points: [0, 60, width, 60],
+            stroke: THEME.hudColor, strokeWidth: 1, dash: [4, 4]
+        }));
+        
+        // Ticks for heading
+        for(let i=0; i<width; i+=40) {
+            hudGroup.add(new Konva.Line({
+                points: [i, 60, i, 65],
+                stroke: THEME.hudColor, strokeWidth: 1
+            }));
+        }
+        // Marker for "170" (Runway heading approx)
+        hudGroup.add(new Konva.Text({
+            text: '170°', x: width/2, y: 45,
+            fill: THEME.primary, fontFamily: THEME.fontMono, fontSize: 10
+        }));
+        hudGroup.add(new Konva.RegularPolygon({
+            x: width/2 + 10, y: 60, sides: 3, radius: 5, fill: THEME.primary, rotation: 180
+        }));
+
+        // 3. HUD: Altimeter Tape (Right)
+        const tapeX = width - 60;
+        hudGroup.add(new Konva.Line({
+            points: [tapeX, 0, tapeX, height],
+            stroke: THEME.hudColor, strokeWidth: 1
+        }));
+        
+        // Altimeter ticks
+        for(let i=0; i<height; i+=50) {
+            const isMajor = i % 100 === 0;
+            hudGroup.add(new Konva.Line({
+                points: [tapeX, i, tapeX + (isMajor ? 10 : 5), i],
+                stroke: THEME.hudColor, strokeWidth: 1
+            }));
+            if(isMajor) {
+                hudGroup.add(new Konva.Text({
+                    text: Math.floor((height-i)*5).toString(), // Fake altitude
+                    x: tapeX + 15, y: i - 5,
+                    fill: THEME.textMuted, fontSize: 10, fontFamily: THEME.fontMono, opacity: 0.5
+                }));
+            }
+        }
+        hudLayer.add(hudGroup);
+    }
+
+    // --- Main Content Construction ---
+    function createTimeline() {
+        mainLayer.destroyChildren();
+        uiLayer.destroyChildren();
+
+        // 1. Main Title Block
+        const titleText = new Konva.Text({
+            text: 'DIỄN BIẾN CHI TIẾT: DL191',
+            x: 40,
+            y: 80, // Moved down below heading strip
+            fontSize: Math.max(24, width * 0.03),
+            fontFamily: THEME.fontHeading,
+            fontStyle: '800',
+            fill: THEME.text,
+        });
+        uiLayer.add(titleText);
+
+        uiLayer.add(new Konva.Text({
+            text: 'FLIGHT PATH RECONSTRUCTION // DFW // AUGUST 2 1985',
+            x: 40,
+            y: titleText.y() + titleText.height() + 10,
+            fontSize: 12,
+            fontFamily: THEME.fontMono,
+            fill: THEME.primary,
+            letterSpacing: 1
+        }));
+
+        // 2. Path Logic (Diagonal Descent)
+        const startX = width * 0.15;
+        const startY = height * 0.3;
+        const endX = width * 0.85;
+        const endY = height * 0.85;
+
+        // Path Line
+        const pathLine = new Konva.Line({
+            points: [startX, startY, width/2, height/2, endX, endY],
+            stroke: THEME.textMuted,
+            strokeWidth: 2,
+            dash: [5, 5],
+            opacity: 0.3
+        });
+        mainLayer.add(pathLine);
+
+        // 3. Microburst Visualization (Center)
+        drawMicroburstVisual(width/2, height/2);
+
+        // 4. Data Points & Cards
+        const points = [
+            { x: startX, y: startY, data: SLIDE_DATA[0], align: 'left' },
+            { x: width/2, y: height/2, data: SLIDE_DATA[1], align: 'center' },
+            { x: endX, y: endY, data: SLIDE_DATA[2], align: 'right' }
+        ];
+
+        points.forEach((pt, index) => {
+            createEventNode(pt.x, pt.y, pt.data, pt.align);
+        });
+
+        // 5. Static Aircraft Icon (Ghosted at shear point)
+        const plane = new Konva.Path({
+            data: "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z",
+            fill: THEME.warning,
+            scaleX: 1.5, scaleY: 1.5,
+            rotation: 140, // Nose down slightly
+            x: width/2 - 50, 
+            y: height/2 - 50,
+            opacity: 0.9,
+            shadowColor: THEME.danger,
+            shadowBlur: 20
+        });
+        mainLayer.add(plane);
+        
+        mainLayer.add(new Konva.Text({
+            text: 'L-1011 TRISTAR',
+            x: width/2 - 60, y: height/2 - 70,
+            fontSize: 10, fontFamily: THEME.fontMono, fill: THEME.warning
+        }));
+    }
+
+    function drawMicroburstVisual(x, y) {
+        const group = new Konva.Group({ x: x, y: y, opacity: 0.3 });
+        
+        // Concentric rings representing air pressure/wind
+        for(let i=1; i<=3; i++) {
+            group.add(new Konva.Circle({
+                radius: i * 40,
+                stroke: THEME.danger,
+                strokeWidth: 1,
+                dash: [10, 10]
+            }));
+        }
+
+        // Downward arrows
+        const arrowPoints = [
+            {x: 0, y: -60}, {x: -30, y: -40}, {x: 30, y: -40},
+            {x: 0, y: -20} // center
+        ];
+        
+        arrowPoints.forEach(pt => {
+             group.add(new Konva.Arrow({
+                points: [pt.x, pt.y, pt.x, pt.y + 20],
+                pointerLength: 5, pointerWidth: 5,
+                fill: THEME.danger, stroke: THEME.danger, strokeWidth: 2
+            }));
+        });
+        
+        // Outflow arrows (Microburst hitting ground spreading out)
+        // Since this is mid-air, we visualize the shear vectors
+        group.add(new Konva.Arrow({
+            points: [-80, 20, -40, 20], // Headwind
+            fill: THEME.primary, stroke: THEME.primary, strokeWidth: 2
+        }));
+        group.add(new Konva.Text({
+            text: 'HEADWIND', x: -90, y: 5, fontSize: 9, fill: THEME.primary, fontFamily: THEME.fontMono
+        }));
+
+        group.add(new Konva.Arrow({
+            points: [40, 20, 80, 20], // Tailwind
+            fill: THEME.danger, stroke: THEME.danger, strokeWidth: 2
+        }));
+        group.add(new Konva.Text({
+            text: 'TAILWIND', x: 40, y: 5, fontSize: 9, fill: THEME.danger, fontFamily: THEME.fontMono
+        }));
+
+        mainLayer.add(group);
+    }
+
+    function createEventNode(x, y, data, align) {
+        const group = new Konva.Group({ x: x, y: y });
+
+        // A. Data Markers (Time & Alt) attached to the node
+        const markerGroup = new Konva.Group({ opacity: 0.8 });
+        
+        // Time Label (Top of dot)
+        markerGroup.add(new Konva.Text({
+            text: data.time,
+            x: -25, y: -35,
+            fontSize: 11, fontFamily: THEME.fontMono, fill: THEME.text
+        }));
+        
+        // Alt Label (Bottom of dot)
+        markerGroup.add(new Konva.Text({
+            text: data.alt,
+            x: -20, y: 25,
+            fontSize: 11, fontFamily: THEME.fontMono, fill: THEME.textMuted
+        }));
+        group.add(markerGroup);
+
+        // B. The Node Dot
+        const outerCircle = new Konva.Circle({
+            radius: 6, fill: data.color, shadowColor: data.color, shadowBlur: 10
+        });
+        group.add(outerCircle);
+        // Halo
+        group.add(new Konva.Circle({
+            radius: 12, stroke: data.color, strokeWidth: 1, opacity: 0.5
+        }));
+
+        // C. The Detailed Card
+        const cardWidth = 280;
+        const cardPadding = 15;
+        
+        // Positioning
+        let textX = 40;
+        let textY = -40;
+        if (align === 'right') textX = -cardWidth - 40;
+        if (align === 'center') textY = 60; textX = -cardWidth / 2;
+
+        const cardGroup = new Konva.Group({ x: textX, y: textY });
+
+        // Background
+        const bgRect = new Konva.Rect({
+            width: cardWidth,
+            height: 100, 
+            fill: 'rgba(10, 25, 47, 0.9)', // More opaque
+            stroke: data.color,
+            strokeWidth: 1,
+            cornerRadius: 0, // Technical look
+            shadowColor: 'black', shadowBlur: 15, shadowOpacity: 0.6
+        });
+
+        // Header Strip
+        const headerRect = new Konva.Rect({
+            width: cardWidth, height: 24, fill: 'rgba(255,255,255,0.05)'
+        });
+        cardGroup.add(bgRect);
+        cardGroup.add(headerRect);
+
+        // Title
+        const title = new Konva.Text({
+            text: data.title,
+            x: cardPadding, y: 6,
+            fontFamily: THEME.fontMono, fontSize: 12, fill: data.color, fontStyle: 'bold'
+        });
+
+        // Description
+        const desc = new Konva.Text({
+            text: data.desc,
+            x: cardPadding, y: 35,
+            width: cardWidth - (cardPadding * 2),
+            fontFamily: THEME.fontBody, fontSize: 13, fill: '#ccc', lineHeight: 1.4
+        });
+
+        // Telemetry Block (Stats)
+        let currentY = desc.y() + desc.height() + 15;
+        
+        // Separator Line
+        cardGroup.add(new Konva.Line({
+            points: [cardPadding, currentY - 8, cardWidth - cardPadding, currentY - 8],
+            stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1
+        }));
+
+        data.stats.forEach((stat, i) => {
+            // Label
+            cardGroup.add(new Konva.Text({
+                text: stat,
+                x: cardPadding + (i % 2 === 0 ? 0 : 130), // 2 columns
+                y: currentY + (Math.floor(i/2) * 18),
+                fontFamily: THEME.fontMono, fontSize: 10, fill: THEME.primary
+            }));
+        });
+
+        // Resize rect
+        bgRect.height(currentY + (Math.ceil(data.stats.length/2) * 18) + 10);
+
+        cardGroup.add(title);
+        cardGroup.add(desc);
+
+        // Connector Line (Circuit style)
+        let connectPoints = [0, 0, textX, 0]; // Default horizontal
+        if (align === 'center') connectPoints = [0, 12, 0, textY]; // Vertical down
+        if (align === 'left' || align === 'right') {
+             // angled connector
+             connectPoints = [0, 0, textX > 0 ? 20 : -20, 0, textX, textY + 12];
+        }
+
+        const connector = new Konva.Line({
+            points: connectPoints,
+            stroke: data.color, strokeWidth: 1, opacity: 0.6
+        });
+
+        group.add(connector);
+        group.add(cardGroup);
+
+        mainLayer.add(group);
+    }
+
+    // --- Initialization ---
+    document.fonts.ready.then(() => {
+        const loader = document.getElementById('loader');
+        if(loader) loader.style.display = 'none';
+        
+        createBackground();
+        createTimeline();
+    });
+
+    // --- Responsive Handling ---
+    window.addEventListener('resize', () => {
+        const newWidth = window.innerWidth;
+        const newHeight = window.innerHeight;
+        if (newWidth === 0 || newHeight === 0) return;
+
+        width = newWidth;
+        height = newHeight;
+        
+        stage.width(width);
+        stage.height(height);
+        
+        bgLayer.destroyChildren();
+        hudLayer.destroyChildren();
+        createBackground();
+        createTimeline();
+    });
+
+</script>
+</body>
+</html>

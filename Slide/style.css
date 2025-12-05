@@ -1,0 +1,172 @@
+:root {
+    /* Palette: Blue-White-Gray with a balanced accent */
+    --color-background-start: #0a192f;
+    --color-background-end: #112240;
+    --color-text-main: #e6f1ff;
+    --color-text-muted: #a8b2d1;
+    --color-accent: #ffca28; /* Soft, balanced gold/amber accent */
+    --color-glass-border: rgba(255, 255, 255, 0.1);
+    --color-glass-bg: rgba(255, 255, 255, 0.03);
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+
+    /* Effects & Layers */
+    --shadow-softness: 24px;
+    --shadow-neumorphic-light: -6px -6px 16px rgba(50, 80, 120, 0.08);
+    --shadow-neumorphic-dark: 6px 6px 16px rgba(0, 0, 0, 0.4);
+    --layer-z-background: -1;
+    --layer-z-particles: 0;
+    --layer-z-content: 1;
+    --layer-z-glass: 2;
+    --layer-z-interactive: 3;
+
+    /* Animation */
+    --transition-smooth: cubic-bezier(.2, .9, .2, 1);
+  }
+
+  /* Base & Anti-aliasing */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-start);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 1. Logical Layer Hierarchy: Background */
+  .slide-background {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-z-background);
+    background: linear-gradient(170deg, var(--color-background-start), var(--color-background-end));
+    transition: transform 0.4s ease-out; /* For parallax */
+  }
+
+  /* Texture Overlay: Handmade canvas/paper grain */
+  .slide-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><g fill="%232d3a59" fill-opacity="0.04"><path d="M0 0h80v80H0zM40 40h40v40H40z"/></g></svg>');
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  /* 1. Logical Layer Hierarchy: Particles (Canvas) */
+  #particles-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-z-particles);
+    pointer-events: none;
+    transition: transform 0.2s ease-out; /* For parallax */
+  }
+
+  /* Main Slide Container */
+  .slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding: clamp(2rem, 5vw, 4rem);
+    position: relative;
+    z-index: var(--layer-z-content);
+  }
+
+  /* 2. Content Blocks */
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* 3. Emphasis Highlights: Main Title */
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 7.5vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: var(--color-text-main);
+    text-shadow:
+      var(--shadow-neumorphic-light),
+      var(--shadow-neumorphic-dark);
+    will-change: transform, opacity; /* Animation optimization */
+    opacity: 0; /* Initially hidden */
+  }
+
+  /* Decorative underline */
+  .main-title::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 4px;
+    margin: 1.5rem auto 0;
+    border-radius: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  /* Glassmorphism Card for Subtitle */
+  .subtitle-card {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px var(--shadow-softness) rgba(0, 0, 0, 0.2);
+    will-change: transform, opacity;
+    opacity: 0;
+  }
+
+  .subtitle-text {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    font-weight: 400;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+  
+  /* Decorative Box Styling: Chibi icon */
+  .chibi-accent {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    width: 64px;
+    height: 64px;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  .chibi-accent svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  }
+
+  /* Pixel-perfect alignment and consistent spacing are handled by flexbox/grid and clamp() */
+  /* Responsive Scaling */
+  @media (max-width: 768px) {
+    .main-title {
+      font-size: clamp(2.5rem, 10vw, 3rem);
+    }
+    .main-title::after {
+      width: 80px;
+    }
+    .subtitle-text {
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    }
+  }

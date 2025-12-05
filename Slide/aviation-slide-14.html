@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 14: Bài Học Từ Tenerife (Refactored)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Palette */
+      --bg-problem: #1a1a1a;
+      --text-problem: #e5e5e5;
+      --accent-problem: #ff3333; /* Alert Red */
+
+      --bg-solution: #f0f4f8;
+      --text-solution: #102a43;
+      --accent-solution: #0066cc; /* Regulation Blue */
+      --highlight-solution: #d9e2ec;
+
+      --font-display: 'IBM+Plex+Mono', monospace; /* Technical feel, but clean */
+      --font-body: 'IBM+Plex+Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%; margin: 0; padding: 0;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background-color: var(--bg-problem);
+      color: var(--text-problem);
+    }
+
+    .slide {
+      position: relative;
+      width: 100%; height: 100%;
+      overflow: hidden;
+    }
+
+    /* --- Backgrounds --- */
+    .bg-layer {
+      position: absolute; inset: 0;
+      transition: opacity 1.2s ease;
+      z-index: 0;
+    }
+
+    #bg-problem {
+      background-color: var(--bg-problem);
+      /* Subtle noise or grain could go here, but keeping it clean */
+      background-image: linear-gradient(to bottom right, #222, #111);
+      opacity: 1;
+    }
+    
+    #bg-solution {
+      background-color: var(--bg-solution);
+      opacity: 0;
+    }
+
+    /* --- Layout Wrapper --- */
+    .content-wrapper {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 0 10vw;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* --- Typography & Elements --- */
+    
+    /* The "Tag" above title */
+    .status-label {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-left: 12px;
+      border-left: 3px solid currentColor;
+      opacity: 0.8;
+      display: inline-block;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin: 0 0 4rem 0;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    /* List Styling */
+    ul {
+      list-style: none; padding: 0; margin: 0;
+      max-width: 850px;
+    }
+
+    li {
+      margin-bottom: 2.5rem;
+      display: flex; align-items: baseline; gap: 1.5rem;
+      opacity: 0; /* Animated */
+      transform: translateY(20px);
+    }
+
+    /* The Numbers (replacing icons) */
+    .item-index {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      opacity: 0.5;
+      flex-shrink: 0;
+      width: 2.5ch;
+    }
+
+    .item-content {
+      font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+    
+    .item-content strong {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.25rem;
+      font-family: var(--font-display);
+    }
+
+    /* --- Problem State Specifics --- */
+    .state-problem {
+      color: var(--text-problem);
+    }
+    .state-problem .status-label {
+      color: var(--accent-problem);
+      border-left-color: var(--accent-problem);
+    }
+    .state-problem .item-index {
+      color: var(--accent-problem);
+    }
+
+    /* --- Solution State Specifics --- */
+    .state-solution {
+      color: var(--text-solution);
+      opacity: 0;
+    }
+    .state-solution .status-label {
+      color: var(--accent-solution);
+      border-left-color: var(--accent-solution);
+    }
+    .state-solution .item-index {
+      color: var(--accent-solution);
+    }
+    
+    /* Highlight box for solution keywords */
+    .solution-box {
+      background: var(--highlight-solution);
+      padding: 0 6px;
+      border-radius: 2px;
+      color: var(--accent-solution);
+      font-weight: 600;
+    }
+
+    /* --- Decorative vertical line --- */
+    .sidebar-line {
+      position: absolute; left: 5vw; top: 15vh; bottom: 15vh;
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+      z-index: 5;
+      transition: background 1s ease;
+    }
+    
+    /* Add a small moving tick on the sidebar line */
+    .sidebar-tick {
+      position: absolute; left: -2px; top: 0;
+      width: 5px; height: 40px;
+      background: var(--accent-problem);
+      transition: top 1s cubic-bezier(0.65, 0, 0.35, 1), background 1s ease;
+    }
+
+  </style>
+</head>
+<body>
+
+<section class="slide">
+  <!-- Backgrounds -->
+  <div class="bg-layer" id="bg-problem"></div>
+  <div class="bg-layer" id="bg-solution"></div>
+
+  <!-- Decorative Line -->
+  <div class="sidebar-line" id="sidebar-line">
+    <div class="sidebar-tick" id="sidebar-tick"></div>
+  </div>
+
+  <!-- STATE 0: PROBLEM -->
+  <div class="content-wrapper state-problem" id="content-problem">
+    <div class="status-label">INCIDENT REPORT // ROOT CAUSES</div>
+    <h2 id="title-problem">Nguyên Nhân Gốc Rễ</h2>
+    <ul id="list-problem">
+      <li>
+        <span class="item-index">01</span>
+        <span class="item-content">
+          <strong>Mù quáng trong sương mù</strong>
+          Tầm nhìn giảm xuống gần bằng 0. Cả phi công lẫn tháp không lưu đều không thể xác nhận vị trí của nhau bằng mắt thường.
+        </span>
+      </li>
+      <li>
+        <span class="item-index">02</span>
+        <span class="item-content">
+          <strong>Giao tiếp chết người</strong>
+          Sử dụng từ ngữ không chuẩn ("We are at takeoff"). Một từ "OK" tai hại từ đài kiểm soát đã ngắt quãng cảnh báo quan trọng.
+        </span>
+      </li>
+      <li>
+        <span class="item-index">03</span>
+        <span class="item-content">
+          <strong>Tâm lý & Áp lực</strong>
+          Cơ trưởng KLM nôn nóng muốn rời đi trước khi quá giờ làm việc, bỏ qua sự nghi ngờ của kỹ sư bay.
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- STATE 1: SOLUTION -->
+  <div class="content-wrapper state-solution" id="content-solution">
+    <div class="status-label">CORRECTIVE ACTIONS // IMPLEMENTED</div>
+    <h2 id="title-solution">Bài Học & Cải Tiến</h2>
+    <ul id="list-solution">
+      <li>
+        <span class="item-index">01</span>
+        <span class="item-content">
+          <strong>Chuẩn hóa Phraseology</strong>
+          Bắt buộc sử dụng thuật ngữ ICAO chuẩn. Ví dụ: Chỉ dùng từ <span class="solution-box">"TAKEOFF"</span> khi thực sự cấp lệnh cất cánh.
+        </span>
+      </li>
+      <li>
+        <span class="item-index">02</span>
+        <span class="item-content">
+          <strong>Đào tạo CRM (Crew Resource Management)</strong>
+          Xóa bỏ văn hóa độc đoán trong buồng lái. Khuyến khích cơ phó và kỹ sư bay thách thức quyết định của cơ trưởng nếu thấy nguy hiểm.
+        </span>
+      </li>
+      <li>
+        <span class="item-index">03</span>
+        <span class="item-content">
+          <strong>Công nghệ ASDE & Radar Mặt Đất</strong>
+          Trang bị hệ thống radar để kiểm soát viên nhìn thấy vị trí máy bay trên đường băng ngay cả khi sương mù dày đặc.
+        </span>
+      </li>
+    </ul>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  const elements = {
+    bgProblem: document.getElementById('bg-problem'),
+    bgSolution: document.getElementById('bg-solution'),
+    sidebarLine: document.getElementById('sidebar-line'),
+    sidebarTick: document.getElementById('sidebar-tick'),
+    
+    contentProblem: document.getElementById('content-problem'),
+    titleProblem: document.getElementById('title-problem'),
+    listProblem: document.getElementById('list-problem'),
+    
+    contentSolution: document.getElementById('content-solution'),
+    titleSolution: document.getElementById('title-solution'),
+    listSolution: document.getElementById('list-solution'),
+  };
+  
+  let currentStep = 0;
+  let activeAnimations = [];
+
+  function resetState() {
+    activeAnimations.forEach(a => a.cancel());
+    activeAnimations = [];
+    
+    // Backgrounds
+    elements.bgProblem.style.opacity = '1';
+    elements.bgSolution.style.opacity = '0';
+    
+    // Sidebar Style (Problem Mode)
+    elements.sidebarLine.style.background = 'rgba(255,255,255,0.1)';
+    elements.sidebarTick.style.top = '10%'; // Top position
+    elements.sidebarTick.style.background = 'var(--accent-problem)';
+
+    // Problem Content (Visible default)
+    elements.contentProblem.style.opacity = '1';
+    elements.contentProblem.style.transform = 'translateY(0)';
+    elements.contentProblem.style.pointerEvents = 'auto';
+    
+    // Reset individual elements for entrance anim
+    elements.titleProblem.style.opacity = '0';
+    elements.titleProblem.style.transform = 'translateY(10px)';
+    
+    Array.from(elements.listProblem.children).forEach(li => {
+        li.style.opacity = '0';
+        li.style.transform = 'translateY(15px)';
+    });
+
+    // Solution Content (Hidden)
+    elements.contentSolution.style.opacity = '0';
+    elements.contentSolution.style.transform = 'translateY(20px)';
+    elements.contentSolution.style.pointerEvents = 'none';
+    
+    Array.from(elements.listSolution.children).forEach(li => {
+        li.style.opacity = '0';
+        li.style.transform = 'translateY(15px)';
+    });
+  }
+
+  function animateStep0() {
+    // Reveal Problem Title
+    const tAnim = elements.titleProblem.animate([
+        { opacity: 0, transform: 'translateY(20px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+    ], { duration: 800, easing: 'ease-out', fill: 'forwards' });
+    activeAnimations.push(tAnim);
+
+    // Reveal List Items
+    Array.from(elements.listProblem.children).forEach((li, index) => {
+        const anim = li.animate([
+            { opacity: 0, transform: 'translateY(30px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 600, delay: 200 + (index * 150), easing: 'ease-out', fill: 'forwards' });
+        activeAnimations.push(anim);
+    });
+  }
+
+  function animateStep1() {
+    // 1. Swap Backgrounds & Theme
+    // Add to activeAnimations to prevent conflicts
+    const bg1 = elements.bgProblem.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, fill: 'forwards' });
+    const bg2 = elements.bgSolution.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 800, fill: 'forwards' });
+    activeAnimations.push(bg1, bg2);
+    
+    // Move Sidebar Tick
+    elements.sidebarTick.style.top = '80%'; 
+    elements.sidebarTick.style.background = 'var(--accent-solution)';
+    elements.sidebarLine.style.background = 'rgba(0,0,0,0.1)'; 
+
+    // 2. Exit Problem Content
+    const exitAnim = elements.contentProblem.animate([
+        { opacity: 1, transform: 'translateY(0)' },
+        { opacity: 0, transform: 'translateY(-20px)' }
+    ], { duration: 600, easing: 'ease-in', fill: 'forwards' });
+    activeAnimations.push(exitAnim);
+    
+    elements.contentProblem.style.pointerEvents = 'none';
+
+    // 3. Enter Solution Content
+    elements.contentSolution.style.pointerEvents = 'auto';
+    
+    const enterAnim = elements.contentSolution.animate([
+        { opacity: 0, transform: 'translateY(30px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+    ], { duration: 800, delay: 300, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards' });
+    activeAnimations.push(enterAnim);
+
+    // Stagger List Items
+    Array.from(elements.listSolution.children).forEach((li, index) => {
+        const anim = li.animate([
+            { opacity: 0, transform: 'translateY(20px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 600, delay: 500 + (index * 100), easing: 'ease-out', fill: 'forwards' });
+        activeAnimations.push(anim);
+    });
+  }
+
+  // Unified Handler
+  function handleStep(step) {
+    resetState();
+    currentStep = step;
+    
+    if (step === 0) {
+        animateStep0();
+    } else if (step === 1) {
+        // Prepare state for transition to 1 (act as if we are at end of 0)
+        // This ensures the cross-fade works even if we jump directly here
+        elements.bgProblem.style.opacity = '1';
+        elements.bgSolution.style.opacity = '0';
+        animateStep1();
+    }
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    
+    switch (data.type) {
+      case 'reset':
+        resetState();
+        currentStep = 0;
+        break;
+      case 'setStep':
+        if (typeof data.step === 'number') {
+            currentStep = data.step;
+            // Only trigger if explicit animation isn't disabled (default logic)
+            // But we will let animate-slide pick it up mostly.
+            if (data.animate !== false) {
+                handleStep(data.step);
+            }
+        }
+        break;
+      case 'animate-slide':
+        // Crucial Fix: Don't force currentStep = 0. Use the currentStep that might have been just set.
+        // We reset the VISUAL state, then animate to the target step.
+        resetState();
+        if (currentStep === 1) animateStep1();
+        else animateStep0();
+        break;
+      case 'getNotes':
+        const note = currentStep === 0 
+            ? 'Vấn đề: Mù quáng, Giao tiếp, Áp lực.' 
+            : 'Giải pháp: Phraseology, CRM, Radar.';
+        try { ev.source.postMessage({ type: 'notes', notes: note }, ev.origin); } catch(e){}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    resetState();
+    if (window.self === window.top) {
+        animateStep0();
+    }
+    try { window.parent.postMessage({ type: 'slide-ready', stepCount: 2 }, '*'); } catch(e){}
+  });
+
+})();
+</script>
+
+</body>
+</html>

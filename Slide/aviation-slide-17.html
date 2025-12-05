@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 17: Diễn Biến (Băng Giá)</title>
+  <meta name="description" content="Timeline 3 giai đoạn của sự cố Air Florida 90.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Palette: Deep Arctic Night */
+    --bg-deep: #020c1b;
+    --bg-gradient: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.15);
+    
+    --text-primary: #e6f1ff;
+    --text-secondary: #8892b0;
+    
+    --accent-ice: #64ffda;
+    --accent-danger: #ff5d5d;
+    --accent-glow: rgba(100, 255, 218, 0.1);
+
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+    --font-number: 'Space Grotesk', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--bg-deep);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- Background & Atmosphere --- */
+  .slide-background {
+    position: absolute; inset: 0; z-index: -2;
+    background: radial-gradient(circle at 50% -20%, #1a3c6e 0%, #020c1b 70%);
+  }
+  
+  /* Frost Vignette Overlay */
+  .slide-background::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, #020c1b 120%);
+    pointer-events: none;
+  }
+
+  #particles-canvas {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .slide {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%; 
+    padding: clamp(2rem, 5vw, 4rem); 
+    position: relative; z-index: 1;
+  }
+
+  .content-wrapper {
+    display: flex; flex-direction: column; align-items: center; 
+    width: 100%; max-width: 1400px;
+    position: relative;
+  }
+
+  /* --- Typography --- */
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    font-style: italic;
+    color: transparent;
+    background: linear-gradient(180deg, #fff 20%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-bottom: 4rem;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0; /* Animated in JS */
+  }
+
+  /* --- Timeline Grid --- */
+  .timeline-container {
+    position: relative;
+    width: 100%;
+  }
+
+  /* The connecting line */
+  .timeline-line {
+    position: absolute;
+    top: 50%; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(255,255,255,0.2) 20%, 
+      rgba(255,255,255,0.2) 80%, 
+      transparent 100%
+    );
+    z-index: 0;
+    transform: translateY(-50%);
+  }
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    width: 100%;
+    position: relative; z-index: 1;
+  }
+
+  /* --- Cards --- */
+  .timeline-card {
+    position: relative;
+    display: flex; flex-direction: column;
+    padding: 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-highlight);
+    box-shadow: 
+      0 20px 40px -10px rgba(0,0,0,0.4),
+      inset 0 0 20px rgba(255,255,255,0.02);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+    opacity: 0; /* Animated in JS */
+  }
+
+  /* Hover Effect */
+  .timeline-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Watermark Number (01, 02, 03) */
+  .card-number {
+    position: absolute;
+    top: -10px; right: 15px;
+    font-family: var(--font-number);
+    font-size: 6rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card-content-inner {
+    position: relative; z-index: 1;
+  }
+
+  .card-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .icon-box {
+    display: flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--accent-ice);
+  }
+  
+  /* Specific styling for the Danger card */
+  #card2 .icon-box {
+    color: var(--accent-danger);
+    background: rgba(255, 93, 93, 0.1);
+    border-color: rgba(255, 93, 93, 0.2);
+  }
+
+  .icon-box svg { width: 24px; height: 24px; }
+
+  .card-title {
+    font-family: var(--font-number);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+    margin: 0;
+  }
+
+  .card-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .card-text strong {
+    color: var(--accent-ice);
+    font-weight: 600;
+  }
+  
+  #card2 .card-text strong {
+    color: var(--accent-danger);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .timeline-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .timeline-line { display: none; } /* Hide line on mobile */
+    .main-title { margin-bottom: 2rem; }
+    .timeline-card { padding: 1.5rem; }
+    .card-number { font-size: 4rem; top: 0; right: 10px; }
+  }
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="slide-background"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="content-wrapper">
+    <h1 class="main-title" id="main-title-h1">Diễn Biến: Air Florida 90</h1>
+    
+    <div class="timeline-container">
+      <div class="timeline-line"></div>
+      
+      <div class="timeline-grid">
+        <!-- Card 1 -->
+        <div class="timeline-card" id="card1">
+          <div class="card-number">01</div>
+          <div class="card-content-inner">
+            <div class="card-header">
+              <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg>
+              </div>
+              <h3 class="card-title">Tình Huống</h3>
+            </div>
+            <div class="card-text">
+              Chuyến bay cất cánh từ Washington D.C. trong điều kiện <strong>tuyết rơi dày đặc</strong>. Máy bay bị trễ giờ và phải chờ đợi lâu trên mặt đất sau khi đã khử băng.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="timeline-card" id="card2">
+          <div class="card-number">02</div>
+          <div class="card-content-inner">
+            <div class="card-header">
+              <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/></svg>
+              </div>
+              <h3 class="card-title">Sai Lầm</h3>
+            </div>
+            <div class="card-text">
+              Tổ bay không bật hệ thống chống băng động cơ, dẫn đến chỉ số lực đẩy sai lệch. Nghiêm trọng hơn, họ quyết định <strong>cất cánh với băng</strong> còn bám trên cánh.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="timeline-card" id="card3">
+          <div class="card-number">03</div>
+          <div class="card-content-inner">
+            <div class="card-header">
+              <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <h3 class="card-title">Hậu Quả</h3>
+            </div>
+            <div class="card-text">
+              Do mất lực nâng, máy bay va vào cầu 14th Street và lao xuống sông Potomac đóng băng. Vụ tai nạn khiến <strong>78 người thiệt mạng</strong> (74 trên máy bay, 4 trên mặt đất).
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    title: document.getElementById('main-title-h1'),
+    cards: document.querySelectorAll('.timeline-card'),
+  };
+  const animations = [];
+
+  let currentStep = 0;
+
+  function resetAnimations() {
+    animations.forEach(anim => anim.cancel());
+    animations.length = 0;
+    
+    // Initial hidden state logic
+    if (elements.title) {
+        elements.title.style.opacity = '0';
+        elements.title.style.transform = 'translateY(-30px)';
+    }
+    
+    if (elements.cards) {
+        elements.cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(40px)';
+            card.style.filter = 'blur(10px)';
+        });
+    }
+  }
+
+  function playStepAnimation(stepIndex) {
+    // 1. Animate Title (Only needs to happen once or stick)
+    if (elements.title.style.opacity === '0') {
+        animations.push(elements.title.animate(
+        [
+            { opacity: 0, transform: 'translateY(-30px)', filter: 'blur(10px)' }, 
+            { opacity: 1, transform: 'translateY(0)', filter: 'blur(0px)' }
+        ],
+        { duration: 1000, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards' }
+        ));
+    }
+
+    elements.cards.forEach((card, i) => {
+      // Logic: 
+      // i < stepIndex: Show simplified/dimmed (Past)
+      // i === stepIndex: Show Highlighted (Present)
+      // i > stepIndex: Hide (Future)
+
+      if (i < stepIndex) { 
+        // Past Cards: Dim them slightly but keep visible
+        animations.push(card.animate(
+          [
+            { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
+            { opacity: 0.5, transform: 'translateY(0) scale(0.98)', filter: 'grayscale(0.5)' }
+          ],
+          { duration: 600, easing: 'ease-out', fill: 'forwards' }
+        ));
+      } else if (i === stepIndex) { 
+        // Current Card: Pop in
+        animations.push(card.animate(
+          [
+            { opacity: 0, transform: 'translateY(40px)', filter: 'blur(10px)' }, 
+            { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0px)' }
+          ],
+          { duration: 900, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards', delay: 200 } // Slight delay for rhythm
+        ));
+      } else { 
+        // Future cards
+        card.style.opacity = '0';
+      }
+    });
+  }
+
+  function animateSlide() {
+    // Instead of full reset, we just trigger the state change for smooth transitions
+    playStepAnimation(currentStep); 
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': 
+        currentStep = 0;
+        resetAnimations();
+        playStepAnimation(0); 
+        break;
+      case 'setStep':
+        if (typeof data.step === 'number') {
+            currentStep = data.step;
+            // Immediate update for setStep, though usually animate-slide is called after
+            animateSlide();
+        }
+        break;
+      case 'animate-slide':
+        animateSlide();
+        break;
+      case 'getNotes':
+        const notes = [
+            'Bước 1: Tình huống - Máy bay bị trễ và chờ đợi lâu sau khử băng.',
+            'Bước 2: Sai lầm - Không bật chống băng, cất cánh với băng trên cánh.',
+            'Bước 3: Hậu quả - Va chạm cầu, rơi xuống sông Potomac.'
+        ];
+        try {
+          ev.source.postMessage({ type: 'notes', notes: notes[currentStep] || '' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  /* --- Particles Effect (Optimized) --- */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particleArray;
+
+  function initParticles() {
+    if(!canvas) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particleArray = [];
+    const numberOfParticles = Math.floor(canvas.width / 60); // Reduced count for cleaner look
+    
+    for (let i = 0; i < numberOfParticles; i++) {
+      particleArray.push({
+        x: Math.random() * canvas.width, 
+        y: Math.random() * canvas.height,
+        directionX: (Math.random() * 0.2) - 0.1, 
+        directionY: (Math.random() * 0.2) + 0.1, // Slight downward drift like snow
+        size: Math.random() * 2 + 0.5, 
+        color: Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.4)' : 'rgba(100, 255, 218, 0.3)'
+      });
+    }
+  }
+
+  function animateParticles() {
+    if(!particleArray) return;
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = 0; i < particleArray.length; i++) {
+      const p = particleArray[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      
+      p.x += p.directionX; 
+      p.y += p.directionY;
+      
+      // Wrap around screen
+      if (p.x > canvas.width + p.size) p.x = -p.size;
+      if (p.x < -p.size) p.x = canvas.width + p.size;
+      if (p.y > canvas.height + p.size) p.y = -p.size;
+      if (p.y < -p.size) p.y = canvas.height + p.size;
+    }
+  }
+
+  window.addEventListener('load', () => {
+    initParticles();
+    animateParticles();
+    resetAnimations(); 
+    playStepAnimation(0);
+    try { window.parent.postMessage({ type: 'slide-ready', stepCount: 3 }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', initParticles);
+
+})();
+</script>
+
+</body>
+</html>

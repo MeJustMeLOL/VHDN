@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 04: Case Study - Mưa Dông & Mưa Đá</title>
+  <meta name="description" content="Slide tiêu đề cho case study về Mưa dông và mưa đá, với hiệu ứng mưa rơi.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;700&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-background-storm: #0d1b2a;
+    --color-text-main: #e0e1dd;
+    --color-text-muted: #b0b5b3;
+    --color-accent: #ff477e; /* Warning Red */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-storm);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+  }
+
+  .slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .background-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('https://images.unsplash.com/photo-1558486012-817176f84c6d?q=80&w=1920');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.5) contrast(1.2);
+    transform: scale(1.05);
+    will-change: transform;
+    opacity: 0;
+  }
+
+  #rain-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .glass-pane {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 800px;
+    padding: clamp(2rem, 6vw, 4rem);
+    border-radius: 20px;
+    background: transparent; /* Hidden */
+    border: none; /* Hidden */
+    backdrop-filter: none; /* Hidden */
+    -webkit-backdrop-filter: none; /* Hidden */
+    box-shadow: none; /* Hidden */
+    text-align: center;
+    will-change: transform, opacity;
+    /* opacity: 0; -- REMOVED */
+  }
+
+  .case-study-label {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 1rem 0;
+    opacity: 0;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 7vw, 5.5rem); /* Bigger font size for emphasis */
+    line-height: 1.1;
+    margin: 0 0 1.5rem 0;
+    color: var(--color-text-main);
+    text-shadow:
+        0 0 10px var(--color-text-main), /* Subtle glow */
+        0 0 20px var(--color-text-main),
+        0 0 30px rgba(255, 71, 126, 0.5); /* Accent color glow */
+  }
+  
+  .subtitle {
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+    margin: 0 auto;
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="background-layer" id="bg-layer"></div>
+  <canvas id="rain-canvas"></canvas>
+
+  <div class="glass-pane" id="glass-pane">
+    <p class="case-study-label" id="case-study-label">Case Study 01</p>
+    <h2 class="main-title" id="main-title">Mưa Dông & Mưa Đá</h2>
+    <p class="subtitle" id="subtitle">Chuyến bay Southern Airways 242 và bài học về việc bay xuyên qua tâm bão.</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    bgLayer: document.getElementById('bg-layer'),
+    glassPane: document.getElementById('glass-pane'),
+    label: document.getElementById('case-study-label'),
+    title: document.getElementById('main-title'),
+    subtitle: document.getElementById('subtitle'),
+  };
+  const canvas = document.getElementById('rain-canvas');
+  const ctx = canvas.getContext('2d');
+  let rainDrops = [];
+  let animationFrameId;
+
+  function onResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    createRain();
+  }
+
+  function createRain() {
+    const dropCount = 500;
+    rainDrops = [];
+    for (let i = 0; i < dropCount; i++) {
+      rainDrops.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        length: Math.random() * 20 + 10,
+        speed: Math.random() * 10 + 5,
+        opacity: Math.random() * 0.5 + 0.2
+      });
+    }
+  }
+
+  function drawRain() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    
+    for (let i = 0; i < rainDrops.length; i++) {
+        const p = rainDrops[i];
+        ctx.globalAlpha = p.opacity;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - 2, p.y + p.length);
+        ctx.stroke();
+        
+        p.y += p.speed;
+        if (p.y > canvas.height) {
+            p.y = 0 - p.length;
+            p.x = Math.random() * canvas.width;
+        }
+    }
+    animationFrameId = requestAnimationFrame(drawRain);
+  }
+
+  function stopAnimation() {
+      if(animationFrameId) cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+  }
+
+  function clearAnimations() {
+    stopAnimation();
+    if(elements.label) elements.label.style.opacity = '0';
+    if(elements.title) elements.title.style.opacity = '0';
+    if(elements.subtitle) elements.subtitle.style.opacity = '0';
+  }
+
+  function animateSlide() {
+    clearAnimations();
+    onResize();
+    drawRain();
+    
+    elements.bgLayer.animate(
+        [{ opacity: 0, transform: 'scale(1.15)' }, { opacity: 1, transform: 'scale(1)' }],
+        { duration: 2000, easing: 'ease-out', fill: 'forwards' }
+    );
+    
+    elements.label.animate(
+        [{ opacity: 0 }, { opacity: 1 }],
+        { duration: 1000, easing: 'ease-in-out', fill: 'forwards', delay: 800 }
+    );
+    elements.title.animate(
+        [{ opacity: 0, transform: 'translateY(10px)' }, {opacity: 1, transform: 'translateY(0)'}],
+        { duration: 800, easing: 'ease-out', fill: 'forwards', delay: 1200 }
+    );
+    elements.subtitle.animate(
+        [{ opacity: 0 }, { opacity: 1 }],
+        { duration: 1200, easing: 'ease-in-out', fill: 'forwards', delay: 1500 }
+    );
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': clearAnimations(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'Case Study 1: Mưa Dông & Mưa Đá - Chuyến bay Southern Airways 242.' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    clearAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', onResize);
+
+})();
+</script>
+
+</body>
+</html>

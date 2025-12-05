@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 07: Bài Học & Giải Pháp</title>
+  <meta name="description" content="Slide bài học và giải pháp cho case study bão tuyết, sử dụng hiệu ứng lớp che phủ.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-dark-bg: #141d2b; /* Kept for problem card background */
+    --color-text-dark: #a8b2d1; /* For main text on dark cards */
+    --color-text-main-bright: #e6f1ff; /* For main text, if needed */
+    --color-accent-problem: #e84a5f; /* Distinct red for problem */
+    --color-accent-solution: #64ffda; /* Distinct green for solution */
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    font-family: var(--font-body);
+    background-color: var(--color-dark-bg); /* Default background for entire slide */
+  }
+  .slide {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%; position: relative;
+    perspective: 1000px;
+  }
+  .background-layer {
+    position: absolute; inset: 0; z-index: 0;
+    background: var(--color-dark-bg); /* Solid dark background */
+    will-change: background;
+  }
+  .flow-card {
+    position: absolute; width: 90%; max-width: 900px; height: 70%;
+    max-height: 500px; border-radius: 16px;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    will-change: transform, opacity;
+  }
+  .problem-card {
+    z-index: 1;
+    background: linear-gradient(145deg, #1f2c3d, #141d2b); /* Dark gradient */
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    color: var(--color-text-dark);
+    opacity: 0;
+  }
+  .solution-card {
+    z-index: 2;
+    background: linear-gradient(145deg, #1f2c3d, #141d2b); /* Synced background */
+    backdrop-filter: blur(8px) saturate(1.2); /* Consistent blur */
+    border: 1px solid rgba(100, 255, 218, 0.3); /* Accent border */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Consistent shadow */
+    color: var(--color-text-dark); /* Dark text for consistency */
+    transform: translateX(110%);
+    opacity: 0;
+  }
+  .card-title {
+    font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700;
+    margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 1rem;
+  }
+  .problem-card .card-title { color: var(--color-accent-problem); }
+  .solution-card .card-title { color: var(--color-accent-solution); }
+  .card-title svg { width: 32px; height: 32px; flex-shrink: 0; }
+  .content-list {
+    list-style: none; padding: 0; margin: 0;
+    font-size: clamp(0.9rem, 1.5vw, 1.05rem); line-height: 1.9;
+  }
+  .content-list li {
+    padding-left: 2rem; position: relative; margin-bottom: 1rem;
+  }
+  .content-list li::before {
+    position: absolute; left: 0; top: 0.25em; font-weight: 700;
+  }
+  .problem-card li::before { content: '⚠️'; }
+  .solution-card li::before { content: '💡'; }
+  .solution-card strong { font-weight: 600; color: var(--color-accent-solution); }
+
+  @media (max-width: 768px) {
+    .flow-card { width: 95%; height: 80%; max-height: 90vh; }
+  }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="background-layer" id="background"></div>
+  <div class="flow-card problem-card" id="problem-card">
+    <h2 class="card-title">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+      Nguyên Nhân Gốc Rễ
+    </h2>
+    <ul class="content-list">
+      <li>Thông tin thời tiết cung cấp cho tổ bay không kịp thời và đầy đủ.</li>
+      <li>Tổ bay quá phụ thuộc vào radar trên máy bay, vốn có giới hạn về khả năng nhận dạng (bị nhiễu xạ).</li>
+      <li>Thiếu quy trình chuẩn về việc cấm bay xuyên qua các vùng dông tố đã được xác định.</li>
+    </ul>
+  </div>
+  <div class="flow-card solution-card" id="solution-card">
+    <h2 class="card-title">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      Bài Học & Cải Tiến
+    </h2>
+    <ul class="content-list">
+      <li><strong>Cải tiến quy định:</strong> Tổ bay phải được cung cấp thông tin thời tiết cực đoan đầy đủ và cập nhật liên tục.</li>
+      <li><strong>Nâng cao huấn luyện:</strong> Tăng cường đào tạo về các hạn chế của radar thời tiết và kỹ năng diễn giải dữ liệu.</li>
+      <li><strong>Quy trình nghiêm ngặt:</strong> Thiết lập quy tắc "không khoan nhượng" về việc bay vào hoặc xuyên qua tâm bão dông đã xác định.</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    background: document.getElementById('background'),
+    problemCard: document.getElementById('problem-card'),
+    solutionCard: document.getElementById('solution-card'),
+    problemItems: document.querySelectorAll('#problem-card li'),
+    solutionItems: document.querySelectorAll('#solution-card li')
+  };
+
+  let activeAnimations = [];
+  let currentStep = 0;
+
+  function resetAnimations() {
+    activeAnimations.forEach(anim => anim.cancel());
+    activeAnimations = [];
+    
+    elements.background.style.background = 'var(--color-dark-bg)';
+    elements.problemCard.style.cssText = 'opacity: 0; transform: scale(0.95);';
+    elements.solutionCard.style.cssText = 'opacity: 0; transform: translateX(110%);';
+  }
+
+  function animateSlide() {
+    resetAnimations();
+
+    if (currentStep === 0) {
+      const problemCardAnim = elements.problemCard.animate(
+        [{ opacity: 0, transform: 'scale(0.95)' }, { opacity: 1, transform: 'scale(1)' }],
+        { duration: 800, easing: 'ease-out', fill: 'forwards' }
+      );
+      activeAnimations.push(problemCardAnim);
+
+      elements.problemItems.forEach((item, i) => {
+          activeAnimations.push(item.animate(
+              [{opacity: 0, transform: 'translateX(-20px)'}, {opacity: 1, transform: 'translateX(0)'}],
+              {duration: 500, easing: 'ease-out', fill: 'forwards', delay: 500 + i * 150}
+          ));
+      });
+    } else if (currentStep === 1) {
+      // Instantly show step 0 state
+      elements.problemCard.style.opacity = '1';
+      elements.problemCard.style.transform = 'scale(1)';
+
+      // Animate in the Solution card
+      const solutionCardAnim = elements.solutionCard.animate(
+        [{ opacity: 0.5, transform: 'translateX(110%)' }, { opacity: 1, transform: 'translateX(0)' }],
+        { duration: 1000, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards', delay: 400 }
+      );
+      activeAnimations.push(solutionCardAnim);
+
+      elements.solutionItems.forEach((item, i) => {
+          activeAnimations.push(item.animate(
+              [{opacity: 0, transform: 'translateX(20px)'}, {opacity: 1, transform: 'translateX(0)'}],
+              {duration: 600, easing: 'ease-out', fill: 'forwards', delay: 1000 + i * 150}
+          ));
+      });
+    }
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset':
+        currentStep = 0;
+        resetAnimations();
+        break;
+      case 'setStep':
+        if (typeof data.step === 'number') {
+            currentStep = data.step;
+        }
+        break;
+      case 'animate-slide':
+        animateSlide();
+        break;
+      case 'getNotes':
+        const note = currentStep === 0 ? 'Các lỗ hổng hệ thống được phát hiện từ sự cố.' : 'Các bài học và giải pháp được rút ra.';
+        try {
+          ev.source.postMessage({ type: 'notes', notes: note }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    resetAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready', stepCount: 2 }, '*'); } catch(e){}
+  });
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 13: Diễn Biến (Sương Mù)</title>
+  <meta name="description" content="Timeline 3 giai đoạn của thảm họa Tenerife với phong cách Glassmorphism.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Đồng bộ màu sắc với Slide 12 */
+    --color-background-fog: #333a45;
+    --color-text-main: #e0e1dd;
+    --color-text-muted: #b0b5b3;
+    --color-accent: #ffca28;
+    --color-danger: #ff6b6b;
+    
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+    
+    --glass-bg: rgba(20, 30, 40, 0.5);
+    --glass-border: rgba(255, 202, 40, 0.2);
+    --glass-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-fog);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+  }
+
+  /* --- Background Layers (Giống Slide 12) --- */
+  .slide-container {
+    position: relative; width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: clamp(1rem, 3vh, 2rem) clamp(2rem, 5vw, 4rem);
+  }
+
+  .background-layer {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: url('https://images.unsplash.com/photo-1485790362249-51532f664147?q=80&w=1920');
+    background-size: cover; background-position: center;
+    filter: brightness(0.3) saturate(0.5);
+    transform: scale(1.05); will-change: transform; opacity: 0;
+  }
+
+  #fog-canvas {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    filter: blur(40px); opacity: 0.7;
+  }
+
+  /* --- Content Layout --- */
+  .content-wrapper {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 1200px;
+    display: flex; flex-direction: column; gap: 2rem;
+  }
+
+  .header-section {
+    text-align: center; margin-bottom: 1rem;
+    opacity: 0; transform: translateY(-20px);
+  }
+
+  .slide-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--color-text-main);
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  
+  .slide-subtitle {
+    font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-accent); margin-top: 0.5rem; display: block;
+  }
+
+  /* --- Timeline Cards --- */
+  .timeline-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    position: relative;
+  }
+
+  /* Connecting Line (Dòng chảy thời gian) */
+  .timeline-line {
+    position: absolute; top: 40px; left: 10%; right: 10%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    z-index: 0; opacity: 0.3; transform: scaleX(0); transform-origin: left;
+  }
+
+  .glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow);
+    display: flex; flex-direction: column; align-items: flex-start;
+    position: relative; z-index: 1;
+    opacity: 0; transform: translateY(30px);
+    transition: transform 0.3s ease, background 0.3s;
+  }
+
+  .glass-card:hover {
+    background: rgba(30, 45, 60, 0.6);
+    transform: translateY(-5px) !important;
+  }
+
+  .step-marker {
+    font-family: var(--font-heading);
+    font-size: 2.5rem; line-height: 1;
+    color: rgba(255,255,255,0.1);
+    position: absolute; top: 1rem; right: 1rem;
+    font-weight: 700;
+  }
+
+  .card-icon {
+    font-size: 1.8rem; color: var(--color-accent);
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(255, 202, 40, 0.4));
+  }
+  
+  .card-title {
+    font-family: var(--font-heading);
+    font-size: 1.4rem; color: var(--color-text-main);
+    margin: 0 0 0.8rem 0;
+  }
+
+  .card-desc {
+    font-size: 0.95rem; line-height: 1.6; color: var(--color-text-muted);
+    margin: 0;
+  }
+  
+  .highlight { color: var(--color-accent); font-weight: 600; }
+  .highlight-danger { color: var(--color-danger); font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .timeline-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .timeline-line { display: none; }
+    .slide-container { overflow-y: auto; display: block; }
+    .header-section { margin-top: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="background-layer" id="bg-layer"></div>
+  <canvas id="fog-canvas"></canvas>
+
+  <div class="slide-container">
+    <div class="content-wrapper">
+      
+      <div class="header-section" id="header">
+        <h1 class="slide-title">Diễn Biến: Màn Sương Định Mệnh</h1>
+        <span class="slide-subtitle">Thảm họa Tenerife • 1977</span>
+      </div>
+
+      <div class="timeline-grid">
+        <div class="timeline-line" id="line"></div>
+
+        <!-- Card 1 -->
+        <div class="glass-card" id="card1">
+          <div class="step-marker">01</div>
+          <div class="card-icon">👁️‍🗨️</div>
+          <h3 class="card-title">Điểm Mù</h3>
+          <p class="card-desc">
+            Sân bay Los Rodeos quá tải. Sương mù dày đặc đột ngột bao phủ, khiến <span class="highlight">tầm nhìn &lt; 300m</span>. Không có radar mặt đất, đài kiểm soát không lưu hoàn toàn mất dấu vị trí hai máy bay.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card" id="card2">
+          <div class="step-marker">02</div>
+          <div class="card-icon">📻</div>
+          <h3 class="card-title">Nhiễu Sóng</h3>
+          <p class="card-desc">
+            Cơ trưởng KLM nôn nóng cất cánh. Do hiện tượng <span class="highlight">chồng sóng (heterodyne)</span>, lệnh "Chờ" quan trọng từ đài kiểm soát biến thành tiếng rít vô nghĩa trong tai nghe phi công.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card" id="card3">
+          <div class="step-marker">03</div>
+          <div class="card-icon">💥</div>
+          <h3 class="card-title">Va Chạm</h3>
+          <p class="card-desc">
+            KLM bắt đầu chạy đà trong khi Pan Am vẫn đang lăn trên đường băng. Va chạm xảy ra ở tốc độ cao gây nổ lớn, cướp đi sinh mạng của <span class="highlight-danger">583 người</span>.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  // --- Animation Elements ---
+  const el = {
+    bg: document.getElementById('bg-layer'),
+    header: document.getElementById('header'),
+    line: document.getElementById('line'),
+    cards: [
+      document.getElementById('card1'),
+      document.getElementById('card2'),
+      document.getElementById('card3')
+    ]
+  };
+
+  // --- Fog Logic (Copy from Slide 12 for sync) ---
+  const canvas = document.getElementById('fog-canvas');
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+  let particles = [];
+
+  function initFog() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
+    // Ít hạt hơn Slide 12 một chút để dễ đọc nội dung chi tiết
+    for(let i=0; i < 20; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 200 + 150,
+            vx: (Math.random() - 0.5) * 0.15,
+            vy: (Math.random() - 0.5) * 0.15,
+            opacity: Math.random() * 0.08 + 0.02
+        });
+    }
+  }
+
+  function drawFog() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x + p.radius < 0) p.x = canvas.width + p.radius;
+        if (p.x - p.radius > canvas.width) p.x = -p.radius;
+        if (p.y + p.radius < 0) p.y = canvas.height + p.radius;
+        if (p.y - p.radius > canvas.height) p.y = -p.radius;
+        
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+        gradient.addColorStop(0, `rgba(200, 210, 220, ${p.opacity})`);
+        gradient.addColorStop(1, `rgba(200, 210, 220, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+    animationFrameId = requestAnimationFrame(drawFog);
+  }
+
+  // --- Control Logic ---
+  const animations = [];
+
+  function resetSlide() {
+    animations.forEach(a => a.cancel());
+    animations.length = 0;
+    
+    // Reset styles
+    el.bg.style.opacity = 0;
+    el.header.style.opacity = 0;
+    el.line.style.transform = 'scaleX(0)';
+    el.cards.forEach(c => {
+      c.style.opacity = 0;
+      c.style.transform = 'translateY(30px)';
+    });
+    
+    if(animationFrameId) cancelAnimationFrame(animationFrameId);
+    initFog();
+    drawFog();
+  }
+
+  function animateSlide() {
+    resetSlide();
+
+    // 1. Background Fade In
+    animations.push(el.bg.animate(
+      [{ opacity: 0, transform: 'scale(1.1)' }, { opacity: 1, transform: 'scale(1)' }],
+      { duration: 2000, easing: 'ease-out', fill: 'forwards' }
+    ));
+
+    // 2. Header
+    animations.push(el.header.animate(
+      [{ opacity: 0, transform: 'translateY(-20px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 800, easing: 'ease-out', fill: 'forwards', delay: 300 }
+    ));
+
+    // 3. Line
+    animations.push(el.line.animate(
+      [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }],
+      { duration: 1000, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards', delay: 800 }
+    ));
+
+    // 4. Cards (Staggered)
+    el.cards.forEach((card, i) => {
+      animations.push(card.animate(
+        [{ opacity: 0, transform: 'translateY(30px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 800, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards', delay: 1000 + (i * 300) }
+      ));
+    });
+  }
+
+  // --- Main Controller Listeners ---
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': resetSlide(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ 
+            type: 'notes', 
+            notes: 'Slide 13: Diễn biến 3 bước của thảm họa - Điểm mù, Nhiễu sóng, và Va chạm.' 
+          }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    resetSlide();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', initFog);
+
+})();
+</script>
+</body>
+</html>

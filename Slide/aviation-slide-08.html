@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 12: Case Study - Gió Đứt</title>
+  <meta name="description" content="Slide tiêu đề cho case study về Gió Đứt (Microburst), với hiệu ứng hạt chuyển động.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-bg: #050a16;
+    --color-text: #e6f1ff;
+    --color-accent: #ff477e; /* Warning pink/red */
+    --font-heading: 'Be Vietnam Pro', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-bg);
+  }
+
+  .slide {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  #particles-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .content {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translate(-20%, -50%);
+    width: 40%;
+    max-width: 600px;
+    z-index: 1;
+    text-align: left;
+    opacity: 0;
+  }
+
+  .case-study-label {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    opacity: 0.7;
+    margin: 0 0 1rem 0;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--color-text);
+    /* Motion blur effect */
+    filter: blur(0.5px);
+    text-shadow: 1px 0 3px rgba(255,255,255,0.2);
+  }
+
+  @media (max-width: 900px) {
+    .content {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        text-align: center;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <canvas id="particles-canvas"></canvas>
+  <div class="content" id="content-block">
+    <p class="case-study-label">Case Study 02</p>
+    <h2 class="main-title">Case Study: Gió Cắt</h2>
+    <p class="subtitle" id="subtitle">Các thảm kịch Delta 191, Pan Am 759 và bài học xương máu.</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    content: document.getElementById('content-block'),
+  };
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  
+  let animationFrameId;
+  let particles = [];
+  const numParticles = 2000;
+  let mouse = { x: null, y: null };
+  
+  let burstActive = false;
+  let burstConfig = { x: 0, y: 0, strength: 0, radius: 0 };
+
+  function onResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < numParticles; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.2,
+            vy: (Math.random() - 0.5) * 0.2,
+            size: Math.random() * 1.5 + 0.5,
+            color: 'rgba(168, 178, 209, 0.7)',
+        });
+    }
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for(let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        
+        if (burstActive) {
+            const dx = p.x - burstConfig.x;
+            const dy = p.y - burstConfig.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < burstConfig.radius) {
+                const force = (burstConfig.radius - dist) / burstConfig.radius;
+                p.vx += dx / dist * force * burstConfig.strength * 0.01;
+                p.vy += dy / dist * force * burstConfig.strength * 0.01;
+                p.color = `rgba(255, 71, 126, ${force * 0.8})`;
+            } else {
+                 p.color = 'rgba(168, 178, 209, 0.7)';
+            }
+        } else {
+            p.color = 'rgba(168, 178, 209, 0.7)';
+        }
+
+        // Apply mouse interaction
+        if(mouse.x && mouse.y){
+            const mdx = p.x - mouse.x;
+            const mdy = p.y - mouse.y;
+            const mDist = Math.sqrt(mdx*mdx + mdy*mdy);
+            if(mDist < 100){
+                p.vx += mdx / mDist * 0.5;
+                p.vy += mdy / mDist * 0.5;
+            }
+        }
+        
+        // Damping
+        p.vx *= 0.98;
+        p.vy *= 0.98;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Wall behavior
+        if (p.x > canvas.width) p.x = 0;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.y > canvas.height) p.y = 0;
+        if (p.y < 0) p.y = canvas.height;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+    }
+    animationFrameId = requestAnimationFrame(animateParticles);
+  }
+  
+  function triggerMicroburst() {
+      burstActive = true;
+      burstConfig.x = canvas.width / 2;
+      burstConfig.y = -100; // Start from top
+      burstConfig.strength = 0;
+      burstConfig.radius = 0;
+
+      // Animate strength
+      let start = null;
+      const animateStrength = (timestamp) => {
+          if(!start) start = timestamp;
+          const progress = Math.min((timestamp - start) / 2000, 1);
+          burstConfig.strength = progress * 5;
+          burstConfig.radius = progress * (canvas.width * 0.8);
+          burstConfig.y = progress * (canvas.height * 0.6);
+          if (progress < 1) requestAnimationFrame(animateStrength);
+      }
+      requestAnimationFrame(animateStrength);
+  }
+
+  function stopAnimation() {
+    if(animationFrameId) cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function clearState() {
+    stopAnimation();
+    elements.content.style.opacity = '0';
+    burstActive = false;
+  }
+
+  function animateSlide() {
+    clearState();
+    
+    if (!animationFrameId) {
+        onResize();
+        initParticles();
+        animateParticles();
+    }
+    
+    // Trigger the microburst animation
+    setTimeout(triggerMicroburst, 500);
+
+    // Animate content "blowing" in
+    elements.content.animate(
+      [
+          { opacity: 0, transform: 'translate(-50%, -50%) scale(1.2) skewX(-10deg)', filter: 'blur(10px)' },
+          { opacity: 1, transform: 'translate(-20%, -50%) scale(1) skewX(0)', filter: 'blur(0.5px)' }
+      ],
+      { duration: 1500, easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)', fill: 'forwards', delay: 300 }
+    );
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': clearState(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'Tiêu đề Case Study 3: Gió Đứt (Microburst).' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+  
+  window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+  });
+
+  window.addEventListener('load', () => {
+    onResize();
+    initParticles();
+    clearState();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', onResize);
+
+})();
+</script>
+
+</body>
+</html>

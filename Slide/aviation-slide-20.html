@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 20: Cảm Ơn & Hỏi Đáp</title>
+  <meta name="description" content="Slide kết thúc, cảm ơn và công cụ ghi chú câu hỏi Q&A.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-text: #fff;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: #000;
+    font-family: var(--font-body);
+    color: var(--color-text);
+  }
+
+  .slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+  }
+  
+  .background-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      filter: brightness(0.5) contrast(1.1);
+  }
+  
+  .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.8) 100%);
+  }
+
+  .content {
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      width: 100%;
+      max-width: 800px;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  
+  .thank-you-text {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1;
+      margin: 0 0 1.5rem 0;
+      text-shadow: 0 5px 25px rgba(0,0,0,0.5);
+  }
+  
+  .divider {
+      width: 80px;
+      height: 3px;
+      background: rgba(255,255,255,0.8);
+      margin: 0 auto 1.5rem auto;
+      border-radius: 2px;
+  }
+  
+  .qa-text {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+  }
+
+  /* --- Q&A Note Taking Styles --- */
+  .qa-container {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      max-height: 50vh; /* Prevents taking up too much screen */
+  }
+
+  .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+  }
+
+  #qa-input {
+      flex: 1;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      outline: none;
+      transition: background 0.2s;
+  }
+
+  #qa-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+  }
+
+  #qa-input:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  #add-btn {
+      background: white;
+      color: black;
+      border: none;
+      padding: 0 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.2s, transform 0.1s;
+  }
+
+  #add-btn:hover {
+      background: #f0f0f0;
+  }
+  
+  #add-btn:active {
+      transform: scale(0.95);
+  }
+
+  .qa-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.3) transparent;
+  }
+
+  /* Custom Scrollbar for Chrome/Safari */
+  .qa-list::-webkit-scrollbar {
+      width: 6px;
+  }
+  .qa-list::-webkit-scrollbar-thumb {
+      background-color: rgba(255,255,255,0.3);
+      border-radius: 3px;
+  }
+
+  .qa-item {
+      background: var(--glass-bg);
+      margin-bottom: 8px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      border-left: 3px solid rgba(255,255,255,0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      animation: slideIn 0.3s ease-out forwards;
+  }
+
+  .qa-item span {
+      flex: 1;
+      padding-right: 10px;
+      word-break: break-word;
+      line-height: 1.4;
+  }
+
+  .delete-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0 4px;
+      line-height: 1;
+      transition: color 0.2s;
+  }
+
+  .delete-btn:hover {
+      color: #ff6b6b;
+  }
+
+  .empty-state {
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+  }
+
+  @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <!-- Background Video -->
+  <video class="background-video" autoplay muted loop playsinline>
+    <source src="https://videos.pexels.com/video-files/3015406/3015406-hd_1920_1080_25fps.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+  
+  <div class="content" id="content-block">
+    <h2 class="thank-you-text">Cảm ơn!</h2>
+    <div class="divider"></div>
+    <p class="qa-text">Hỏi & Đáp</p>
+
+    <!-- Q&A Section -->
+    <div class="qa-container">
+        <div class="input-group">
+            <input type="text" id="qa-input" placeholder="Nhập câu hỏi khán giả..." autocomplete="off">
+            <button id="add-btn">Thêm</button>
+        </div>
+        <ul id="qa-list" class="qa-list">
+            <!-- Questions will appear here -->
+        </ul>
+        <div id="empty-msg" class="empty-state">Chưa có câu hỏi nào.</div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  const content = document.getElementById('content-block');
+  const qaInput = document.getElementById('qa-input');
+  const addBtn = document.getElementById('add-btn');
+  const qaList = document.getElementById('qa-list');
+  const emptyMsg = document.getElementById('empty-msg');
+  
+  // Storage Key
+  const STORAGE_KEY = 'slide_qa_notes';
+  
+  const animations = [];
+
+  // --- Animation Logic (Slide Transition) ---
+  function clearAnimations() {
+    animations.forEach(anim => anim.cancel());
+    animations.length = 0;
+    if(content) content.style.opacity = '0';
+  }
+
+  function animateSlide() {
+    clearAnimations();
+    const anim = content.animate(
+      [
+        { opacity: 0, transform: 'scale(0.95)' },
+        { opacity: 1, transform: 'scale(1)' }
+      ],
+      { duration: 1500, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards' }
+    );
+    animations.push(anim);
+  }
+
+  // --- Q&A Logic ---
+
+  function loadQuestions() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const questions = stored ? JSON.parse(stored) : [];
+      renderList(questions);
+  }
+
+  function saveQuestions(questions) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
+      renderList(questions);
+  }
+
+  function renderList(questions) {
+      qaList.innerHTML = '';
+      
+      if (questions.length === 0) {
+          emptyMsg.style.display = 'block';
+          return;
+      }
+      
+      emptyMsg.style.display = 'none';
+
+      questions.forEach((q, index) => {
+          const li = document.createElement('li');
+          li.className = 'qa-item';
+          
+          const textSpan = document.createElement('span');
+          textSpan.textContent = q;
+          
+          const delBtn = document.createElement('button');
+          delBtn.className = 'delete-btn';
+          delBtn.innerHTML = '&times;';
+          delBtn.title = 'Xóa câu hỏi';
+          delBtn.onclick = () => deleteQuestion(index);
+
+          li.appendChild(textSpan);
+          li.appendChild(delBtn);
+          
+          // Prepend to show newest first? Or append for chronological. Let's use append (chronological).
+          qaList.appendChild(li); 
+      });
+      
+      // Auto scroll to bottom
+      qaList.scrollTop = qaList.scrollHeight;
+  }
+
+  function addQuestion() {
+      const text = qaInput.value.trim();
+      if (!text) return;
+
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const questions = stored ? JSON.parse(stored) : [];
+      
+      questions.push(text);
+      saveQuestions(questions);
+      
+      qaInput.value = '';
+      qaInput.focus();
+  }
+
+  function deleteQuestion(index) {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return;
+      
+      const questions = JSON.parse(stored);
+      questions.splice(index, 1);
+      saveQuestions(questions);
+  }
+
+  // --- Event Listeners ---
+
+  addBtn.addEventListener('click', addQuestion);
+
+  qaInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addQuestion();
+  });
+
+  // Handle messaging for iframe communication
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': clearAnimations(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'getNotes':
+        try {
+          // Send notes + current Q&A count
+          const qCount = qaList.children.length;
+          ev.source.postMessage({ 
+            type: 'notes', 
+            notes: `Slide cuối. Cảm ơn & Hỏi đáp. Hiện có ${qCount} câu hỏi đang chờ.` 
+          }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    clearAnimations();
+    loadQuestions(); // Load stored questions on init
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+    
+    // Optional: Start animation automatically if viewed standalone
+    if (window.self === window.top) {
+        animateSlide();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 12: Case Study - Sương Mù (Enhanced)</title>
+  <meta name="description" content="Slide tiêu đề cho case study về Sương Mù, với hiệu ứng sương mù, nhiễu hạt film và ánh đèn đường băng.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-bg: #1a1e24;
+    --color-text-main: #f0f2f5;
+    --color-text-muted: #a0a5aa;
+    --color-warning: #ffb300; /* Amber/Orange for aviation warning */
+    --color-danger: #e53935;
+    
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-bg);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+  }
+
+  .slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    perspective: 1000px; /* For 3D feel */
+  }
+
+  /* --- Layers --- */
+
+  /* 1. Base Image */
+  .background-layer {
+    position: absolute;
+    inset: -5%; /* Larger than screen for parallax movement */
+    z-index: 0;
+    /* Using a moody tarmac/runway image */
+    background-image: url('https://images.unsplash.com/photo-1518066512300-348f0797178a?q=80&w=1920'); 
+    background-size: cover;
+    background-position: center bottom;
+    filter: brightness(0.3) contrast(1.2) grayscale(0.4);
+    transform: scale(1.1);
+    transition: transform 0.1s ease-out; /* For parallax */
+    will-change: transform;
+  }
+
+  /* 2. Runway Lights (Contextual Clue) */
+  .runway-lights {
+    position: absolute;
+    top: 60%;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 150px;
+    opacity: 0; /* Animated in */
+    transform: perspective(600px) rotateX(45deg);
+    pointer-events: none;
+  }
+
+  .light {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--color-warning);
+    box-shadow: 0 0 40px 10px rgba(255, 179, 0, 0.4);
+    animation: pulse 4s infinite ease-in-out;
+  }
+  .light:nth-child(2) { animation-delay: 1s; }
+  .light:nth-child(3) { animation-delay: 2s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.2); }
+  }
+
+  /* 3. Fog Canvas */
+  #fog-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen; /* Makes fog blend better with dark bg */
+    opacity: 0.8;
+  }
+
+  /* 4. Film Grain Overlay */
+  .grain-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* 5. Content Card */
+  .glass-pane {
+    position: relative;
+    z-index: 4;
+    width: 85%;
+    max-width: 750px;
+    padding: clamp(2.5rem, 5vw, 4.5rem);
+    
+    /* Advanced Glassmorphism */
+    background: rgba(20, 25, 30, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Top highlight */
+    border-radius: 4px; /* Sharper corners for serious tone */
+    
+    backdrop-filter: blur(12px) saturate(90%);
+    -webkit-backdrop-filter: blur(12px) saturate(90%);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    
+    text-align: center;
+    opacity: 0; /* Handled by JS */
+    will-change: transform, opacity;
+    transition: transform 0.1s ease-out; /* For parallax */
+  }
+
+  /* Decoration Line */
+  .glass-pane::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: var(--color-warning);
+    box-shadow: 0 0 10px var(--color-warning);
+  }
+
+  .case-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+  }
+
+  .case-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1a1e24;
+    background: var(--color-warning);
+    padding: 4px 8px;
+    border-radius: 2px;
+  }
+
+  .case-year {
+    font-size: 0.85rem;
+    font-family: var(--font-heading);
+    color: var(--color-text-muted);
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 7vw, 5rem);
+    line-height: 1;
+    margin: 0 0 1.5rem 0;
+    color: var(--color-text-main);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    letter-spacing: -0.02em;
+    position: relative;
+    opacity: 0;
+  }
+  
+  .subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    max-width: 55ch;
+    margin: 0 auto;
+    font-weight: 300;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    opacity: 0;
+  }
+
+  /* Emphasis in subtitle */
+  .subtitle strong {
+    color: var(--color-text-main);
+    font-weight: 600;
+  }
+
+</style>
+</head>
+<body>
+
+<section class="slide" id="slide-container">
+  <!-- Background -->
+  <div class="background-layer" id="bg-layer"></div>
+  
+  <!-- Runway Lights -->
+  <div class="runway-lights" id="runway-lights">
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+  </div>
+
+  <!-- Fog Simulation -->
+  <canvas id="fog-canvas"></canvas>
+  
+  <!-- Texture -->
+  <div class="grain-overlay"></div>
+
+  <!-- Content -->
+  <div class="glass-pane" id="glass-pane">
+    <div class="case-meta" id="case-meta">
+      <span class="case-tag">Case Study 2</span>
+      <span class="case-year">March 27, 1977</span>
+    </div>
+    
+    <h1 class="main-title" id="main-title">Thảm Họa Tenerife</h1>
+    
+    <p class="subtitle" id="subtitle">
+      Khi <strong>sương mù dày đặc</strong> trở thành bức màn che cho chuỗi sai lầm chết người, dẫn đến vụ tai nạn thảm khốc nhất lịch sử hàng không.
+    </p>
+  </div>
+</section>
+
+<script>
+(function(){
+  // --- Configuration ---
+  const config = {
+    particleCount: 50,
+    parallaxStrength: 15, // How much the mouse affects movement
+    colors: {
+        fog: '210, 220, 230' 
+    }
+  };
+
+  const elements = {
+    container: document.getElementById('slide-container'),
+    bgLayer: document.getElementById('bg-layer'),
+    glassPane: document.getElementById('glass-pane'),
+    runwayLights: document.getElementById('runway-lights'),
+    meta: document.getElementById('case-meta'),
+    title: document.getElementById('main-title'),
+    subtitle: document.getElementById('subtitle'),
+  };
+
+  const canvas = document.getElementById('fog-canvas');
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+  let particles = [];
+  let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+
+  // --- Mouse Interaction (Parallax) ---
+  window.addEventListener('mousemove', (e) => {
+    // Normalize mouse position from -1 to 1
+    mouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.targetY = (e.clientY / window.innerHeight) * 2 - 1;
+  });
+
+  function updateParallax() {
+    // Smooth lerp
+    mouse.x += (mouse.targetX - mouse.x) * 0.05;
+    mouse.y += (mouse.targetY - mouse.y) * 0.05;
+
+    // Move Background (Inverse direction)
+    elements.bgLayer.style.transform = `scale(1.1) translate(${mouse.x * -10}px, ${mouse.y * -5}px)`;
+    
+    // Move Content (Forward direction - subtle)
+    // We combine this with the scale(1) used in CSS animation, so we apply it via specific property if possible, 
+    // but since CSS animation sets transform, we check if animation is done or use a wrapper.
+    // For simplicity here, we assume the entrance animation finishes, then we can slightly nudge.
+    if(elements.glassPane.style.opacity === '1') {
+        elements.glassPane.style.transform = `scale(1) translate(${mouse.x * 10}px, ${mouse.y * 5}px)`;
+    }
+  }
+
+  // --- Fog Simulation ---
+  function onResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initParticles();
+  }
+
+  function initParticles() {
+    particles = [];
+    for(let i=0; i < config.particleCount; i++) {
+        particles.push(createParticle());
+    }
+  }
+
+  function createParticle() {
+    return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 250 + 100,
+        vx: (Math.random() - 0.5) * 0.5, // Slow wind
+        vy: (Math.random() - 0.5) * 0.2, 
+        opacity: Math.random() * 0.15 + 0.05,
+        life: Math.random() * 1000
+    };
+  }
+
+  function drawFog() {
+    // Clear slightly to create trails? No, full clear for crisp fog
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    updateParallax();
+
+    particles.forEach(p => {
+        // Movement
+        p.x += p.vx + (mouse.x * -2); // Fog reacts to mouse like wind
+        p.y += p.vy;
+
+        // Wrap around
+        if (p.x + p.radius < 0) p.x = canvas.width + p.radius;
+        if (p.x - p.radius > canvas.width) p.x = -p.radius;
+        if (p.y + p.radius < 0) p.y = canvas.height + p.radius;
+        if (p.y - p.radius > canvas.height) p.y = -p.radius;
+        
+        // Draw
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+        gradient.addColorStop(0, `rgba(${config.colors.fog}, ${p.opacity})`);
+        gradient.addColorStop(0.6, `rgba(${config.colors.fog}, ${p.opacity * 0.4})`);
+        gradient.addColorStop(1, `rgba(${config.colors.fog}, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    animationFrameId = requestAnimationFrame(drawFog);
+  }
+
+  // --- Slide Logic ---
+
+  function stopAnimation() {
+      if(animationFrameId) cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+  }
+
+  function clearAnimations() {
+    stopAnimation();
+    // Reset styles
+    elements.bgLayer.style.opacity = '0';
+    elements.bgLayer.style.transform = 'scale(1.2)';
+    
+    elements.glassPane.style.opacity = '0';
+    elements.glassPane.style.transform = 'scale(0.95) translateY(20px)';
+    
+    elements.runwayLights.style.opacity = '0';
+    
+    elements.meta.style.opacity = '0';
+    elements.title.style.opacity = '0';
+    elements.subtitle.style.opacity = '0';
+  }
+
+  function animateSlide() {
+    clearAnimations();
+    onResize();
+    drawFog();
+    
+    // 1. Background Fade In
+    elements.bgLayer.animate(
+        [{ opacity: 0, transform: 'scale(1.2)' }, { opacity: 1, transform: 'scale(1.1)' }],
+        { duration: 2500, easing: 'ease-out', fill: 'forwards' }
+    );
+
+    // 2. Runway Lights (Flicker on)
+    elements.runwayLights.animate(
+        [{ opacity: 0 }, { opacity: 0.8 }],
+        { duration: 2000, easing: 'ease-in', fill: 'forwards', delay: 500 }
+    );
+
+    // 3. Glass Card (Pop up)
+    elements.glassPane.animate(
+        [
+            { opacity: 0, transform: 'scale(0.95) translateY(30px)' }, 
+            { opacity: 1, transform: 'scale(1) translateY(0)' }
+        ],
+        { duration: 1200, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards', delay: 400 }
+    ).onfinish = () => {
+        elements.glassPane.style.opacity = '1'; // Lock for parallax
+    };
+
+    // 4. Text Stagger
+    const textBaseDelay = 800;
+    elements.meta.animate(
+        [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 800, easing: 'ease-out', fill: 'forwards', delay: textBaseDelay }
+    );
+    
+    elements.title.animate(
+        [{ opacity: 0, transform: 'translateY(20px)', filter: 'blur(10px)' }, { opacity: 1, transform: 'translateY(0)', filter: 'blur(0)' }],
+        { duration: 1000, easing: 'ease-out', fill: 'forwards', delay: textBaseDelay + 200 }
+    );
+
+    elements.subtitle.animate(
+        [{ opacity: 0 }, { opacity: 1 }],
+        { duration: 1500, easing: 'ease-out', fill: 'forwards', delay: textBaseDelay + 600 }
+    );
+  }
+
+  // --- Slide System Comms (Standard) ---
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': clearAnimations(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'Nhấn mạnh vào vai trò của thời tiết và áp lực thời gian.' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    clearAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+    // Auto-start for standalone viewing
+    if (window.self === window.top) {
+        animateSlide();
+    }
+  });
+  
+  window.addEventListener('resize', onResize);
+
+})();
+</script>
+
+</body>
+</html>

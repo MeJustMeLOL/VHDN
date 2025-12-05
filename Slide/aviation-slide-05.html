@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 05: Diễn Biến (Story Mode)</title>
+  <meta name="description" content="Narrative timeline of Southern Airways 242">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&family=Cinzel:wght@600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-dark: #0f172a;
+    --bg-darker: #020617;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --accent-1: #38bdf8; /* Sky blue for storm */
+    --accent-2: #fbbf24; /* Warning yellow */
+    --accent-3: #f87171; /* Danger red */
+    --line-color: rgba(255, 255, 255, 0.15);
+    
+    --font-heading: 'Playfair Display', serif;
+    --font-label: 'Cinzel', serif; /* Cinematic font for Acts */
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: var(--font-body);
+    color: var(--text-main);
+  }
+
+  /* Deep Stormy Background */
+  .slide-background {
+    position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(circle at 50% 0%, #1e293b, var(--bg-darker));
+  }
+  
+  #storm-canvas {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .slide {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    padding: clamp(1rem, 5vw, 4rem);
+    position: relative; z-index: 1;
+  }
+
+  .main-header {
+    margin-bottom: clamp(2rem, 5vh, 4rem);
+    text-align: center;
+    z-index: 2;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(to bottom, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-family: var(--font-label);
+    color: var(--accent-1);
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+  }
+
+  /* Story Container */
+  .story-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; /* No gap, connected by line */
+    width: 100%;
+    max-width: 1400px;
+    position: relative;
+  }
+
+  /* The Connecting Thread */
+  .story-line {
+    position: absolute;
+    top: 60px; /* Aligns with the circles */
+    left: 16%; /* Start inside first column */
+    right: 16%; /* End inside last column */
+    height: 2px;
+    background: linear-gradient(90deg, 
+      rgba(255,255,255,0) 0%, 
+      var(--line-color) 20%, 
+      var(--line-color) 80%, 
+      rgba(255,255,255,0) 100%
+    );
+    z-index: 0;
+  }
+
+  .story-act {
+    position: relative;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0; /* For animation */
+  }
+
+  /* The "Node" or Icon Circle */
+  .act-marker {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+  }
+  
+  .act-marker svg {
+    width: 28px; height: 28px;
+  }
+
+  /* Act Label (Act I, II, III) */
+  .act-label {
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .act-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    margin: 0 0 1rem 0;
+    color: var(--text-main);
+    line-height: 1.1;
+  }
+
+  .act-content {
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 320px;
+  }
+  
+  .act-content strong {
+    color: #e2e8f0;
+    font-weight: 600;
+  }
+
+  /* Specific Colors per Act */
+  .story-act:nth-child(2) .act-marker { border-color: rgba(56, 189, 248, 0.4); color: var(--accent-1); } /* Blue */
+  .story-act:nth-child(3) .act-marker { border-color: rgba(251, 191, 36, 0.4); color: var(--accent-2); } /* Yellow */
+  .story-act:nth-child(4) .act-marker { border-color: rgba(248, 113, 113, 0.4); color: var(--accent-3); } /* Red */
+
+  /* Responsive Mobile View */
+  @media (max-width: 800px) {
+    .story-container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .story-line {
+      top: 0; bottom: 0; left: 30px; right: auto;
+      width: 2px; height: 100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0), var(--line-color), rgba(255,255,255,0));
+    }
+    .story-act {
+      flex-direction: row;
+      text-align: left;
+      align-items: flex-start;
+      padding: 0;
+    }
+    .act-marker {
+      flex-shrink: 0;
+      margin-right: 1.5rem;
+      margin-bottom: 0;
+    }
+    .act-body {
+      padding-top: 0.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="slide-background"></div>
+  <canvas id="storm-canvas"></canvas>
+
+  <div class="main-header">
+    <div class="subtitle">Hồ Sơ An Toàn Bay</div>
+    <h1 class="main-title" id="main-title">Diễn Biến Sự Cố</h1>
+  </div>
+
+  <div class="story-container">
+    <!-- Visual Line connecting acts -->
+    <div class="story-line"></div>
+
+    <!-- ACT 1 -->
+    <div class="story-act" id="act1">
+      <div class="act-marker">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.97 19.78C15.97 19.78 8 18.5 6 12C6 5.5 12 2 12 2s6 3.5 6 10c0 3.5-2.5 6.5-2.03 7.78Z"/></svg>
+      </div>
+      <div class="act-body">
+        <div class="act-label">Màn 01</div>
+        <h3 class="act-title">Lạc Vào Tâm Bão</h3>
+        <p class="act-content">
+          Dựa vào dữ liệu radar không chính xác, tổ bay DC-9 đã quyết định đi qua một "hành lang" ngỡ là an toàn. Thực tế, họ đang lao thẳng vào vùng <strong>mưa dông dữ dội nhất</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- ACT 2 -->
+    <div class="story-act" id="act2">
+      <div class="act-marker">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="act-body">
+        <div class="act-label">Màn 02</div>
+        <h3 class="act-title">Chết Động Cơ</h3>
+        <p class="act-content">
+          Mưa đá và nước với khối lượng lớn bị hút vào đã khiến cả hai động cơ bị hỏng hoàn toàn. Máy bay trở thành một khối kim loại trôi tự do, <strong>mất lực đẩy</strong> và không thể tái khởi động.
+        </p>
+      </div>
+    </div>
+
+    <!-- ACT 3 -->
+    <div class="story-act" id="act3">
+      <div class="act-marker">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m8 17 4 4 4-4"/></svg>
+      </div>
+      <div class="act-body">
+        <div class="act-label">Màn 03</div>
+        <h3 class="act-title">Hạ Cánh & Thương Vong</h3>
+        <p class="act-content">
+          Trong nỗ lực tuyệt vọng, phi hành đoàn hạ cánh xuống đường cao tốc. Vụ va chạm cướp đi sinh mạng <strong>72 người</strong> (63 trên máy bay, 9 dưới đất), để lại bài học xương máu về hiểm họa thời tiết.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function(){
+  const title = document.getElementById('main-title');
+  const acts = document.querySelectorAll('.story-act');
+  const animations = [];
+
+  function resetAnimations() {
+    animations.forEach(a => a.cancel());
+    animations.length = 0;
+    if(title) title.style.opacity = 0;
+    acts.forEach(a => a.style.opacity = 0);
+  }
+
+  function animateSequence() {
+    resetAnimations();
+    
+    // Title Fade In
+    animations.push(title.animate(
+      [{ opacity: 0, transform: 'translateY(-10px) scale(0.98)' }, { opacity: 1, transform: 'translateY(0) scale(1)' }],
+      { duration: 1000, easing: 'ease-out', fill: 'forwards' }
+    ));
+
+    // Staggered Story Acts
+    acts.forEach((act, index) => {
+      animations.push(act.animate(
+        [
+          { opacity: 0, transform: 'translateY(40px)' }, 
+          { opacity: 1, transform: 'translateY(0)' }
+        ],
+        { 
+          duration: 900, 
+          easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', 
+          fill: 'forwards', 
+          delay: 400 + (index * 350) // Progressive delay for storytelling feel
+        }
+      ));
+    });
+  }
+
+  // --- Rain/Storm Particle System ---
+  const canvas = document.getElementById('storm-canvas');
+  const ctx = canvas.getContext('2d');
+  let drops = [];
+  
+  function initRain() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drops = [];
+    const count = 150; // Number of rain drops
+    for(let i=0; i<count; i++) {
+      drops.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        l: Math.random() * 20 + 10, // Length
+        vy: Math.random() * 15 + 10, // Velocity Y (fast)
+        vx: Math.random() * 2 - 1    // Slight wind
+      });
+    }
+  }
+
+  function animateRain() {
+    if(!canvas) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    for(let i=0; i<drops.length; i++) {
+      let d = drops[i];
+      ctx.moveTo(d.x, d.y);
+      ctx.lineTo(d.x + d.vx, d.y + d.l);
+      
+      d.x += d.vx;
+      d.y += d.vy;
+      
+      // Reset if out of bounds
+      if(d.y > canvas.height) {
+        d.y = -d.l;
+        d.x = Math.random() * canvas.width;
+      }
+    }
+    ctx.stroke();
+    requestAnimationFrame(animateRain);
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if(data.type === 'animate-slide') animateSequence();
+    if(data.type === 'reset') resetAnimations();
+  });
+
+  window.addEventListener('load', () => {
+    initRain();
+    animateRain();
+    animateSequence();
+    window.addEventListener('resize', initRain);
+  });
+
+})();
+</script>
+
+</body>
+</html>

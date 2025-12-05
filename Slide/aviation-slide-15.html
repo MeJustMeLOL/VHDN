@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 15: Case Study - Tuyết & Băng Giá</title>
+  <meta name="description" content="Slide tiêu đề cho case study về Tuyết và Băng giá, tích hợp Step Count.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-background-snow: #0d1b2a;
+    --color-text-main: #f0f4f8;
+    --color-text-muted: #dbe7e4;
+    --color-accent: #caf0f8;
+    --color-warning: #ffd166;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-snow);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+  }
+
+  .slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .background-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: #1b263b; 
+    background-image: url('https://images.unsplash.com/photo-1549993439-88bf9493f140?q=80&w=1920');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: soft-light;
+    filter: blur(8px) brightness(0.5) contrast(1.2);
+    transform: scale(1.1);
+    will-change: transform;
+    opacity: 0;
+  }
+
+  #snow-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* --- Iceberg Container Styles --- */
+  .glass-pane {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 900px;
+    height: 85vh;
+    padding: clamp(3rem, 5vw, 4rem);
+    padding-top: 4.5rem;
+    
+    background: linear-gradient(170deg, 
+      rgba(220, 240, 255, 0.5) 0%, 
+      rgba(150, 200, 230, 0.6) 40%, 
+      rgba(13, 50, 80, 0.95) 100%);
+    
+    backdrop-filter: blur(10px) saturate(110%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+    
+    clip-path: polygon(
+      2% 0%, 98% 1%,
+      100% 25%, 99% 85%,
+      90% 100%, 10% 99%,
+      0% 80%, 1% 15%
+    );
+    
+    filter: drop-shadow(0 20px 30px rgba(10, 25, 40, 0.9)) drop-shadow(0 0 15px rgba(162, 210, 255, 0.15));
+
+    text-align: left;
+    will-change: transform, opacity;
+    opacity: 0;
+    transform-style: preserve-3d;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .glass-pane::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* --- Scrollable Content Area --- */
+  .content-scroll {
+    overflow-y: auto;
+    padding-right: 1.5rem;
+    height: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(162, 210, 255, 0.5) rgba(0,0,0,0.2);
+    scroll-behavior: smooth; /* Smooth scroll when step revealing */
+  }
+
+  .content-scroll::-webkit-scrollbar { width: 6px; }
+  .content-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 3px; margin: 10px 0; }
+  .content-scroll::-webkit-scrollbar-thumb { background: rgba(162, 210, 255, 0.5); border-radius: 3px; }
+
+  /* --- Typography --- */
+  .case-study-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(162, 210, 255, 0.6);
+    text-align: center;
+    display: block;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: var(--color-text-main);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    text-align: center;
+    border-bottom: 1px solid rgba(162, 210, 255, 0.3);
+    padding-bottom: 1.5rem;
+  }
+  
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 24px;
+    background-color: var(--color-accent);
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--color-accent);
+  }
+
+  .case-item {
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .case-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: baseline;
+    margin-bottom: 1rem;
+    border-bottom: 1px dashed rgba(255,255,255,0.2);
+    padding-bottom: 0.5rem;
+  }
+
+  .case-name { font-weight: 700; font-size: 1.2rem; color: #fff; }
+  .case-meta { font-size: 0.9rem; color: var(--color-text-muted); font-style: italic; }
+  p { font-size: 1rem; line-height: 1.6; color: var(--color-text-muted); margin-bottom: 1rem; text-align: justify; }
+  strong { color: #fff; font-weight: 600; }
+  ul { list-style: none; padding-left: 0; margin-top: 1rem; }
+  li { position: relative; padding-left: 1.5rem; margin-bottom: 0.8rem; line-height: 1.5; color: var(--color-text-muted); }
+  li::before { content: '❄'; position: absolute; left: 0; color: var(--color-accent); font-size: 0.8rem; top: 0.2rem; }
+  
+  .solution-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 600px) {
+    .solution-grid { grid-template-columns: 1fr 1fr; }
+    .solution-item { grid-column: span 1; }
+    .solution-item:last-child:nth-child(odd) { grid-column: span 2; }
+  }
+
+  .solution-item {
+    background: rgba(13, 27, 42, 0.4);
+    padding: 1.2rem;
+    border-radius: 8px;
+    border-left: 3px solid var(--color-accent);
+  }
+  .solution-title { color: var(--color-accent); font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-heading); font-size: 1.1rem; }
+
+  /* --- Step Animation Classes --- */
+  .step-content {
+    transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.9, 0.2, 1);
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .step-hidden {
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    pointer-events: none;
+    /* Optional: collapse height if you want items to shift up. 
+       For this layout, keeping space reserved (visibility:hidden style) or simply fading in place is better.
+       Here we fade in place to avoid layout shifts, but if content is long, user scrolls. */
+  }
+
+  /* --- Snow Cap & Crack --- */
+  .snow-cap {
+    position: absolute;
+    top: -25px; left: -2%; right: -2%; height: 70px; 
+    z-index: 10; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 80' preserveAspectRatio='none'%3E%3Cpath fill='%23f4faff' d='M0,40 C100,38 900,35 1000,40 L1000,55 C950,65 920,50 850,60 C780,70 700,50 600,55 C500,60 400,70 300,55 C200,40 100,60 0,55 Z'/%3E%3C/svg%3E");
+    background-size: 100% 100%; background-repeat: no-repeat;
+    filter: drop-shadow(0 4px 3px rgba(0,0,0,0.15));
+    opacity: 0.98;
+  }
+  .snow-cap::after {
+    content: ''; position: absolute; top: 10px; left: 2%; right: 2%; bottom: 10px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent 80%);
+    mix-blend-mode: overlay; border-radius: 4px; opacity: 0.5;
+  }
+
+  .crack-container {
+    position: absolute; top: 10%; right: 5%; width: 120px; height: 120px;
+    pointer-events: none; z-index: 3; opacity: 0; /* Hidden initially */
+    mix-blend-mode: screen; transition: opacity 0.5s;
+  }
+  .crack-container.visible { opacity: 0.5; }
+
+  .crack-path {
+    fill: none; stroke: rgba(255, 255, 255, 0.8); stroke-width: 1.5;
+    stroke-dasharray: 200; stroke-dashoffset: 200;
+  }
+  /* Animation triggered via class */
+  .crack-container.visible .crack-path {
+    animation: crack-appear 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  @keyframes crack-appear { to { stroke-dashoffset: 0; } }
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="background-layer" id="bg-layer"></div>
+  <canvas id="snow-canvas"></canvas>
+
+  <div class="glass-pane" id="glass-pane">
+    <div class="snow-cap"></div>
+    <div class="crack-container" id="crack-effect">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path class="crack-path" d="M10,10 L30,35 L20,50 L45,65 L40,85 M30,35 L50,30 L65,45" />
+      </svg>
+    </div>
+
+    <!-- Scrollable Content Wrapper -->
+    <div class="content-scroll" id="content-scroll">
+      <!-- STEP 0: Titles (Always Visible) -->
+      <div class="step-content" data-step="0">
+        <span class="case-study-label">Case Study: Tuyết & Băng Giá</span>
+        <h1 class="main-title">Các Sự Cố Điển Hình</h1>
+      </div>
+
+      <!-- STEP 1: Case 1 -->
+      <div class="case-item step-content step-hidden" data-step="1">
+        <div class="case-header">
+          <div class="case-name">✈ Air Florida Flight 90</div>
+          <div class="case-meta">13/1/1982 | Washington-DC, Mỹ</div>
+        </div>
+        <p>
+          Boeing 737 cất cánh trong điều kiện tuyết rơi dày và đóng băng trên sân đỗ.
+          <strong>Nguyên nhân:</strong> Phi công không bật hệ thống chống đóng băng động cơ (engine anti-ice) và để lại lớp băng trên cánh, khiến lực nâng bị suy giảm nghiêm trọng.
+        </p>
+        <p>
+          <strong>Hậu quả:</strong> Máy bay bay chệch đường, va vào cầu qua sông Potomac và rơi xuống sông. Chỉ <strong>5/79</strong> người trên máy bay sống sót, 4 người trên cầu thiệt mạng.
+        </p>
+        <p>
+          <em>Bài học:</em> Nâng cao nhận thức về quy trình khử băng (de-icing), quy định thời gian tối đa giữa de-icing và cất cánh (holdover time).
+        </p>
+      </div>
+
+      <!-- STEP 2: Case 2 -->
+      <div class="case-item step-content step-hidden" data-step="2">
+        <div class="case-header">
+          <div class="case-name">✈ American Eagle Flight 4184</div>
+          <div class="case-meta">31/10/1994 | Roselawn, Mỹ</div>
+        </div>
+        <p>
+          ATR-72 bay chờ trong luồng gió xoáy lạnh đã gặp phải <strong>mưa siêu lạnh (Supercooled Large Droplets - SLD)</strong>.
+        </p>
+        <p>
+          <strong>Nguyên nhân:</strong> Băng tích tụ vượt quá giới hạn của lớp bọc chống băng (de-icing boots), gây hiện tượng "đảo lực ở càng lái" (aileron hinge moment reversal) khiến phi công mất kiểm soát hoàn toàn.
+        </p>
+        <p>
+          <strong>Hậu quả:</strong> Máy bay lao xuống đất, toàn bộ <strong>68</strong> người thiệt mạng. Sự kiện thúc đẩy nghiên cứu về băng siêu lạnh và cập nhật quy trình chứng nhận tàu bay.
+        </p>
+      </div>
+
+      <!-- STEP 3: Solutions -->
+      <div class="step-content step-hidden" data-step="3">
+        <h2 class="section-title">Biện pháp khắc phục & Cải tiến</h2>
+        <div class="solution-grid">
+          <div class="solution-item">
+            <div class="solution-title">Công nghệ Dự báo</div>
+            <ul>
+              <li>Radar Doppler (TDWR) & LLWAS phát hiện gió cắt/microburst.</li>
+              <li>Radar thời tiết trên máy bay (X-band, Ka-band) phát hiện dông từ xa.</li>
+              <li>Hệ thống EGPWS cảnh báo địa hình và gió cắt.</li>
+            </ul>
+          </div>
+          <div class="solution-item">
+            <div class="solution-title">Quy trình Không lưu (ATC)</div>
+            <ul>
+              <li>Hạ cánh tự động CAT II/III trong sương mù.</li>
+              <li>Giãn cách máy bay thích ứng thời tiết xấu.</li>
+              <li>Hệ thống đèn Stop-bar và quản lý mặt đất tự động.</li>
+            </ul>
+          </div>
+          <div class="solution-item">
+            <div class="solution-title">Đào tạo Phi công</div>
+            <ul>
+              <li>Huấn luyện mô phỏng gió cắt (Windshear training) bắt buộc.</li>
+              <li>Kỹ năng CRM (Làm việc nhóm) trong buồng lái.</li>
+              <li>Quy trình khử băng "mạnh tay" và nhận biết băng bất thường.</li>
+            </ul>
+          </div>
+          <div class="solution-item">
+            <div class="solution-title">Chính sách Điều hành</div>
+            <ul>
+              <li>Giới hạn bay nghiêm ngặt trong điều kiện cực đoan.</li>
+              <li>Tuân thủ khuyến cáo ICAO (Annex 6, 14).</li>
+              <li>Cập nhật báo cáo SIGMET chính xác về nhiễu động.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div style="height: 2rem;"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    bgLayer: document.getElementById('bg-layer'),
+    glassPane: document.getElementById('glass-pane'),
+    contentScroll: document.getElementById('content-scroll'),
+    crack: document.getElementById('crack-effect'),
+    stepItems: document.querySelectorAll('.step-content')
+  };
+  const canvas = document.getElementById('snow-canvas');
+  const ctx = canvas.getContext('2d');
+  let snowflakes = [];
+  let animationFrameId;
+  let currentStep = 0; // Default step
+
+  function onResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    createSnowflakes();
+  }
+
+  function createSnowflakes() {
+    const flakeCount = Math.floor(window.innerWidth / 5);
+    snowflakes = [];
+    for (let i = 0; i < flakeCount; i++) {
+      snowflakes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 3 + 1,
+        density: Math.random() * flakeCount,
+        speed: Math.random() * 1 + 0.5,
+        opacity: Math.random() * 0.5 + 0.2
+      });
+    }
+  }
+
+  let angle = 0;
+  function drawSnow() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = `rgba(224, 225, 221, 0.8)`;
+    ctx.beginPath();
+    angle += 0.005;
+    for (let i = 0; i < snowflakes.length; i++) {
+      const flake = snowflakes[i];
+      flake.y += flake.speed;
+      flake.x += Math.sin(angle + flake.density) * 0.5;
+      if (flake.y > canvas.height) {
+        snowflakes[i] = { ...flake, x: Math.random() * canvas.width, y: -10 };
+      }
+      ctx.moveTo(flake.x, flake.y);
+      ctx.globalAlpha = flake.opacity;
+      ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2, true);
+    }
+    ctx.fill();
+    animationFrameId = requestAnimationFrame(drawSnow);
+  }
+
+  function stopAnimation() {
+      if(animationFrameId) cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+  }
+
+  function clearAnimations() {
+    stopAnimation();
+    if (elements.bgLayer) elements.bgLayer.style.opacity = '0';
+    if (elements.glassPane) elements.glassPane.style.opacity = '0';
+  }
+
+  // --- Step Handler ---
+  function applyStep(stepIndex) {
+    currentStep = stepIndex;
+    
+    // 1. Reveal/Hide Content
+    elements.stepItems.forEach(el => {
+      const itemStep = parseInt(el.getAttribute('data-step'), 10);
+      if (itemStep <= stepIndex) {
+        el.classList.remove('step-hidden');
+      } else {
+        el.classList.add('step-hidden');
+      }
+    });
+
+    // 2. Special Effect: Crack appears on Step 1 (Air Florida crash)
+    if (stepIndex >= 1) {
+      elements.crack.classList.add('visible');
+    } else {
+      elements.crack.classList.remove('visible');
+    }
+
+    // 3. Auto-scroll to the newest revealed element (UX improvement)
+    // Only scroll if we are moving forward and it's not the initial load
+    if (stepIndex > 0) {
+      const activeItems = document.querySelectorAll(`.step-content[data-step="${stepIndex}"]`);
+      if (activeItems.length > 0) {
+        // Wait slightly for layout to stabilize then scroll
+        setTimeout(() => {
+          activeItems[activeItems.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
+    }
+  }
+
+  function animateSlide() {
+    clearAnimations();
+    onResize();
+    drawSnow();
+    
+    // Animate Background
+    elements.bgLayer.animate(
+        [{ opacity: 0, transform: 'scale(1.15)' }, { opacity: 1, transform: 'scale(1.1)' }],
+        { duration: 2000, easing: 'ease-out', fill: 'forwards' }
+    );
+    
+    // Animate Box
+    elements.glassPane.animate(
+        [
+          { opacity: 0, transform: 'scale(0.95) translateY(20px)' }, 
+          { opacity: 1, transform: 'scale(1) translateY(0)' }
+        ],
+        { duration: 1000, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards', delay: 200 }
+    );
+    
+    // Re-apply current step state (in case of reset/replay)
+    applyStep(currentStep);
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': 
+        clearAnimations(); 
+        currentStep = 0; // Reset step internally
+        applyStep(0);
+        break;
+      case 'animate-slide': 
+        animateSlide(); 
+        break;
+      case 'setStep': // Handle step update from main.html
+        if (typeof data.step === 'number') {
+          applyStep(data.step);
+        }
+        break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'Chi tiết Case Study Air Florida 90, American Eagle 4184 và các giải pháp khắc phục.' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    clearAnimations();
+    // Initialize at step 0
+    applyStep(0);
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+    // Auto-play for standalone preview
+    if (window.self === window.top) {
+      animateSlide();
+      // Simulate stepping for preview
+      setTimeout(() => applyStep(1), 2000);
+      setTimeout(() => applyStep(2), 5000);
+      setTimeout(() => applyStep(3), 8000);
+    }
+  });
+  window.addEventListener('resize', onResize);
+
+})();
+</script>
+
+</body>
+</html>

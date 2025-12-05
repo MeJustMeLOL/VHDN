@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 18: Bảng Tổng Hợp</title>
+  <meta name="description" content="Bảng tóm tắt các sự cố, hiện tượng thời tiết, thiệt hại và các biện pháp cải tiến chính đã được thảo luận.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-background-start: #0a192f;
+    --color-background-end: #112240;
+    --color-text-main: #e6f1ff;
+    --color-text-muted: #a8b2d1;
+    --color-accent: #ffca28;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-start);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+  }
+
+  .slide-background, #particles-canvas { position: absolute; inset: 0; z-index: -1; }
+  .slide-background { background: linear-gradient(170deg, var(--color-background-start), var(--color-background-end)); }
+  #particles-canvas { z-index: 0; pointer-events: none; }
+
+  .slide {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    padding: 2rem;
+    position: relative; z-index: 1;
+    overflow-y: auto;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    text-align: center;
+    margin: 0 0 2rem 0;
+    opacity: 0;
+  }
+  
+  .table-container {
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(10, 25, 47, 0.7);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+  
+  table { width: 100%; border-collapse: collapse; }
+  th, td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  thead th {
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-main);
+  }
+  
+  tbody tr { opacity: 0; }
+  tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+  
+  .tag {
+      padding: 0.25rem 0.6rem; border-radius: 99px;
+      font-size: 0.8rem; font-weight: 600; display: inline-block;
+  }
+  .tag-storm { background: #fee2e2; color: #991b1b; }
+  .tag-fog { background: #e0e7ff; color: #3730a3; }
+  .tag-wind { background: #fef3c7; color: #92400e; }
+  .tag-ice { background: #dbeafe; color: #1e40af; }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="slide-background"></div>
+  <canvas id="particles-canvas"></canvas>
+  <h1 class="main-title" id="main-title-h1">Bảng Tổng Hợp Các Sự Cố Lớn</h1>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th>Vụ việc</th>
+          <th>Hiện tượng cực đoan</th>
+          <th>Thiệt hại</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row">
+          <td>4/4/1977</td>
+          <td>Southern Airways 242</td>
+          <td><span class="tag tag-storm">Mưa đá</span></td>
+          <td>72 người chết</td>
+        </tr>
+        <tr class="table-row">
+          <td>27/3/1977</td>
+          <td>Thảm họa Tenerife</td>
+          <td><span class="tag tag-fog">Sương mù</span></td>
+          <td>583 người chết</td>
+        </tr>
+        <tr class="table-row">
+          <td>2/8/1985</td>
+          <td>Delta Flight 191</td>
+          <td><span class="tag tag-wind">Gió cắt</span></td>
+          <td>137 người chết</td>
+        </tr>
+        <tr class="table-row">
+          <td>13/1/1982</td>
+          <td>Air Florida Flight 90</td>
+          <td><span class="tag tag-ice">Băng giá</span></td>
+          <td>78 người chết</td>
+        </tr>
+        <tr class="table-row">
+          <td>31/10/1994</td>
+          <td>American Eagle 4184</td>
+          <td><span class="tag tag-ice">Băng siêu lạnh</span></td>
+          <td>68 người chết</td>
+        </tr>
+         <tr class="table-row">
+          <td>9/7/1982</td>
+          <td>Pan Am Flight 759</td>
+          <td><span class="tag tag-wind">Gió cắt</span></td>
+          <td>153 người chết</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    title: document.getElementById('main-title-h1'),
+    rows: document.querySelectorAll('.table-row'),
+  };
+  const animations = [];
+
+  function resetAnimations() {
+    animations.forEach(a => a.cancel());
+    animations.length = 0;
+    if (elements.title) elements.title.style.opacity = '0';
+    if (elements.rows) elements.rows.forEach(row => row.style.opacity = '0');
+  }
+
+  function animateSlide() {
+    resetAnimations();
+    
+    animations.push(elements.title.animate([{opacity:0, transform:'translateY(-20px)'}, {opacity:1, transform:'translateY(0)'}], {duration: 800, fill:'forwards', delay: 200}));
+
+    elements.rows.forEach((row, i) => {
+      animations.push(row.animate(
+        [{opacity:0, transform: 'translateX(-20px)'}, {opacity:1, transform: 'translateX(0)'}],
+        {duration: 500, fill: 'forwards', delay: 500 + i * 100, easing: 'ease-out'}
+      ));
+    });
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch(data.type){
+        case 'reset': resetAnimations(); break;
+        case 'animate-slide': animateSlide(); break;
+        case 'getNotes':
+            ev.source.postMessage({type:'notes', notes: 'Bảng tóm tắt các sự cố, hiện tượng thời tiết, thiệt hại và các biện pháp cải tiến chính.'}, ev.origin);
+            break;
+    }
+  });
+
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particleArray;
+
+  function initParticles() { /* ... particle code ... */ }
+  function animateParticles() { /* ... particle code ... */ }
+  // Paste the full particle functions here
+  function initParticles() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particleArray = [];
+    const numberOfParticles = Math.floor(canvas.width / 50);
+    for (let i = 0; i < numberOfParticles; i++) {
+      const size = Math.random() * 1.5 + 0.5;
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const directionX = (Math.random() * 0.4) - 0.2;
+      const directionY = (Math.random() * 0.4) - 0.2;
+      const color = 'rgba(168, 178, 209, 0.4)';
+      particleArray.push({x, y, directionX, directionY, size, color});
+    }
+  }
+
+  function animateParticles() {
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particleArray.length; i++) {
+      const p = particleArray[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.directionX; p.y += p.directionY;
+      if (p.x > canvas.width + p.size) p.x = -p.size;
+      if (p.x < -p.size) p.x = canvas.width + p.size;
+      if (p.y > canvas.height + p.size) p.y = -p.size;
+      if (p.y < -p.size) p.y = canvas.height + p.size;
+    }
+  }
+
+
+  window.addEventListener('load', () => {
+    initParticles();
+    animateParticles();
+    resetAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', initParticles);
+
+})();
+</script>
+
+</body>
+</html>

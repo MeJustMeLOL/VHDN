@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 03: Các Hiện Tượng Chính</title>
+  <meta name="description" content="Bốn hiện tượng thời tiết chính ảnh hưởng đến hàng không: Bão dông, Gió cắt, Sương mù, và Băng giá.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-background-start: #0a192f;
+    --color-background-end: #112240;
+    --color-text-main: #e6f1ff;
+    --color-text-muted: #a8b2d1;
+    --color-accent: #ffca28;
+    --color-accent-1: #ff8c8c;
+    --color-accent-2: #ffca28;
+    --color-accent-3: #64ffda;
+    --color-accent-4: #a2d2ff;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+    --shadow-softness: 24px;
+    --layer-z-background: -1;
+    --layer-z-particles: 0;
+    --layer-z-content: 1;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-start);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+  }
+
+  .slide-background {
+    position: absolute; inset: 0; z-index: var(--layer-z-background);
+    background: linear-gradient(170deg, var(--color-background-start), var(--color-background-end));
+  }
+  #particles-canvas {
+    position: absolute; inset: 0; z-index: var(--layer-z-particles); pointer-events: none;
+  }
+
+  .slide {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%; text-align: center;
+    padding: clamp(1rem, 4vw, 2rem); position: relative; z-index: var(--layer-z-content);
+  }
+
+  .content-wrapper {
+    display: flex; flex-direction: column; align-items: center; gap: 2rem;
+    width: 100%; height: 100%;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: var(--color-text-main);
+    opacity: 0;
+    flex-shrink: 0;
+    margin: 0 0 1rem 0;
+  }
+
+  .phenomena-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: clamp(1rem, 3vw, 2rem);
+    width: 100%;
+    max-width: 1100px;
+    height: 100%;
+  }
+
+  .phenomenon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem; /* Reduced padding */
+  background: transparent; /* Remove background */
+  border-radius: 0; /* Remove border-radius */
+  border: none; /* Remove border */
+  opacity: 0;
+  backdrop-filter: none; /* Remove backdrop filter */
+  }
+  .card-icon {
+    width: clamp(48px, 6vw, 64px);
+    height: clamp(48px, 6vw, 64px);
+    margin-bottom: 1rem;
+  }
+  .card-icon svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+  #icon1 { color: var(--color-accent-1); }
+  #icon2 { color: var(--color-accent-2); }
+  #icon3 { color: var(--color-accent-3); }
+  #icon4 { color: var(--color-accent-4); }
+
+  .card-title {
+    font-family: var(--font-body); /* Changed to body for better readability */
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: var(--color-text-main);
+  }
+
+  .card-description {
+    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .phenomena-grid {
+        grid-template-columns: 1fr;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .main-title {
+        margin-bottom: 1rem;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<section class="slide" aria-labelledby="main-title-h1">
+  <div class="slide-background" id="background-layer"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="content-wrapper">
+    <h1 class="main-title" id="main-title-h1">Các Hiện Tượng Thời Tiết Cực Đoan</h1>
+    <div class="phenomena-grid">
+      <div class="phenomenon-card" id="card1">
+          <div class="card-icon" id="icon1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 4h-5.91l-1.1-2.29a1 1 0 0 0-.9-.71H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm-6 14h-2v-4h-2l4-4 4 4h-2v4z"/></svg></div>
+          <h3 class="card-title">Bão Dông & Mưa Đá</h3>
+          <p class="card-description">Gây hư hại động cơ, thân vỏ và kính buồng lái. Lượng lớn nước và mưa đá có thể làm tắt động cơ, dẫn đến mất lực đẩy hoàn toàn.</p>
+      </div>
+      <div class="phenomenon-card" id="card2">
+          <div class="card-icon" id="icon2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 12a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm16 4a1 1 0 0 0-1 1v1H5v-1a1 1 0 1 0-2 0v1a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1zm-4-8a1 1 0 0 0-1-1H9a1 1 0 1 0 0 2h6a1 1 0 0 0 1-1z"/></svg></div>
+          <h3 class="card-title">Gió Cắt (Wind Shear)</h3>
+          <p class="card-description">Sự thay đổi gió đột ngột, có thể làm máy bay mất lực nâng và độ cao tức thì, cực kỳ nguy hiểm khi cất/hạ cánh.</p>
+      </div>
+      <div class="phenomenon-card" id="card3">
+          <div class="card-icon" id="icon3"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM5.33 12a6.67 6.67 0 0 0 13.34 0z"/><path d="M2 12h20v2H2z"/></svg></div>
+          <h3 class="card-title">Sương Mù Dày</h3>
+          <p class="card-description">Hạn chế nghiêm trọng tầm nhìn, gây khó khăn trong việc nhận diện đường băng và các máy bay khác, dẫn đến nguy cơ va chạm.</p>
+      </div>
+      <div class="phenomenon-card" id="card4">
+          <div class="card-icon" id="icon4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+          <h3 class="card-title">Tuyết & Băng Giá</h3>
+          <p class="card-description">Băng đóng trên cánh làm thay đổi biên dạng khí động học, gây mất lực nâng. Băng trong động cơ có thể làm giảm hoặc mất hoàn toàn lực đẩy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    title: document.getElementById('main-title-h1'),
+    cards: document.querySelectorAll('.phenomenon-card'),
+  };
+  const animations = [];
+
+  function resetAnimations() {
+    animations.forEach(anim => anim.cancel());
+    animations.length = 0;
+    if (elements.title) elements.title.style.opacity = '0';
+    if (elements.cards) elements.cards.forEach(item => item.style.opacity = '0');
+  }
+
+  function animateSlide() {
+    resetAnimations();
+    
+    const titleAnim = elements.title.animate(
+      [{ opacity: 0, transform: 'translateY(-20px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 800, easing: 'ease-out', fill: 'forwards', delay: 200 }
+    );
+    animations.push(titleAnim);
+
+    elements.cards.forEach((item, i) => {
+      const itemAnim = item.animate(
+        [{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 700, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards', delay: 500 + i * 150 }
+      );
+      animations.push(itemAnim);
+    });
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': resetAnimations(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'Bốn hiện tượng thời tiết chính ảnh hưởng đến hàng không: Bão dông, Gió cắt, Sương mù, và Băng giá.' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+  
+  // Standard particle and parallax setup
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particleArray;
+
+  function initParticles() {
+    if(!canvas) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particleArray = [];
+    const numberOfParticles = Math.floor(canvas.width / 50);
+    for (let i = 0; i < numberOfParticles; i++) {
+      particleArray.push({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        directionX: (Math.random() * 0.4) - 0.2, directionY: (Math.random() * 0.4) - 0.2,
+        size: Math.random() * 1.5 + 0.5, color: 'rgba(168, 178, 209, 0.4)'
+      });
+    }
+  }
+
+  function animateParticles() {
+    if(!particleArray) return;
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particleArray.length; i++) {
+      const p = particleArray[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.directionX; p.y += p.directionY;
+      if (p.x > canvas.width + p.size) p.x = -p.size;
+      if (p.x < -p.size) p.x = canvas.width + p.size;
+      if (p.y > canvas.height + p.size) p.y = -p.size;
+      if (p.y < -p.size) p.y = canvas.height + p.size;
+    }
+  }
+
+  window.addEventListener('load', () => {
+    initParticles();
+    animateParticles();
+    resetAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', initParticles);
+
+})();
+</script>
+
+</body>
+</html>

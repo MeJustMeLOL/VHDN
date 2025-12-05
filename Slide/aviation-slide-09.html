@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Slide 09: Cơ Chế Của Gió Cắt</title>
+  <meta name="description" content="Slide giải thích cơ chế của Gió Đứt qua mô phỏng tương tác.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Theme Colors */
+      --color-bg: #050a16;
+      --color-text-main: #e6f1ff;
+      --color-text-muted: #a8b2d1;
+      
+      /* Wind Shear Zones */
+      --color-headwind: #64ffda;  /* Teal - Good/False Lift */
+      --color-downdraft: #ff477e; /* Red - Danger/Down */
+      --color-tailwind: #ffca28;  /* Amber - Stall/Speed Loss */
+      
+      /* Typography */
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Be Vietnam Pro', sans-serif;
+      --font-mono: 'Roboto Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%; margin: 0; padding: 0;
+      overflow: hidden;
+      background-color: var(--color-bg);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+    }
+
+    /* Layers */
+    #canvas-layer {
+      position: absolute; inset: 0; z-index: 1;
+      display: block;
+    }
+
+    #ui-layer {
+      position: absolute; inset: 0; z-index: 2;
+      pointer-events: none; /* Let clicks pass through to canvas if needed */
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+    }
+
+    /* Header */
+    .header-area {
+      flex: 0 0 auto;
+      margin-bottom: 1rem;
+      text-align: center;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      margin: 0;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .subtitle {
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      opacity: 0.8;
+      letter-spacing: 1px;
+    }
+
+    /* Content Area */
+    .content-area {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Step Cards (Floating overlays) */
+    .step-card {
+      position: absolute;
+      background: rgba(5, 10, 22, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      max-width: 300px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .step-card.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .step-number {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    /* Positioning the cards relative to the canvas zones */
+    #card-1 { left: 10%; bottom: 20%; border-left: 4px solid var(--color-headwind); }
+    #card-1 .step-number { color: var(--color-headwind); }
+    
+    #card-2 { left: 50%; transform: translate(-50%, 20px) scale(0.95); bottom: 10%; border-left: 4px solid var(--color-downdraft); }
+    #card-2.active { transform: translate(-50%, 0) scale(1); }
+    #card-2 .step-number { color: var(--color-downdraft); }
+
+    #card-3 { right: 10%; bottom: 20%; border-left: 4px solid var(--color-tailwind); }
+    #card-3 .step-number { color: var(--color-tailwind); }
+
+    /* Legend */
+    .legend {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    @media (max-width: 768px) {
+      .step-card {
+        bottom: 5% !important;
+        left: 5% !important;
+        right: 5% !important;
+        max-width: none;
+        transform: translateY(20px) !important;
+      }
+      .step-card.active {
+        transform: translateY(0) !important;
+      }
+      .legend { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Visualization -->
+  <canvas id="canvas-layer"></canvas>
+
+  <!-- UI Overlay -->
+  <div id="ui-layer">
+    <header class="header-area" id="header">
+      <h1 class="main-title">Cơ Chế Tử Thần</h1>
+      <div class="subtitle">MICROBURST / WIND SHEAR MECHANICS</div>
+    </header>
+
+    <div class="content-area">
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item"><span class="dot" style="background:var(--color-headwind)"></span> Headwind</div>
+        <div class="legend-item"><span class="dot" style="background:var(--color-downdraft)"></span> Downdraft</div>
+        <div class="legend-item"><span class="dot" style="background:var(--color-tailwind)"></span> Tailwind</div>
+      </div>
+
+      <!-- Step 1 Overlay -->
+      <div class="step-card" id="card-1">
+        <span class="step-number">Phase 01</span>
+        <h3 class="step-title">Gió Ngược (Headwind)</h3>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">
+          Máy bay gặp gió ngược mạnh. Lực nâng (Lift) tăng đột ngột. Phi công phản xạ giảm ga/chúi mũi.
+        </p>
+      </div>
+
+      <!-- Step 2 Overlay -->
+      <div class="step-card" id="card-2">
+        <span class="step-number">Phase 02</span>
+        <h3 class="step-title">Dòng Giáng (Downdraft)</h3>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">
+          Luồng khí cực mạnh ép máy bay xuống đất.
+        </p>
+      </div>
+
+      <!-- Step 3 Overlay -->
+      <div class="step-card" id="card-3">
+        <span class="step-number">Phase 03</span>
+        <h3 class="step-title">Gió Xuôi (Tailwind)</h3>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">
+          Gió đổi chiều đẩy từ phía sau. Tốc độ không khí (Airspeed) giảm sâu. Máy bay thất tốc (Stall) và rơi.
+        </p>
+      </div>
+    </div>
+  </div>
+
+<script>
+/**
+ * ROBUST SLIDE LOGIC
+ * Encapsulated to prevent global scope pollution
+ */
+(function() {
+  
+  // --- Configuration ---
+  const CONFIG = {
+    colors: {
+      headwind: '#64ffda',
+      downdraft: '#ff477e',
+      tailwind: '#ffca28',
+      plane: '#ffffff',
+      particles: 'rgba(168, 178, 209, 0.3)'
+    },
+    planeSize: 40,
+    particleCount: 150
+  };
+
+  // --- Classes ---
+
+  /**
+   * Represents a single wind particle in the background
+   */
+  class Particle {
+    constructor(w, h) {
+      this.reset(w, h);
+    }
+
+    reset(w, h) {
+      this.x = Math.random() * w;
+      this.y = Math.random() * h;
+      this.size = Math.random() * 2 + 1;
+      this.speedBase = Math.random() * 2 + 1;
+    }
+
+    update(w, h, zones) {
+      // Determine which zone the particle is in
+      let vector = { x: 0, y: 0 };
+      let color = CONFIG.colors.particles;
+
+      if (this.x < w * 0.35) {
+        // Headwind Zone (Wind blows Left)
+        vector.x = -1.5;
+        vector.y = 0.2; // Slight down
+      } else if (this.x < w * 0.65) {
+        // Downdraft Zone (Wind blows Down)
+        vector.x = 0;
+        vector.y = 4.0;
+      } else {
+        // Tailwind Zone (Wind blows Right)
+        vector.x = 2.5;
+        vector.y = 0.5;
+      }
+
+      this.x += vector.x * this.speedBase;
+      this.y += vector.y * this.speedBase;
+
+      // Wrap around
+      if (this.x > w) this.x = 0;
+      if (this.x < 0) this.x = w;
+      if (this.y > h) this.y = 0;
+      if (this.y < 0) this.y = h;
+    }
+
+    draw(ctx) {
+      ctx.fillStyle = CONFIG.colors.particles;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  /**
+   * Represents the airplane schematic
+   */
+  class Airplane {
+    constructor() {
+      // Normalized position (0-1)
+      this.targetX = 0.1;
+      this.targetY = 0.4;
+      this.currentX = 0.1;
+      this.currentY = 0.4;
+      this.angle = 0; // Radians
+      this.targetAngle = 0;
+      this.state = 'normal'; // normal, lift, drop, stall
+    }
+
+    update(step) {
+      // Define target states based on slide step
+      switch(step) {
+        case 0: // Reset/Start
+          this.targetX = 0.1;
+          this.targetY = 0.4;
+          this.targetAngle = 0;
+          this.state = 'normal';
+          break;
+        case 1: // Headwind - False Lift
+          this.targetX = 0.25;
+          this.targetY = 0.25; // Rise up
+          this.targetAngle = -0.2; // Pitch up
+          this.state = 'lift';
+          break;
+        case 2: // Downdraft - Sink
+          this.targetX = 0.5;
+          this.targetY = 0.6; // Push down
+          this.targetAngle = 0.3; // Pitch down nose
+          this.state = 'drop';
+          break;
+        case 3: // Tailwind - Stall/Crash
+          this.targetX = 0.8;
+          this.targetY = 0.85; // Near ground
+          this.targetAngle = 0.5; // Steep drop
+          this.state = 'stall';
+          break;
+      }
+
+      // Smooth interpolation (Lerp)
+      const ease = 0.05;
+      this.currentX += (this.targetX - this.currentX) * ease;
+      this.currentY += (this.targetY - this.currentY) * ease;
+      this.angle += (this.targetAngle - this.angle) * ease;
+    }
+
+    draw(ctx, w, h) {
+      const x = this.currentX * w;
+      const y = this.currentY * h;
+      
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(this.angle);
+
+      // Draw Plane Shape (Simple vector art)
+      ctx.strokeStyle = CONFIG.colors.plane;
+      ctx.lineWidth = 2;
+      ctx.fillStyle = '#050a16'; // Fill with bg color to hide lines behind
+      
+      // Fuselage
+      ctx.beginPath();
+      ctx.moveTo(-20, 0);
+      ctx.lineTo(20, 0);
+      // Tail
+      ctx.moveTo(-20, 0);
+      ctx.lineTo(-25, -10);
+      ctx.lineTo(-15, 0);
+      // Wing
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-5, 15);
+      ctx.lineTo(10, 0);
+      
+      ctx.stroke();
+      
+      // Visual feedback circle based on state
+      if (this.state !== 'normal') {
+        ctx.beginPath();
+        let color = '#fff';
+        if (this.state === 'lift') color = CONFIG.colors.headwind;
+        if (this.state === 'drop') color = CONFIG.colors.downdraft;
+        if (this.state === 'stall') color = CONFIG.colors.tailwind;
+        
+        ctx.strokeStyle = color;
+        ctx.setLineDash([2, 4]);
+        ctx.arc(0, 0, 35, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      ctx.restore();
+    }
+  }
+
+  /**
+   * Main Scene Manager
+   */
+  const canvas = document.getElementById('canvas-layer');
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  const plane = new Airplane();
+  let width, height;
+  let animationId;
+  let currentStep = 0;
+
+  // Initialize Particles
+  for (let i = 0; i < CONFIG.particleCount; i++) {
+    particles.push(new Particle(window.innerWidth, window.innerHeight));
+  }
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  function drawWindVectors() {
+    // Helper to draw an arrow
+    const drawArrow = (x, y, angle, color) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.3;
+      ctx.beginPath();
+      ctx.moveTo(-15, 0);
+      ctx.lineTo(15, 0);
+      ctx.lineTo(10, -5);
+      ctx.moveTo(15, 0);
+      ctx.lineTo(10, 5);
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    const yLevels = [0.2, 0.4, 0.6, 0.8];
+    const zone1 = width * 0.2;
+    const zone2 = width * 0.5;
+    const zone3 = width * 0.8;
+
+    yLevels.forEach(yPct => {
+      const y = yPct * height;
+      // Zone 1: Headwind (Left)
+      drawArrow(zone1, y, Math.PI, CONFIG.colors.headwind); 
+      // Zone 2: Downdraft (Down)
+      drawArrow(zone2, y, Math.PI / 2, CONFIG.colors.downdraft);
+      // Zone 3: Tailwind (Right)
+      drawArrow(zone3, y, 0, CONFIG.colors.tailwind);
+    });
+    ctx.globalAlpha = 1.0;
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw Background Elements
+    drawWindVectors();
+
+    // Update & Draw Particles
+    particles.forEach(p => {
+      p.update(width, height);
+      p.draw(ctx);
+    });
+
+    // Update & Draw Plane
+    plane.update(currentStep);
+    plane.draw(ctx, width, height);
+
+    animationId = requestAnimationFrame(animate);
+  }
+
+  // --- Slide Logic & Communication ---
+
+  const uiElements = {
+    title: document.getElementById('header'),
+    cards: [
+      document.getElementById('card-1'),
+      document.getElementById('card-2'),
+      document.getElementById('card-3')
+    ]
+  };
+
+  function updateUI(step) {
+    // Animate Header
+    uiElements.title.style.opacity = step > 0 ? '0.5' : '1';
+    uiElements.title.style.transform = step > 0 ? 'scale(0.9)' : 'scale(1)';
+
+    // Toggle Cards
+    uiElements.cards.forEach((card, index) => {
+      if ((index + 1) === step) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+  }
+
+  function handleMessage(ev) {
+    const data = ev.data || {};
+    if (!data.type) return;
+
+    switch (data.type) {
+      case 'reset':
+        currentStep = 0;
+        updateUI(0);
+        break;
+      case 'setStep':
+        if (typeof data.step === 'number') {
+          currentStep = data.step;
+          updateUI(currentStep);
+        }
+        break;
+      case 'animate-slide':
+        // FIX: Do NOT force reset to 1. Respect the step set via setStep.
+        // If currentStep is 0 (initial state), we can treat it as start or just update UI.
+        updateUI(currentStep);
+        break;
+      case 'getNotes':
+        const notes = [
+          'Overview of wind shear.',
+          'Phase 1: Headwind increases lift temporarily.',
+          'Phase 2: Downdraft pushes aircraft down violently.',
+          'Phase 3: Tailwind removes lift, causing stall.'
+        ];
+        try {
+          ev.source.postMessage({ type: 'notes', notes: notes[currentStep] || '' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  }
+
+  // --- Initialization ---
+  
+  window.addEventListener('resize', resize);
+  window.addEventListener('message', handleMessage);
+  
+  // Start
+  resize();
+  animate();
+  
+  // Notify parent frame
+  window.addEventListener('load', () => {
+    try { 
+      // Broadcast stepCount: 4 to allow 0 (Intro), 1, 2, 3 (Tailwind)
+      window.parent.postMessage({ type: 'slide-ready', stepCount: 4 }, '*'); 
+    } catch(e){}
+  });
+
+})();
+</script>
+</body>
+</html>

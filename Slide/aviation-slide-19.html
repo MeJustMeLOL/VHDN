@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 19: Tóm Tắt & Toàn Cảnh</title>
+  <meta name="description" content="Tổng kết lại các vấn đề, tác động và giải pháp, nhấn mạnh sự kết hợp giữa Công nghệ, Quy trình và Huấn luyện.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-background-start: #0a192f;
+    --color-background-end: #112240;
+    --color-text-main: #e6f1ff;
+    --color-text-muted: #a8b2d1;
+    --color-accent: #ffca28;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-start);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+  }
+
+  .slide-background, #particles-canvas { position: absolute; inset: 0; z-index: -1; }
+  .slide-background { background: linear-gradient(170deg, var(--color-background-start), var(--color-background-end)); }
+  #particles-canvas { z-index: 0; pointer-events: none; }
+
+  .slide {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    padding: 2rem;
+    position: relative; z-index: 1;
+    overflow-y: auto;
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    text-align: center;
+    margin: 0 0 2.5rem 0;
+    opacity: 0;
+  }
+  
+  .infographic-spine {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 1100px;
+      gap: 2rem;
+  }
+  
+  .infographic-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      backdrop-filter: blur(5px);
+  }
+  
+  .section-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+  }
+  .section-icon svg { width: 32px; height: 32px; color: #fff; }
+  #problem-icon { background: #ef4444; }
+  #impact-icon { background: #f97316; }
+  #solution-icon { background: #10b981; }
+
+  .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+  }
+  #problem-title { color: #ef4444; }
+  #impact-title { color: #f97316; }
+  #solution-title { color: #10b981; }
+  
+  .section-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--color-text-muted);
+  }
+  .section-list li {
+      margin-bottom: 0.5rem;
+  }
+  
+  @media (max-width: 768px) {
+      .infographic-spine { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="slide-background"></div>
+  <canvas id="particles-canvas"></canvas>
+  <h1 class="main-title" id="main-title-h1">Toàn Cảnh Vấn Đề</h1>
+
+  <div class="infographic-spine">
+      <div class="infographic-section" id="section1">
+          <div class="section-icon" id="problem-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 4C15.64 4 18.67 6.59 19.35 10.04C21.95 10.22 24 12.36 24 15c0 2.76-2.24 5-5 5H5c-2.76 0-5-2.24-5-5c0-2.44 1.76-4.47 4.08-4.89C4.56 6.18 7.97 4 12 4zm-1 13h2v-2h-2v2zm0-4h2V7h-2v6z"/></svg></div>
+          <h3 class="section-title" id="problem-title">Vấn Đề</h3>
+          <ul class="section-list">
+              <li>Bão Dông & Mưa Đá</li>
+              <li>Gió Cắt (Microburst)</li>
+              <li>Sương Mù Dày Đặc</li>
+              <li>Tuyết & Băng Giá</li>
+          </ul>
+      </div>
+      
+      <div class="infographic-section" id="section2">
+          <div class="section-icon" id="impact-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M13 13v8h-2v-8H4l8-8 8 8h-7z"/></svg></div>
+          <h3 class="section-title" id="impact-title">Tác Động</h3>
+          <ul class="section-list">
+              <li>Thiệt hại nhân mạng</li>
+              <li>>20% tai nạn hàng không</li>
+              <li>Trễ/hủy chuyến hàng loạt</li>
+              <li>Thiệt hại kinh tế lớn</li>
+          </ul>
+      </div>
+
+      <div class="infographic-section" id="section3">
+          <div class="section-icon" id="solution-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 class="section-title" id="solution-title">Giải Pháp</h3>
+          <ul class="section-list">
+              <li><strong>Công nghệ:</strong> Radar mới, AI, EGPWS</li>
+              <li><strong>Huấn luyện:</strong> CRM, buồng lái mô phỏng</li>
+              <li><strong>Quy trình:</strong> Chuẩn hóa giao tiếp, quy tắc bay</li>
+          </ul>
+      </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    title: document.getElementById('main-title-h1'),
+    section1: document.getElementById('section1'),
+    section2: document.getElementById('section2'),
+    section3: document.getElementById('section3'),
+  };
+  const animations = [];
+
+  function resetAnimations() {
+    animations.forEach(a => a.cancel());
+    animations.length = 0;
+    Object.values(elements).forEach(el => {
+        if(el) el.style.opacity = '0';
+    });
+  }
+
+  function animateSlide() {
+    resetAnimations();
+    const animConfig = { duration: 800, easing: 'ease-out', fill: 'forwards' };
+    const keyframes = [{opacity:0, transform: 'translateY(20px)'}, {opacity:1, transform: 'translateY(0)'}];
+
+    animations.push(elements.title.animate(keyframes, {...animConfig, delay: 200}));
+    animations.push(elements.section1.animate(keyframes, {...animConfig, delay: 500}));
+    animations.push(elements.section2.animate(keyframes, {...animConfig, delay: 700}));
+    animations.push(elements.section3.animate(keyframes, {...animConfig, delay: 900}));
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch(data.type){
+        case 'reset': resetAnimations(); break;
+        case 'animate-slide': animateSlide(); break;
+        case 'getNotes':
+            ev.source.postMessage({type:'notes', notes: 'Infographic tóm tắt 3 phần chính: Vấn đề, Tác động, và Giải pháp.'}, ev.origin);
+            break;
+    }
+  });
+  
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particleArray;
+
+  function initParticles() { /* ... particle code ... */ }
+  function animateParticles() { /* ... particle code ... */ }
+  function initParticles() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particleArray = [];
+    const numberOfParticles = Math.floor(canvas.width / 50);
+    for (let i = 0; i < numberOfParticles; i++) {
+      const size = Math.random() * 1.5 + 0.5;
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const directionX = (Math.random() * 0.4) - 0.2;
+      const directionY = (Math.random() * 0.4) - 0.2;
+      const color = 'rgba(168, 178, 209, 0.4)';
+      particleArray.push({x, y, directionX, directionY, size, color});
+    }
+  }
+
+  function animateParticles() {
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particleArray.length; i++) {
+      const p = particleArray[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.directionX; p.y += p.directionY;
+      if (p.x > canvas.width + p.size) p.x = -p.size;
+      if (p.x < -p.size) p.x = canvas.width + p.size;
+      if (p.y > canvas.height + p.size) p.y = -p.size;
+      if (p.y < -p.size) p.y = canvas.height + p.size;
+    }
+  }
+
+  window.addEventListener('load', () => {
+    initParticles();
+    animateParticles();
+    resetAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', initParticles);
+
+})();
+</script>
+
+</body>
+</html>

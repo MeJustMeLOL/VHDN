@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 11: Giải Pháp (Gió Cắt) - Telemetry Style</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&family=Playfair+Display:wght@700;800&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Đồng bộ màu với Slide 10 */
+    --bg-deep: #0a192f;
+    --text-main: #e6f1ff;
+    --text-muted: #8892b0;
+    --primary: #64ffda; /* Teal */
+    --warning: #ffca28;
+    --danger: #ff4d4f;
+    --grid-color: rgba(136, 146, 176, 0.07);
+    --hud-color: rgba(100, 255, 218, 0.3);
+    
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden;
+    background-color: var(--bg-deep);
+    font-family: var(--font-body);
+    color: var(--text-main);
+  }
+
+  /* --- Background Grid & HUD Decoration (Giống Slide 10) --- */
+  .hud-layer {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+
+  /* Grid lines */
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  /* Heading Strip (Top) */
+  .hud-heading {
+    position: absolute; top: 40px; left: 0; width: 100%; height: 20px;
+    border-bottom: 1px dashed var(--hud-color);
+    display: flex; justify-content: center;
+  }
+  .hud-heading::after {
+    content: '▲'; color: var(--primary); font-size: 10px;
+    position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+  }
+  
+  /* Altimeter Tape (Right) */
+  .hud-alt {
+    position: absolute; top: 0; right: 40px; width: 40px; height: 100%;
+    border-left: 1px solid var(--hud-color);
+    display: flex; flex-direction: column; justify-content: space-between; padding: 20px 0;
+  }
+  .alt-tick {
+    width: 8px; height: 1px; background: var(--hud-color);
+    margin-left: -1px;
+  }
+  .alt-tick.major { width: 15px; }
+
+  /* --- Main Content --- */
+  .slide-content {
+    position: relative; z-index: 10;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    padding: clamp(1rem, 5vh, 2rem) clamp(2rem, 5vw, 4rem);
+  }
+
+  /* Header Section */
+  .header-section {
+    margin-bottom: 3vh; margin-top: 40px; /* Space for HUD strip */
+    border-left: 3px solid var(--primary);
+    padding-left: 1.5rem;
+    opacity: 0; transform: translateX(-20px);
+  }
+
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--text-main); margin: 0; line-height: 1.1;
+  }
+  .sub-title {
+    font-family: var(--font-mono); color: var(--primary);
+    font-size: 0.9rem; letter-spacing: 2px; margin-top: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  /* Cards Grid */
+  .solutions-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    flex: 1; align-content: center;
+  }
+
+  /* Tech Card Style (Mimics Konva Rects in Slide 10) */
+  .tech-card {
+    background: rgba(10, 25, 47, 0.85); /* Dark background matching Konva cards */
+    border: 1px solid var(--hud-color);
+    border-top: 2px solid var(--primary);
+    padding: 0; /* Header strip handles padding look */
+    position: relative;
+    backdrop-filter: blur(4px);
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    opacity: 0; transform: translateY(20px);
+    display: flex; flex-direction: column;
+  }
+
+  .tech-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(100, 255, 218, 0.1);
+    border-color: var(--primary);
+  }
+
+  /* Decorative connecting lines like Slide 10 */
+  .tech-card::before {
+    content: ''; position: absolute; top: -20px;
+    width: 1px; height: 20px; background: var(--primary); opacity: 0.5;
+  }
+  #card-1::before { left: 20px; } /* Left connection */
+  #card-2::before { right: 20px; } /* Right connection */
+
+  /* Card Internals */
+  .card-header {
+    background: rgba(100, 255, 218, 0.05);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--hud-color);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  
+  .card-title {
+    font-family: var(--font-mono); font-size: 1.1rem; 
+    color: var(--primary); font-weight: 700; margin: 0;
+  }
+  
+  .card-icon { color: var(--text-muted); font-size: 1.2rem; }
+
+  .card-body {
+    padding: 20px; flex: 1;
+    display: flex; flex-direction: column; gap: 1.5rem;
+  }
+
+  .feature-block {
+    position: relative; padding-left: 15px;
+  }
+  .feature-block::before {
+    content: ''; position: absolute; left: 0; top: 6px;
+    width: 3px; height: 3px; background: var(--primary); box-shadow: 0 0 5px var(--primary);
+  }
+
+  .term {
+    display: block; font-family: var(--font-mono); color: var(--primary);
+    font-size: 0.95rem; margin-bottom: 4px; font-weight: 700;
+  }
+  
+  .desc {
+    font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;
+  }
+  .highlight-warn { color: var(--warning); font-weight: 600; font-family: var(--font-mono); }
+
+  /* Stats row at bottom (Like Slide 10 stats) */
+  .card-stats {
+    padding: 10px 20px; border-top: 1px solid var(--hud-color);
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    display: flex; gap: 15px;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 900px) {
+    .slide-content { overflow-y: auto; display: block; }
+    .header-section { margin-top: 60px; }
+    .solutions-grid { grid-template-columns: 1fr; gap: 2rem; padding-bottom: 40px; }
+    .hud-alt { display: none; }
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- Layer 1: HUD Decorations -->
+  <div class="hud-layer">
+    <div class="grid-bg"></div>
+    
+    <!-- Top Heading Strip -->
+    <div class="hud-heading">
+      <div style="display: flex; gap: 40px; color: var(--hud-color); font-family: var(--font-mono); font-size: 10px; padding-top: 5px;">
+        <span>330</span><span>340</span><span>350</span><span style="color:var(--primary)">N</span><span>010</span><span>020</span><span>030</span>
+      </div>
+    </div>
+
+    <!-- Right Altimeter Strip -->
+    <div class="hud-alt">
+      <div class="alt-tick major"></div><div class="alt-tick"></div><div class="alt-tick"></div><div class="alt-tick"></div>
+      <div class="alt-tick major"></div><div class="alt-tick"></div><div class="alt-tick"></div><div class="alt-tick"></div>
+      <div class="alt-tick major"></div><div class="alt-tick"></div><div class="alt-tick"></div><div class="alt-tick"></div>
+    </div>
+  </div>
+
+  <!-- Layer 2: Main Content -->
+  <section class="slide-content">
+    
+    <header class="header-section" id="header-anim">
+      <h1 class="main-title">Giải Pháp Công Nghệ</h1>
+      <div class="sub-title">WINDSHEAR MITIGATION PROTOCOLS</div>
+    </header>
+
+    <div class="solutions-grid">
+      
+      <!-- Card 1: Ground -->
+      <article class="tech-card" id="card-1">
+        <div class="card-header">
+          <h3 class="card-title">GROUND SYSTEMS</h3>
+          <span class="card-icon">📡</span>
+        </div>
+        <div class="card-body">
+          <div class="feature-block">
+            <span class="term">LLWAS NETWORK</span>
+            <span class="desc">Hệ thống cảm biến vành đai sân bay. So sánh vector gió tại nhiều điểm để phát hiện chênh lệch đột ngột.</span>
+          </div>
+          <div class="feature-block">
+            <span class="term">TDWR RADAR</span>
+            <span class="desc">Radar Doppler chuyên dụng. Quét xuyên tâm bão để phát hiện microburst và gió cắt cách sân bay tới 15km.</span>
+          </div>
+        </div>
+        <div class="card-stats">
+          <span>STATUS: ONLINE</span>
+          <span>RANGE: 45NM</span>
+        </div>
+      </article>
+
+      <!-- Card 2: Airborne -->
+      <article class="tech-card" id="card-2">
+        <div class="card-header">
+          <h3 class="card-title">AVIONICS & CREW</h3>
+          <span class="card-icon">✈️</span>
+        </div>
+        <div class="card-body">
+          <div class="feature-block">
+            <span class="term">PREDICTIVE WINDSHEAR (PWS)</span>
+            <span class="desc">Cảnh báo sớm 10-60 giây trước khi bay vào vùng nguy hiểm. Cảnh báo âm thanh: <span class="highlight-warn">"WINDSHEAR AHEAD"</span>.</span>
+          </div>
+          <div class="feature-block">
+            <span class="term">ESCAPE MANEUVER</span>
+            <span class="desc">Quy trình bắt buộc: Tăng tối đa công suất (TOGA), giữ góc tấn lớn, không thay đổi cấu hình máy bay.</span>
+          </div>
+        </div>
+        <div class="card-stats">
+          <span>MODE: AUTO</span>
+          <span>ALERT: ENABLED</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+<script>
+(function(){
+  const el = {
+    header: document.getElementById('header-anim'),
+    cards: [document.getElementById('card-1'), document.getElementById('card-2')]
+  };
+
+  const animations = [];
+
+  function resetState() {
+    animations.forEach(a => a.cancel());
+    animations.length = 0;
+    
+    el.header.style.opacity = '0';
+    el.cards.forEach(c => {
+      c.style.opacity = '0';
+      c.style.transform = 'translateY(20px)';
+    });
+  }
+
+  function playSequence() {
+    resetState();
+
+    // 1. Header Slide In
+    animations.push(el.header.animate([
+      { opacity: 0, transform: 'translateX(-20px)' },
+      { opacity: 1, transform: 'translateX(0)' }
+    ], { duration: 800, easing: 'ease-out', fill: 'forwards' }));
+
+    // 2. Cards Drop In (Technical feel)
+    el.cards.forEach((card, i) => {
+      animations.push(card.animate([
+        { opacity: 0, transform: 'translateY(30px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { 
+        duration: 600, 
+        easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', 
+        fill: 'forwards', 
+        delay: 400 + (i * 200) 
+      }));
+    });
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': resetState(); break;
+      case 'animate-slide': playSequence(); break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ 
+            type: 'notes', 
+            notes: 'Giải pháp đồng bộ: Kết hợp công nghệ mặt đất (LLWAS, TDWR) và thiết bị trên khoang (PWS) cùng quy trình thoát hiểm.' 
+          }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    playSequence();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+
+})();
+</script>
+</body>
+</html>

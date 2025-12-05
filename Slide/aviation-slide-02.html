@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 02: Giới thiệu</title>
+  <meta name="description" content="Giới thiệu tổng quan về báo cáo và tầm quan trọng của việc phân tích các sự cố do thời tiết.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Palette: Blue-White-Gray with a balanced accent */
+    --color-background-start: #0a192f;
+    --color-background-end: #112240;
+    --color-text-main: #e6f1ff;
+    --color-text-muted: #a8b2d1;
+    --color-accent: #ffca28; /* Soft, balanced gold/amber accent */
+    --color-glass-border: rgba(255, 255, 255, 0.1);
+    --color-glass-bg: rgba(255, 255, 255, 0.03);
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+
+    /* Effects & Layers */
+    --shadow-softness: 24px;
+    --shadow-neumorphic-light: -6px -6px 16px rgba(50, 80, 120, 0.08);
+    --shadow-neumorphic-dark: 6px 6px 16px rgba(0, 0, 0, 0.4);
+    --layer-z-background: -1;
+    --layer-z-particles: 0;
+    --layer-z-content: 1;
+    --layer-z-glass: 2;
+    --layer-z-interactive: 3;
+
+    /* Animation */
+    --transition-smooth: cubic-bezier(.2, .9, .2, 1);
+  }
+
+  /* Base & Anti-aliasing */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--color-background-start);
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 1. Logical Layer Hierarchy: Background */
+  .slide-background {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-z-background);
+    background: linear-gradient(170deg, var(--color-background-start), var(--color-background-end));
+    transition: transform 0.4s ease-out; /* For parallax */
+  }
+
+  /* Texture Overlay: Handmade canvas/paper grain */
+  .slide-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><g fill="%232d3a59" fill-opacity="0.04"><path d="M0 0h80v80H0zM40 40h40v40H40z"/></g></svg>');
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  /* 1. Logical Layer Hierarchy: Particles (Canvas) */
+  #particles-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-z-particles);
+    pointer-events: none;
+    transition: transform 0.2s ease-out; /* For parallax */
+  }
+
+  /* Main Slide Container */
+  .slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding: clamp(2rem, 5vw, 4rem);
+    position: relative;
+    z-index: var(--layer-z-content);
+  }
+
+  /* 2. Content Blocks */
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 80ch;
+  }
+
+  /* 3. Emphasis Highlights: Main Title */
+  .main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: var(--color-text-main);
+    text-shadow:
+      var(--shadow-neumorphic-light),
+      var(--shadow-neumorphic-dark);
+    will-change: transform, opacity; /* Animation optimization */
+    opacity: 0; /* Initially hidden */
+  }
+
+  /* Decorative underline */
+  .main-title::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 4px;
+    margin: 1.5rem auto 0;
+    border-radius: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  /* Container for Subtitle */
+  .subtitle-container {
+    padding: 0;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .subtitle-text {
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+  
+  /* Decorative Box Styling: Chibi icon (can be hidden or removed if not needed) */
+  .chibi-accent {
+    display: none;
+  }
+
+  /* Responsive Scaling */
+  @media (max-width: 768px) {
+    .main-title {
+      font-size: clamp(2rem, 8vw, 2.5rem);
+    }
+    .main-title::after {
+      width: 80px;
+    }
+    .subtitle-text {
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<section class="slide" aria-labelledby="main-title-h1">
+  <div class="slide-background" id="background-layer"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="content-wrapper">
+    <h1 class="main-title" id="main-title-h1">Giới thiệu</h1>
+    <div class="subtitle-container">
+      <p class="subtitle-text" id="subtitle-p">Thời tiết cực đoan thường là nguyên nhân hoặc nhân tố nguy hiểm trong nhiều sự cố hàng không. Báo cáo này tập hợp và phân tích các sự cố chính thức đã được điều tra, chỉ rõ nguyên nhân, hậu quả, cùng bài học và các biện pháp khắc phục đã được áp dụng.</p>
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  /**
+   * PostMessage API Listener for slide control from parent frame.
+   */
+  const elements = {
+    title: document.getElementById('main-title-h1'),
+    subtitleContainer: document.querySelector('.subtitle-container'),
+  };
+
+  const animations = new WeakMap();
+
+  function resetAnimations() {
+    for (const el in elements) {
+      if (animations.has(elements[el])) {
+        animations.get(elements[el]).cancel();
+        animations.delete(elements[el]);
+      }
+    }
+    if (elements.title) {
+        elements.title.style.opacity = '0';
+        elements.title.style.transform = 'translateY(20px)';
+        const after = document.querySelector('.main-title::after');
+        if(after) after.style.transform = 'scaleX(0)';
+    }
+    if (elements.subtitleContainer) {
+        elements.subtitleContainer.style.opacity = '0';
+        elements.subtitleContainer.style.transform = 'translateY(10px)';
+    }
+  }
+
+  function animateSlide() {
+    resetAnimations();
+
+    const anim1 = elements.title.animate([
+      { opacity: 0, transform: 'translateY(20px)' },
+      { opacity: 1, transform: 'translateY(0)' }
+    ], { duration: 1000, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards', delay: 200 });
+    animations.set(elements.title, anim1);
+
+    const titleAfterElement = document.querySelector('.main-title');
+    const anim2 = titleAfterElement.animate([
+        { /* Fakes ::after animation timing */ }
+    ], {duration: 1200, delay: 600});
+    anim2.onfinish = () => { titleAfterElement.classList.add('animate-after'); };
+     titleAfterElement.style.setProperty('--after-animation-name', 'sweep');
+    
+    const style = document.createElement('style');
+    document.head.appendChild(style);
+    style.sheet.insertRule(`
+        @keyframes sweep { to { transform: scaleX(1); } }
+    `);
+    style.sheet.insertRule(`
+        .main-title::after { animation: sweep 800ms cubic-bezier(0.2, 0.9, 0.2, 1) 800ms forwards; }
+    `);
+    
+    const anim3 = elements.subtitleContainer.animate([
+      { opacity: 0, transform: 'translateY(10px)' },
+      { opacity: 1, transform: 'translateY(0)' }
+    ], { duration: 800, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards', delay: 1200 });
+    animations.set(elements.subtitleContainer, anim3);
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': resetAnimations(); break;
+      case 'animate-slide': animateSlide(data.options || {}); break;
+      case 'getNotes':
+        try {
+          const note = document.querySelector('.subtitle-text').textContent;
+          ev.source.postMessage({ type: 'notes', notes: note }, ev.origin);
+        } catch(e) { console.error('Could not post message back to parent:', e); }
+        break;
+    }
+  });
+
+  /* Parallax Effect */
+  const background = document.getElementById('background-layer');
+  window.addEventListener('mousemove', (e) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { innerWidth, innerHeight } = currentTarget;
+    const x = (clientX / innerWidth - 0.5) * 2;
+    const y = (clientY / innerHeight - 0.5) * 2;
+    if (background) background.style.transform = `translateX(${x * -5}px) translateY(${y * -5}px)`;
+  });
+
+  /* Particles.js */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particleArray;
+
+  function initParticles() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particleArray = [];
+    const numberOfParticles = Math.floor(canvas.width / 50);
+    for (let i = 0; i < numberOfParticles; i++) {
+      const size = Math.random() * 1.5 + 0.5;
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const directionX = (Math.random() * 0.4) - 0.2;
+      const directionY = (Math.random() * 0.4) - 0.2;
+      const color = 'rgba(168, 178, 209, 0.4)';
+      particleArray.push({x, y, directionX, directionY, size, color});
+    }
+  }
+
+  function animateParticles() {
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particleArray.length; i++) {
+      const p = particleArray[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.directionX;
+      p.y += p.directionY;
+      if (p.x > canvas.width + p.size) p.x = -p.size;
+      if (p.x < -p.size) p.x = canvas.width + p.size;
+      if (p.y > canvas.height + p.size) p.y = -p.size;
+      if (p.y < -p.size) p.y = canvas.height + p.size;
+    }
+  }
+  
+  window.addEventListener('load', () => {
+    initParticles();
+    animateParticles();
+    resetAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+  window.addEventListener('resize', initParticles);
+
+})();
+</script>
+
+</body>
+</html>

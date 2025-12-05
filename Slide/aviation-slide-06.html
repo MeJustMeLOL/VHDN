@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide 06: Phân Tích Nguyên Nhân</title>
+  <meta name="description" content="Slide phân tích nguyên nhân gốc rễ, so sánh giữa dự kiến và thực tế.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-light-bg: #f0f2f5;
+    --color-light-text: #333;
+    --color-dark-bg: #141d2b;
+    --color-dark-text: #c8d3f5;
+    --color-accent-calm: #2a7a4a;
+    --color-accent-chaos: #e84a5f;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Be Vietnam Pro', sans-serif;
+  }
+
+  /* Base */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: #000;
+  }
+
+  .slide {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    font-family: var(--font-body);
+  }
+  
+  /* Split Screen Layout */
+  .split-pane {
+    width: 50%;
+    height: 100%;
+    padding: clamp(1.5rem, 4vw, 3rem) 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+  }
+
+  /* Left Side: Expectation */
+  .pane-left {
+    background-color: var(--color-light-bg);
+    color: var(--color-light-text);
+    /* Material-inspired texture: Paper grain */
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAXFJREFUaAXtmtENgyAQBMe3sQvYxV7sVnaxG9jFVuxW9+AI2MEuQOQzDgljQ8lDslM+3/DSQD/N/yJHAHAYCgAkmgGAd+1vB/f9wA+AOUA2gI0fSoA+h+A0AKe+j4QAA5g2gGgJMLsA4sUnF+B/gGAu8DkQpB+D3eD/wA+AuxfQfYb2D+B0x/A5f4FKM4Alh3gCgCgI0HcAwB8w81/3w+A/wFYuwBQQkC+vQMAwD8g2wBgCwCwA8C2AUBLAsB/A+CjAFwKAJcCoLMONgUAUAFABQBQAUAFABQAUAFABQBQAUAFABQAUAFABQBQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQAUAFABQA');
+    opacity: 0;
+  }
+
+  /* Right Side: Reality */
+  .pane-right {
+    background-color: var(--color-dark-bg);
+    color: var(--color-dark-text);
+    /* Material-inspired texture: Watercolor wash */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><filter id="f" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="60" /></filter><rect width="100%" height="100%" fill="%23141d2b" /><g filter="url(%23f)"><g stroke="%23384c6e" stroke-width="60"><circle cx="200" cy="200" r="200" /><circle cx="600" cy="600" r="200" /></g></g></svg>');
+    background-size: cover;
+    opacity: 0;
+  }
+
+  .pane-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  .pane-left .pane-title { color: var(--color-accent-calm); }
+  .pane-right .pane-title { color: var(--color-accent-chaos); }
+
+  .pane-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+  }
+  .pane-left .pane-title::after { background: var(--color-accent-calm); }
+  .pane-right .pane-title::after { background: var(--color-accent-chaos); }
+
+  .content-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .content-list li {
+    font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+    padding-left: 2rem;
+    position: relative;
+  }
+  .content-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Icons */
+  .pane-left li::before {
+    content: '✔';
+    color: var(--color-accent-calm);
+    font-weight: 700;
+  }
+  .pane-right li::before {
+    content: '✖';
+    color: var(--color-accent-chaos);
+    font-weight: 700;
+  }
+  
+  /* Highlighted keywords */
+  .pane-left strong { font-weight: 600; color: #1e462f; }
+  .pane-right strong { font-weight: 600; color: #ff8c9d; }
+
+  /* Torn Paper Divider */
+  .divider-svg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 80px; /* Width of the SVG effect */
+    transform: translateX(-50%);
+    z-index: 10;
+    pointer-events: none;
+    will-change: opacity;
+    opacity: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .slide { flex-direction: column; }
+    .split-pane { width: 100%; height: 50%; }
+    .divider-svg {
+      top: 50%; left: 0; width: 100%; height: 80px;
+      transform: translateY(-50%);
+      transform-origin: center;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="split-pane pane-left" id="pane-left">
+    <h2 class="pane-title">Lý Thuyết</h2>
+    <ul class="content-list">
+      <li>Phi công có thể dùng radar thời tiết trên máy bay để <strong>tìm ra "hành lang"</strong> an toàn giữa các vùng dông bão.</li>
+      <li>Tín hiệu radar mạnh cho thấy vùng nguy hiểm nhất, cho phép phi hành đoàn <strong>bay vòng tránh</strong>.</li>
+      <li>Thông tin thời tiết từ mặt đất là <strong>nguồn tham khảo</strong> phụ trợ.</li>
+    </ul>
+  </div>
+
+  <div class="split-pane pane-right" id="pane-right">
+    <h2 class="pane-title">Thực Tế</h2>
+    <ul class="content-list">
+      <li>Radar thời tiết bị <strong>nhiễu xạ (attenuation)</strong> khi đi qua vùng mưa lớn, làm "che khuất" vùng bão nguy hiểm nhất ở phía sau.</li>
+      <li>Phi hành đoàn đã bay vào vùng họ tin là an toàn, nhưng thực chất đó là <strong>tâm bão</strong>.</li>
+      <li>Thông tin thời tiết từ mặt đất <strong>không kịp thời</strong>, không cung cấp được cảnh báo đầy đủ về cường độ thực sự của cơn bão.</li>
+    </ul>
+  </div>
+  
+  <!-- Torn paper SVG divider -->
+  <svg class="divider-svg" id="divider" viewBox="0 0 80 841" preserveAspectRatio="none">
+    <path d="M40 0 V841" stroke="white" stroke-width="1" opacity="0.3" />
+    <path d="M30,0 C45,50 25,100 40,150 S55,200 35,250 45,300 30,350 45,400 40,450 25,500 40,550 55,600 35,650 45,700 30,750 45,800 40,841" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.5"/>
+    <filter id="torn-paper-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.5" numOctaves="3" result="turbulence"/>
+      <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="15" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <path d="M40 0 V841" stroke="#f0f2f5" stroke-width="80" filter="url(#torn-paper-filter)" />
+  </svg>
+
+</section>
+
+<script>
+(function(){
+  const elements = {
+    paneLeft: document.getElementById('pane-left'),
+    paneRight: document.getElementById('pane-right'),
+    divider: document.getElementById('divider'),
+    leftItems: document.querySelectorAll('#pane-left li'),
+    rightItems: document.querySelectorAll('#pane-right li'),
+    leftTitle: document.querySelector('#pane-left .pane-title'),
+    rightTitle: document.querySelector('#pane-right .pane-title'),
+  };
+
+  const animations = [];
+
+  function clearAnimations() {
+    animations.forEach(anim => { if (anim) anim.cancel(); });
+    animations.length = 0;
+    
+    Object.values(elements).forEach(el => {
+      if (el && el.style) el.style.opacity = '0';
+      if(el && el.forEach) el.forEach(i => i.style.opacity = '0');
+    });
+  }
+
+  function animateSlide() {
+    clearAnimations();
+
+    const isMobile = window.innerWidth <= 768;
+    const keyframesLeft = isMobile
+      ? [{ opacity: 0, transform: 'translateY(-50%)' }, { opacity: 1, transform: 'translateY(0)' }]
+      : [{ opacity: 0, transform: 'translateX(-50%)' }, { opacity: 1, transform: 'translateX(0)' }];
+    
+    const keyframesRight = isMobile
+      ? [{ opacity: 0, transform: 'translateY(50%)' }, { opacity: 1, transform: 'translateY(0)' }]
+      : [{ opacity: 0, transform: 'translateX(50%)' }, { opacity: 1, transform: 'translateX(0)' }];
+    
+    animations.push(elements.paneLeft.animate(keyframesLeft, { duration: 1000, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards' }));
+    animations.push(elements.paneRight.animate(keyframesRight, { duration: 1000, easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)', fill: 'forwards' }));
+    
+    animations.push(elements.divider.animate(
+      [{ opacity: 0, transform: isMobile ? 'translateY(-50%) scaleX(0.5)' : 'translateX(-50%) scaleY(0.5)'}, { opacity: 1, transform: isMobile ? 'translateY(-50%) scaleX(1)' : 'translateX(-50%) scaleY(1)' }],
+      { duration: 800, easing: 'ease-out', fill: 'forwards', delay: 800 }
+    ));
+
+    const contentAnimConfig = { duration: 600, easing: 'ease-out', fill: 'forwards' };
+    const contentKeyframes = [{ opacity: 0, transform: 'translateY(15px)' }, { opacity: 1, transform: 'translateY(0)' }];
+    
+    animations.push(elements.leftTitle.animate(contentKeyframes, { ...contentAnimConfig, delay: 1000 }));
+    animations.push(elements.rightTitle.animate(contentKeyframes, { ...contentAnimConfig, delay: 1000 }));
+
+    elements.leftItems.forEach((item, i) => {
+      animations.push(item.animate(contentKeyframes, { ...contentAnimConfig, delay: 1200 + i * 100 }));
+    });
+    
+    // Glitch effect animation for right side
+    elements.rightItems.forEach((item, i) => {
+      const glitchKeyframes = [
+        { opacity: 0, transform: 'translate(0, 15px)' },
+        { opacity: 0.8, transform: 'translate(-2px, 0)' },
+        { opacity: 0.5, transform: 'translate(2px, 0)' },
+        { opacity: 1, transform: 'translate(0, 0)' }
+      ];
+      animations.push(item.animate(glitchKeyframes, { duration: 500, easing: 'steps(3, end)', fill: 'forwards', delay: 1200 + i * 100 }));
+    });
+  }
+
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': clearAnimations(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'getNotes':
+        try {
+          ev.source.postMessage({ type: 'notes', notes: 'So sánh giữa kế hoạch dự kiến và thực tế hỗn loạn của sự cố.' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    clearAnimations();
+    try { window.parent.postMessage({ type: 'slide-ready' }, '*'); } catch(e){}
+  });
+
+})();
+</script>
+
+</body>
+</html>

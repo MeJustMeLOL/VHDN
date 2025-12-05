@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Slide 16: Công Nghệ Vượt Bão</title>
+<meta name="description" content="Slide giới thiệu các công nghệ an toàn hàng không với hiệu ứng carousel nâng cao.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --color-bg: #0a192f;
+  --color-text: #e6f1ff;
+  --color-text-muted: #a8b2d1;
+  /* Default accent, will be updated by JS */
+  --color-accent: #64ffda; 
+  --font-body: 'Be Vietnam Pro', sans-serif;
+  --card-width: clamp(320px, 40vw, 480px);
+  --card-height: clamp(400px, 60vh, 550px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  width: 100%; height: 100%; margin: 0; padding: 0;
+  overflow: hidden;
+  background-color: var(--color-bg);
+  font-family: var(--font-body);
+  transition: background-color 1s ease;
+}
+
+/* Dynamic Background Overlay for color tinting */
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--color-accent) 0%, transparent 70%);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+  transition: background 1s ease;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  perspective: 1000px;
+}
+
+.plexus-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.slide-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  text-shadow: 0 0 20px rgba(0,0,0,0.5);
+  transition: color 0.5s ease;
+}
+
+.carousel-container {
+  width: 100%;
+  height: clamp(450px, 70vh, 650px);
+  position: relative;
+  perspective: 2000px; /* Deep perspective */
+  z-index: 1;
+}
+
+.carousel-track {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* CARD STYLES */
+.tech-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--card-width);
+  height: var(--card-height);
+  background: rgba(10, 25, 47, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  /* 3D setup */
+  transform-style: preserve-3d;
+  /* Hiding backface helps performance */
+  backface-visibility: hidden; 
+  
+  transition: 
+    opacity 0.8s, 
+    transform 0.8s,
+    box-shadow 0.5s,
+    border-color 0.5s;
+    
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Active State Styles */
+.tech-card.is-active {
+  background: rgba(10, 25, 47, 0.85);
+  border: 2px solid var(--color-accent);
+  box-shadow: 
+    0 20px 50px rgba(0,0,0,0.6),
+    0 0 30px var(--color-accent-dim, rgba(100,255,218,0.2));
+  z-index: 10;
+}
+
+/* HUD Corners for the "Fixed Frame" effect */
+.hud-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--color-accent);
+  border-style: solid;
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.tech-card.is-active .hud-corner {
+  opacity: 1;
+  width: 30px;
+  height: 30px;
+}
+
+.hc-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; border-radius: 6px 0 0 0; }
+.hc-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; border-radius: 0 6px 0 0; }
+.hc-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-radius: 0 0 0 6px; }
+.hc-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-radius: 0 0 6px 0; }
+
+/* Scanning line effect */
+.scan-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--color-accent);
+  opacity: 0;
+  box-shadow: 0 0 10px var(--color-accent);
+  pointer-events: none;
+}
+
+.tech-card.is-active .scan-line {
+  animation: scan 3s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes scan {
+  0% { top: 5%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 95%; opacity: 0; }
+}
+
+.card-icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-muted); /* Default muted */
+  transition: color 0.5s, transform 0.5s, filter 0.5s;
+}
+
+.tech-card.is-active .card-icon {
+  color: var(--color-accent);
+  transform: scale(1.1) translateZ(20px);
+  filter: drop-shadow(0 0 10px var(--color-accent));
+}
+
+.card-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  transform: translateZ(10px);
+}
+
+.card-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  transform: translateZ(10px);
+}
+
+.card-content {
+  opacity: 0.3;
+  transform: scale(0.95);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.tech-card.is-active .card-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .slide-title { font-size: 2rem; margin-bottom: 1rem; }
+  .tech-card { padding: 1.5rem; }
+  .card-icon { width: 70px; height: 70px; }
+  .card-title { font-size: 1.5rem; }
+  .card-description { font-size: 1rem; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg-overlay" id="bg-overlay"></div>
+<section class="slide">
+  <canvas class="plexus-bg" id="plexus-canvas"></canvas>
+  <h2 class="slide-title" id="slide-title">Những Công Nghệ Vượt Bão</h2>
+
+  <div class="carousel-container">
+    <div class="carousel-track" id="carousel-track">
+      
+      <!-- Item 1: Radar (Cyan) -->
+      <div class="tech-card" id="card-0" data-color="#64ffda">
+        <div class="hud-corner hc-tl"></div><div class="hud-corner hc-tr"></div>
+        <div class="hud-corner hc-bl"></div><div class="hud-corner hc-br"></div>
+        <div class="scan-line"></div>
+        
+        <div class="card-content">
+          <div class="card-icon">
+            <!-- Radar Icon -->
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          </div>
+          <h3 class="card-title">Radar Doppler Mới</h3>
+          <p class="card-description">Phát hiện Gió Đứt và các dòng khí đối lưu nguy hiểm với độ chính xác cao hơn, cung cấp cảnh báo sớm.</p>
+        </div>
+      </div>
+
+      <!-- Item 2: AI (Purple) -->
+      <div class="tech-card" id="card-1" data-color="#d946ef">
+        <div class="hud-corner hc-tl"></div><div class="hud-corner hc-tr"></div>
+        <div class="hud-corner hc-bl"></div><div class="hud-corner hc-br"></div>
+        <div class="scan-line"></div>
+        
+        <div class="card-content">
+          <div class="card-icon">
+            <!-- Brain/AI Icon -->
+            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.71 11.29l-4-4a1 1 0 0 0-1.42 0l-4 4a1 1 0 0 0 1.42 1.42L12 11.41l3.29 3.3a1 1 0 0 0 1.42-1.42z"/></svg>
+          </div>
+          <h3 class="card-title">Dự Báo Bằng AI</h3>
+          <p class="card-description">Mô hình AI phân tích dữ liệu khổng lồ để dự báo sự hình thành thời tiết cực đoan chính xác hơn tới 70%.</p>
+        </div>
+      </div>
+
+      <!-- Item 3: Material (Amber/Orange) -->
+      <div class="tech-card" id="card-2" data-color="#f59e0b">
+        <div class="hud-corner hc-tl"></div><div class="hud-corner hc-tr"></div>
+        <div class="hud-corner hc-bl"></div><div class="hud-corner hc-br"></div>
+        <div class="scan-line"></div>
+        
+        <div class="card-content">
+          <div class="card-icon">
+             <!-- Structure Icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3 class="card-title">Vật Liệu Composite</h3>
+          <p class="card-description">Thân vỏ siêu bền, chịu được tốt hơn các tác động vật lý từ mưa đá và nhiễu động không khí mạnh.</p>
+        </div>
+      </div>
+
+      <!-- Item 4: Autopilot (Blue) -->
+      <div class="tech-card" id="card-3" data-color="#3b82f6">
+        <div class="hud-corner hc-tl"></div><div class="hud-corner hc-tr"></div>
+        <div class="hud-corner hc-bl"></div><div class="hud-corner hc-br"></div>
+        <div class="scan-line"></div>
+        
+        <div class="card-content">
+          <div class="card-icon">
+            <!-- Pilot/Plane Icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+          <h3 class="card-title">Lái Tự Động</h3>
+          <p class="card-description">Autopilot thông minh có khả năng tự động thực hiện các thao tác thoát hiểm phức tạp khi nhận diện nguy hiểm.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const elements = {
+    title: document.getElementById('slide-title'),
+    track: document.getElementById('carousel-track'),
+    cards: document.querySelectorAll('.tech-card'),
+    bgOverlay: document.getElementById('bg-overlay'),
+  };
+
+  const canvas = document.getElementById('plexus-canvas');
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+
+  // Configuration
+  let currentStep = 0;
+  const numCards = elements.cards.length;
+  const theta = 360 / numCards;
+  let radius = 0;
+
+  // Theme Colors (RGB format for interpolation)
+  const themes = [
+    { r: 100, g: 255, b: 218 }, // Cyan (Radar)
+    { r: 217, g: 70,  b: 239 }, // Purple (AI)
+    { r: 245, g: 158, b: 11  }, // Amber (Composite)
+    { r: 59,  g: 130, b: 246 }  // Blue (Autopilot)
+  ];
+  
+  // Current interpolated color state
+  let currentColor = { ...themes[0] };
+  let targetColor = { ...themes[0] };
+
+  // Helper: Linear Interpolation
+  function lerp(start, end, t) {
+    return start * (1 - t) + end * t;
+  }
+
+  function applyTheme(index) {
+    const theme = themes[index];
+    const hex = elements.cards[index].getAttribute('data-color');
+    
+    // Set target for particle animation
+    targetColor = theme;
+    
+    // Update CSS variables for glow/accents
+    document.documentElement.style.setProperty('--color-accent', hex);
+    
+    // Update dim accent (for shadow)
+    const rgb = `${theme.r}, ${theme.g}, ${theme.b}`;
+    document.documentElement.style.setProperty('--color-accent-dim', `rgba(${rgb}, 0.2)`);
+  }
+
+  function calculateAndApplyTransforms() {
+    // Dynamically calculate radius to prevent overlap
+    const cardWidth = elements.cards[0].offsetWidth;
+    // Push them out further for a cleaner look
+    radius = Math.round( ( cardWidth / 2 ) / Math.tan( Math.PI / numCards ) ) + (cardWidth * 0.25);
+
+    elements.cards.forEach((card, i) => {
+      const angle = theta * i;
+      // Cards face outward from center
+      card.style.transform = `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${radius}px)`;
+    });
+
+    rotateCarousel(currentStep); 
+  }
+
+  function rotateCarousel(step) {
+    currentStep = step;
+    
+    // Calculate track rotation
+    const angle = -theta * step;
+    elements.track.style.transform = `translateZ(-${radius}px) rotateY(${angle}deg)`;
+
+    // Handle Active Classes & Themes
+    elements.cards.forEach((card, i) => {
+      // Handle looping logic implicitly via modulo if needed, 
+      // but here we trust 'step' is clamped or handled by controller.
+      // Simple exact match for active:
+      const isActive = (i === step);
+      card.classList.toggle('is-active', isActive);
+    });
+
+    // Apply color theme based on step
+    applyTheme(step % numCards);
+  }
+
+  // --- Plexus Background Logic ---
+  let particles = [];
+  
+  function onResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // Create fewer particles on mobile for performance
+    const particleCount = window.innerWidth < 768 ? 50 : 90;
+    
+    particles = Array.from({length: particleCount}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      size: Math.random() * 2 + 1
+    }));
+    
+    calculateAndApplyTransforms();
+  }
+
+  function animatePlexus() {
+    // Smoothly transition color
+    currentColor.r = lerp(currentColor.r, targetColor.r, 0.05);
+    currentColor.g = lerp(currentColor.g, targetColor.g, 0.05);
+    currentColor.b = lerp(currentColor.b, targetColor.b, 0.05);
+    
+    const strokeColor = `rgba(${Math.round(currentColor.r)}, ${Math.round(currentColor.g)}, ${Math.round(currentColor.b)}`;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Update positions
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x > canvas.width || p.x < 0) p.vx *= -1;
+      if (p.y > canvas.height || p.y < 0) p.vy *= -1;
+      
+      // Draw dots
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fillStyle = `${strokeColor}, 0.5)`;
+      ctx.fill();
+    });
+
+    // Draw lines
+    for(let i = 0; i < particles.length; i++) {
+      for (let j = i; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `${strokeColor}, ${1 - dist / 150})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    animationFrameId = requestAnimationFrame(animatePlexus);
+  }
+
+  function stopAnimation() {
+    if(animationFrameId) cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+
+  function clearState() {
+    stopAnimation();
+    elements.title.style.opacity = '0';
+    elements.cards.forEach(card => card.style.opacity = '0');
+  }
+
+  function animateSlide() {
+    clearState();
+    if (!animationFrameId) {
+      onResize();
+      animatePlexus();
+    }
+    
+    // Entrance Animations
+    elements.title.animate([{opacity:0, transform: 'translateY(-20px)'},{opacity:1, transform: 'translateY(0)'}], {duration: 800, fill:'forwards', easing: 'ease-out'});
+    
+    elements.cards.forEach((card, i) => {
+      card.animate([{opacity:0, transform: `translate(-50%, -50%) rotateY(${theta*i}deg) translateZ(${radius+200}px)`}, {opacity:1}], 
+      {duration: 1000, fill:'forwards', delay: 200});
+    });
+
+    // Force re-calculation of positions to ensure they snap to correct Z
+    setTimeout(() => calculateAndApplyTransforms(), 100);
+    setAnimationStep(currentStep);
+  }
+
+  function setAnimationStep(step) {
+    if (step >= 0 && step < numCards) {
+      rotateCarousel(step);
+    }
+  }
+
+  // --- Event Listeners ---
+  window.addEventListener('message', (ev) => {
+    const data = ev.data || {};
+    if (!data.type) return;
+    switch (data.type) {
+      case 'reset': clearState(); break;
+      case 'animate-slide': animateSlide(); break;
+      case 'setStep':
+        if(typeof data.step === 'number') setAnimationStep(data.step);
+        break;
+      case 'getNotes':
+         const notes = [
+            "Radar Doppler thế hệ mới: Màu xanh ngọc đại diện cho công nghệ quét và hiển thị.",
+            "Trí tuệ nhân tạo (AI): Màu tím đại diện cho sự bí ẩn và thông minh của thuật toán.",
+            "Vật liệu Composite: Màu vàng cam đại diện cho độ bền vật lý và cấu trúc.",
+            "Hệ thống lái tự động: Màu xanh dương đại diện cho bầu trời và sự an toàn."
+         ];
+        try {
+          ev.source.postMessage({ type: 'notes', notes: notes[currentStep] || '' }, ev.origin);
+        } catch(e) {}
+        break;
+    }
+  });
+
+  window.addEventListener('load', () => {
+    onResize();
+    // Start animation loop immediately for preview
+    animatePlexus(); 
+    // Trigger entrance
+    animateSlide();
+    try { window.parent.postMessage({ type: 'slide-ready', stepCount: numCards }, '*'); } catch(e){}
+  });
+  
+  window.addEventListener('resize', onResize);
+
+})();
+</script>
+
+</body>
+</html>
