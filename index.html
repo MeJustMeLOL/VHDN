@@ -507,31 +507,46 @@
       left.classList.toggle('expanded');
     }
   });
-  frameWrapEl.addEventListener('mousedown', (e) => {
-  // Chỉ hoạt động khi immersive
-  if (!bodyEl.classList.contains('immersive')) return;
+  
 
-  e.stopPropagation();
+<script>
+(function(){
+  const bodyEl = document.body;
 
-  // Chuột trái = NEXT
-  if (e.button === 0) {
-    lastClickedIndex = null;
-    showNext();
-    frameWrapEl.focus();
+  // Hàm gọi nút Next/Prev có sẵn
+  function goNext(){
+    document.getElementById("nextBtn")?.click();
+  }
+  function goPrev(){
+    document.getElementById("prevBtn")?.click();
   }
 
-  // Chuột phải = PREVIOUS
-  if (e.button === 2) {
-    lastClickedIndex = null;
-    showPrev();
-    frameWrapEl.focus();
-  }
-});
+  // Lắng nghe click chuột khi fullscreen
+  document.addEventListener("mousedown", function(e){
+    if (!bodyEl.classList.contains("immersive")) return;  // chỉ hoạt động trong fullscreen
 
-// Chặn menu chuột phải
-frameWrapEl.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-});
+    // Chuột phải → Prev
+    if (e.button === 2) {
+      e.preventDefault();
+      goPrev();
+    }
+
+    // Chuột trái → Next
+    if (e.button === 0) {
+      e.preventDefault();
+      goNext();
+    }
+  });
+
+  // Ngăn menu chuột phải hiện lên
+  document.addEventListener("contextmenu", function(e){
+    if (bodyEl.classList.contains("immersive")) {
+      e.preventDefault();
+    }
+  });
+})();
+</script>
+
 
   function startAutoplay(){
     stopAutoplay();
